@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itcast.bos.dao.FunctionDAO" >
+  <resultMap id="FunctionResultMap" type="cn.itcast.bos.domain.Function" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="PAGE" property="page" jdbcType="VARCHAR" />
+    <result column="GENERATEMENU" property="generatemenu" jdbcType="VARCHAR" />
+    <result column="ZINDEX" property="zindex" jdbcType="DECIMAL" />
+    <result column="PID" property="pid" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 查询用户具有菜单 -->
+  <select id="findMenu" parameterType="User" resultMap="FunctionResultMap">
+  	<if test="username != 'admin'">
+  	select distinct <include refid="Base_Column_List"/>
+  		from AUTH_FUNCTION, ROLE_FUNCTION, USER_ROLE, T_USER
+  		where AUTH_FUNCTION.id = ROLE_FUNCTION.function_id and  ROLE_FUNCTION.role_id = USER_ROLE.role_id and USER_ROLE.user_id = T_USER.id
+  		and AUTH_FUNCTION.generatemenu='1'
+  		and T_USER.username = #{username} 
+  		order by AUTH_FUNCTION.zindex
+  	</if>
+  	<if test="username=='admin'">
+  		select distinct <include refid="Base_Column_List"/> from AUTH_FUNCTION
+  		where AUTH_FUNCTION.generatemenu='1' order by AUTH_FUNCTION.zindex
+  	</if>
+  </select>
+  
+  <sql id="Base_Column_List" >
+    AUTH_FUNCTION.ID, AUTH_FUNCTION.NAME, AUTH_FUNCTION.DESCRIPTION, AUTH_FUNCTION.PAGE, AUTH_FUNCTION.GENERATEMENU, AUTH_FUNCTION.ZINDEX, PID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="FunctionResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from AUTH_FUNCTION
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from AUTH_FUNCTION
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.itcast.bos.domain.Function" >
+    insert into AUTH_FUNCTION (ID, NAME, DESCRIPTION,
+      PAGE, GENERATEMENU, ZINDEX, 
+      PID)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{page,jdbcType=VARCHAR}, #{generatemenu,jdbcType=VARCHAR}, #{zindex,jdbcType=DECIMAL}, 
+      #{pid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.itcast.bos.domain.Function" >
+    insert into AUTH_FUNCTION
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+      <if test="page != null" >
+        PAGE,
+      </if>
+      <if test="generatemenu != null" >
+        GENERATEMENU,
+      </if>
+      <if test="zindex != null" >
+        ZINDEX,
+      </if>
+      <if test="pid != null" >
+        PID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="page != null" >
+        #{page,jdbcType=VARCHAR},
+      </if>
+      <if test="generatemenu != null" >
+        #{generatemenu,jdbcType=VARCHAR},
+      </if>
+      <if test="zindex != null" >
+        #{zindex,jdbcType=DECIMAL},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.itcast.bos.domain.Function" >
+    update AUTH_FUNCTION
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="page != null" >
+        PAGE = #{page,jdbcType=VARCHAR},
+      </if>
+      <if test="generatemenu != null" >
+        GENERATEMENU = #{generatemenu,jdbcType=VARCHAR},
+      </if>
+      <if test="zindex != null" >
+        ZINDEX = #{zindex,jdbcType=DECIMAL},
+      </if>
+      <if test="pid != null" >
+        PID = #{pid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.itcast.bos.domain.Function" >
+    update AUTH_FUNCTION
+    set NAME = #{name,jdbcType=VARCHAR},
+      DESCRIPTION = #{description,jdbcType=VARCHAR},
+      PAGE = #{page,jdbcType=VARCHAR},
+      GENERATEMENU = #{generatemenu,jdbcType=VARCHAR},
+      ZINDEX = #{zindex,jdbcType=DECIMAL},
+      PID = #{pid,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

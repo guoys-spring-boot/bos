@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- namespace名称空间 确保语句 唯一 -->
+<mapper namespace="cn.itcast.bos.dao.UserDAO">
+	<!-- 如果表列名 和 属性名 完全一致，省略resultMap -->
+
+    <resultMap id="userMap" type="User">
+        <id column="id" property="id"  />
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="salary" property="salary"/>
+        <result column="birthday" property="birthday"/>
+        <result column="gender" property="gender"/>
+        <result column="station" property="station"/>
+        <result column="telephone" property="telephone"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+
+	<select id="findAll" resultMap="userMap">
+        select * from T_USER order by USERNAME
+    </select>
+
+    <select id="findTotalCount" resultType="int">
+        select count(*) from T_USER
+    </select>
+	<!-- parameterType 传入语句参数类型  -->
+	<!-- 插入 -->
+	<insert id="insert" parameterType="cn.itcast.bos.domain.User">
+		insert into T_USER(id,username,password, salary, birthday, gender, station, telephone, remark)
+		values(#{id},#{username},#{password}, #{salary}, #{birthday}, #{gender}, #{station}, #{telephone}, #{remark})
+	</insert>
+	
+	<!-- 用户登录查询 -->
+	<select id="login" resultType="User">
+		select * from T_USER where username=#{username} and password =#{password}
+	</select>
+
+    <delete id="deleteByIds" >
+        DELETE FROM T_USER where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+	
+	<!-- 修改密码 -->
+	<update id="updatePassword" parameterType="cn.itcast.bos.domain.User">
+		update T_USER set password = #{password} where id = #{id}
+	</update>
+	
+	<!-- 查询密码 -->
+	<select id="findPasswordByUsername" parameterType="java.lang.String" resultType="java.lang.String">
+		select password from T_USER where username = #{username}
+	</select>
+	
+	<!-- 根据用户名 查询角色和权限 -->
+	<resultMap type="cn.itcast.bos.domain.User" id="UserResultMap">
+		<id property="id" column="id"/>
+		<result property="username" column="username"/> 
+		<collection property="roles" ofType="Role">
+			<id property="id" column="roleId"/>
+			<result property="name" column="roleName"/>
+			<collection property="functions" ofType="Function">
+				<id property="id" column="functionId"/>
+				<result property="name" column="functionName"/>
+			</collection>
+		</collection>
+	</resultMap>
+	
+	<select id="findUserByUsername" parameterType="java.lang.String" resultMap="UserResultMap">
+		select T_USER.id , T_USER.username, auth_role.id roleId, auth_role.name roleName, auth_function.id functionId, auth_function.name functionName 
+			from 
+			T_USER 
+			left outer join USER_ROLE on T_USER.id = USER_ROLE.user_id
+			left outer join auth_role on USER_ROLE.role_id = auth_role.id 
+			left outer join role_function on auth_role.id = role_function.role_id
+			left outer join auth_function on role_function.function_id = auth_function.id 
+			where username = #{username}
+	</select>	
+
+</mapper>

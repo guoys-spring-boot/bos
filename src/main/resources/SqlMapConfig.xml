@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration 
+PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-config.dtd"> 
+
+<configuration>
+	<!-- 配置MyBatis属性 -->
+	<properties>
+		<property name="dialect" value="oracle" />  <!-- 方言 -->
+	    <property name="pageSqlId" value=".*Page$" />  <!-- 拦截哪种SQL：以Page结尾SQL -->
+	</properties>
+
+	<!-- 进行mybatis 配置 -->
+	<typeAliases>
+		<!-- 为类型 起了别名 -->
+		<typeAlias type="cn.itcast.bos.domain.User" alias="User"/>
+		<typeAlias type="cn.itcast.bos.domain.Staff" alias="Staff"/>
+		<typeAlias type="cn.itcast.bos.domain.Region" alias="Region"/>
+		<typeAlias type="cn.itcast.bos.domain.Subarea" alias="Subarea"/>
+		<typeAlias type="cn.itcast.bos.domain.DecidedZone" alias="DecidedZone"/>
+		<typeAlias type="cn.itcast.bos.domain.NoticeBill" alias="NoticeBill"/>
+		<typeAlias type="cn.itcast.bos.domain.WorkBill" alias="WorkBill"/>
+		<typeAlias type="cn.itcast.bos.domain.WorkOrderManage" alias="WorkOrderManage"/>
+		<typeAlias type="cn.itcast.bos.domain.Function" alias="Function"/>
+		<typeAlias type="cn.itcast.bos.domain.Role" alias="Role"/>
+	</typeAliases>
+
+
+</configuration> 

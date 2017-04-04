@@ -45,6 +45,7 @@ public class UnitServiceImp implements UnitService {
         return unitDao.totalCountByCondition(unitBean);
     }
 
+    @Override
     public UnitBean findById(String id){
         UnitBean unitBean = unitDao.findById(id);
         if(unitBean == null){
@@ -52,4 +53,10 @@ public class UnitServiceImp implements UnitService {
         }
         return unitBean;
     }
+
+    @Override
+    public void update(UnitBean bean){
+        unitDao.update(bean);
+    }
+
 }

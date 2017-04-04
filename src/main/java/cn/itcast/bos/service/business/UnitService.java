@@ -18,4 +18,6 @@ public interface UnitService {
     int countUnit(UnitBean unitBean);
 
     UnitBean findById(String id);
+
+    void update(UnitBean bean);
 }

@@ -70,5 +70,73 @@
         </if>
     </select>
 
+    <update id="update" parameterType="cn.itcast.bos.domain.business.UnitBean">
+        UPDATE BASE_UNIT t SET
+        <if test="parentUnitCode != null and parentUnitCode != ''" >
+            parentUnitCode = #{parentUnitCode},
+        </if>
+        <if test="ascriptionArea != null and ascriptionArea != ''" >
+            ascriptionArea = #{ascriptionArea},
+        </if>
+        <if test="organizationCode != null and organizationCode != ''" >
+            organizationCode = #{organizationCode},
+        </if>
+        <if test="unitFullName != null and unitFullName != ''" >
+            unitFullName = #{unitFullName},
+        </if>
+        <if test="unitType != null and unitType != ''" >
+            unitType = #{unitType},
+        </if>
+        <if test="unitProperty != null and unitProperty != ''" >
+            unitProperty = #{unitProperty},
+        </if>
+        <if test="unitLevel != null and unitLevel != ''" >
+            unitLevel = #{unitLevel},
+        </if>
+        <if test="unitPersonCount != null and unitPersonCount != ''" >
+            unitPersonCount = #{unitPersonCount},
+        </if>
+        <if test="legalEntity != null and legalEntity != ''" >
+            legalEntity = #{legalEntity},
+        </if>
+        <if test="legalEntityTelNum != null and legalEntityTelNum != ''" >
+            legalEntityTelNum = #{legalEntityTelNum},
+        </if>
+        <if test="leader != null and leader != ''" >
+            leader = #{leader},
+        </if>
+        <if test="leaderTelNum != null and leaderTelNum != ''" >
+            leaderTelNum = #{leaderTelNum},
+        </if>
+        <if test="unitContactPerson != null and unitContactPerson != ''" >
+            unitContactPerson = #{unitContactPerson},
+        </if>
+        <if test="unitContactPersonTelNum != null and unitContactPersonTelNum != ''" >
+            unitContactPersonTelNum = #{unitContactPersonTelNum},
+        </if>
+        <if test="contactQQ != null and contactQQ != ''" >
+            contactQQ = #{contactQQ},
+        </if>
+        <if test="username != null and username != ''" >
+            username = #{username},
+        </if>
+        <if test="contactEmail != null and contactEmail != ''" >
+            contactEmail = #{contactEmail},
+        </if>
+        <if test="auditingStatus != null and auditingStatus != ''" >
+            auditingStatus = #{auditingStatus},
+        </if>
+        <if test="isAdmin != null and isAdmin != ''" >
+            isAdmin = #{isAdmin},
+        </if>
+        <if test="unitShortName != null and unitShortName != ''" >
+            unitShortName = #{unitShortName},
+        </if>
+        <if test="unitAddress != null and unitAddress != ''" >
+            unitAddress = #{unitAddress},
+        </if>
+        password = password
+        where id = #{id}
+    </update>
 
 </mapper>

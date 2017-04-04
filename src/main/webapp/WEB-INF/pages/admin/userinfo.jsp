@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -31,8 +32,13 @@
 <body class="easyui-layout" style="visibility:hidden;">
 	<div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
 		<div class="datagrid-toolbar" >
-			<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
-		</div>
+            <c:if test="${action eq 'add'}">
+			    <a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
+            </c:if>
+            <c:if test="${action eq 'update'}">
+                <a id="update" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
+            </c:if>
+        </div>
 	</div>
     <div region="center" style="overflow:auto;padding:5px;" border="false">
        <form:form id="useForm" method="post" commandName="unit" action="/business/addUnit">
@@ -110,22 +116,26 @@
                </tr>
 	           	<tr><td>单位地址:</td><td colspan="3"><form:textarea path="unitAddress" disabled="${disabled}" id="unitAddress" name="unitAddress" required="true" style="width:80%" /></td></tr>
            </table>
+           <form:hidden path="id"/>
        </form:form>
 		<script type="text/javascript">
 
             $(function () {
-                if('${action}' != 'lookup'){
-                    $("#save").click(function(){
-                        var userForm = $("#useForm");
-                        if(userForm.form('validate')){
-                            if('${action}' == ''){
-                                userForm.attr("action", "/business/updateUnit");
-                            }
-                            userForm.submit();
-                        }
-                    });
-                }
 
+                $("#save").click(function(){
+                    var userForm = $("#useForm");
+                    if(userForm.form('validate')){
+                        userForm.submit();
+                    }
+                });
+
+                $("#update").click(function(){
+                    var userForm = $("#useForm");
+                    if(userForm.form('validate')){
+                        userForm.attr("action", "/business/updateUnit");
+                        userForm.submit();
+                    }
+                });
 
                 $.enumCombobox('unitLevel', 'unitLevel');
                 $.enumCombobox('auditingStatus', 'auditingStatus');

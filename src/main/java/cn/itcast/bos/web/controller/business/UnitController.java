@@ -85,9 +85,7 @@ public class UnitController {
         if(unitBean == null || StringUtils.isBlank(unitBean.getId())){
             return "admin/userlist";
         }
-
-
-
+        unitService.update(unitBean);
         return "admin/userlist";
     }
 }

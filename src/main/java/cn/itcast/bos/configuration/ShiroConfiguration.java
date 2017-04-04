@@ -4,12 +4,14 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,18 +36,11 @@ public class ShiroConfiguration {
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
         credentialsMatcher.setHashAlgorithmName("MD5");
-        credentialsMatcher.setHashIterations(2);
-        credentialsMatcher.setStoredCredentialsHexEncoded(false);
+        //credentialsMatcher.setHashIterations(2);
+        credentialsMatcher.setStoredCredentialsHexEncoded(true);
         return credentialsMatcher;
     }
 
-    @Bean(name = "shiroRealm")
-    @DependsOn("lifecycleBeanPostProcessor")
-    public ShiroRealm shiroRealm() {
-        ShiroRealm realm = new ShiroRealm();
-        realm.setCredentialsMatcher(new SimpleCredentialsMatcher());
-        return realm;
-    }
 
     @Bean(name = "ehCacheManager")
     @DependsOn("lifecycleBeanPostProcessor")
@@ -55,17 +50,18 @@ public class ShiroConfiguration {
     }
 
     @Bean(name = "securityManager")
-    public SecurityManager securityManager(){
+    @DependsOn("monitorRealm")
+    public SecurityManager securityManager(AuthorizingRealm realm){
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(shiroRealm());
+        securityManager.setRealm(realm);
         securityManager.setCacheManager(ehCacheManager());
         return securityManager;
     }
 
     @Bean(name = "shiroFilter")
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(){
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager());
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         LogoutFilter logoutFilter = new LogoutFilter();
@@ -78,6 +74,7 @@ public class ShiroConfiguration {
         filterChainDefinitionManager.put("/login.do", "anon");
         filterChainDefinitionManager.put("/js/**", "anon");
         filterChainDefinitionManager.put("/css/**", "anon");
+        filterChainDefinitionManager.put("/images/**", "anon");
         filterChainDefinitionManager.put("/json/**", "anon");
         filterChainDefinitionManager.put("/validatecode.jsp","anon");
         //filterChainDefinitionManager.put("/user/**", "authc,roles[user]");
@@ -102,9 +99,9 @@ public class ShiroConfiguration {
     }
 
     @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor aasa = new AuthorizationAttributeSourceAdvisor();
-        aasa.setSecurityManager(securityManager());
+        aasa.setSecurityManager(securityManager);
         return aasa;
     }
 

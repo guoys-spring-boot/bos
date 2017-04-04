@@ -46,7 +46,8 @@
 			  {
 				  field : 'id',
 				  title : '编号',
-				  width : 100
+				  width : 100,
+				  hidden: true
 			  },
 			  {
 				  field : 'name',

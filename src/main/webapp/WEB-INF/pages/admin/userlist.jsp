@@ -26,13 +26,30 @@
 <script
 	src="${pageContext.request.contextPath }/js/easyui/locale/easyui-lang-zh_CN.js"
 	type="text/javascript"></script>
+
+<script
+        src="${pageContext.request.contextPath }/js/platform/common.js"
+        type="text/javascript"></script>
 <script type="text/javascript">
+
+    function openLookupPage(id) {
+        var userWindow = $("#addUserWindow");
+        userWindow.window('refresh', '${pageContext.request.contextPath}/business/toLookupUnit?unitId=' + id);
+        userWindow.window('open');
+    }
+
+    function openEditPage(id) {
+        var userWindow = $("#addUserWindow");
+        userWindow.window('refresh', '${pageContext.request.contextPath}/business/toUpdateUnit?unitId=' + id);
+        userWindow.window('open');
+    }
+
 	// 工具栏
 	var toolbar = [ {
 		id : 'button-view',	
-		text : '查看',
-		iconCls : 'icon-search',
-		handler : doView
+		text : '修改',
+		iconCls : 'icon-edit',
+		handler : doEdit
 	}, {
 		id : 'button-add',
 		text : '新增',
@@ -44,57 +61,90 @@
 		iconCls : 'icon-cancel',
 		handler : doDelete
 	}];
+
+	var unitTypes = $.loadEnum('unitType');
+	var unitProperty = $.loadEnum('unitProperty');
+	var unitLevel = $.loadEnum('unitLevel');
+	var isAdmin = $.loadEnum('yesOrNo');
+	var auditingStatus = $.loadEnum('auditingStatus');
+
 	//定义冻结列
-	var frozenColumns = [ [ {
+	var frozenColumns = [[{
 		field : 'id',
 		checkbox : true,
-		rowspan : 2
+		rowspan : 1
 	}, {
-		field : 'username',
-		title : '名称',
+		field : 'organizationCode',
+		title : '单位代码',
 		width : 80,
-		rowspan : 2
-	} ] ];
+		rowspan : 1,
+        sortable : false
+	},
+        {
+            field : 'unitFullName',
+            title : '单位名称',
+            width : 120,
+            rowspan : 1,
+            sortable : false,
+            formatter: function (value, row, index) {
+                if(row.id){
+                    return "<a href='#' onclick=\"openLookupPage('"+row.id+"')\">" + value + "</a>";
+                }else {
+                    return value;
+                }
+            }
+        }]];
 
 
 	// 定义标题栏
-	var columns = [ [ {
-		field : 'gender',
-		title : '性别',
+	var columns = [[ {
+		field : 'ascriptionArea',
+		title : '归属区域',
 		width : 60,
-		rowspan : 2,
-		align : 'center'
+		rowspan : 1
 	}, {
-		field : 'birthday',
-		title : '生日',
+		field : 'unitType',
+		title : '单位类型',
+		width : 70,
+		rowspan : 1,
+        formatter : function(value, row, index){
+		    return unitTypes[value];
+        }
+	}, {
+		field : 'unitProperty',
+		title : '单位性质',
+		width : 70,
+		rowspan : 1,
+        formatter : function(value, row, index){
+            return unitProperty[value];
+        }
+	} , {
+		field : 'unitLevel',
+		title : '文明单位等级',
 		width : 120,
-		rowspan : 2,
-		align : 'center'
+        formatter : function(value, row, index){
+            return unitLevel[value];
+        }
 	}, {
-		title : '其他信息',
-		colspan : 2
-	}, {
-		field : 'telephone',
-		title : '电话',
-		width : 800,
-		rowspan : 2
-	} ], [ {
-		field : 'station',
-		title : '单位',
+		field : 'isAdmin',
+		title : '是否为管理员',
 		width : 80,
-		align : 'center'
-	}, {
-		field : 'salary',
-		title : '工资',
-		width : 80,
-		align : 'right'
-	} ] ];
+        formatter : function(value, row, index){
+            return isAdmin[value];
+        }
+	} , {
+        field : 'auditingStatus',
+        title : '审核状态',
+        width : 86,
+        formatter : function(value, row, index){
+            return auditingStatus[value];
+        }
+    }]];
 	$(function(){
 		// 初始化 datagrid
 		// 创建grid
 		$('#grid').datagrid( {
 			iconCls : 'icon-forward',
-            total: 11,
             pagination: true,
 			fit : true,
 			border : false,
@@ -102,7 +152,7 @@
 			rownumbers : true,
 			striped : true,
 			toolbar : toolbar,
-			url : "/listUser",
+			url : "/business/listUnit",
 			idField : 'id', 
 			frozenColumns : frozenColumns,
 			columns : columns,
@@ -119,36 +169,31 @@
             })
         }
 
-		$("#save").click(function(){
-		    var userForm = $("#useForm");
-            if(userForm.form('validate')){
-                userForm.submit();
-            }
-        });
 		
 		$("body").css({visibility:"visible"});
 
         $("#addUserWindow").window('close');
+
 		
 	});
 	// 双击
 	function doDblClickRow(rowIndex, rowData) {
-		var items = $('#grid').datagrid('selectRow',rowIndex);
-		doView();
+        openLookupPage(rowData.id);
 	}
 	// 单击
 	function onClickRow(rowIndex){
 
 	}
 
+	function doEdit() {
+        var item = $('#grid').datagrid('getSelected');
+        openEditPage(item.id);
+    }
+
 
 	function doAdd() {
 	    var userWindow = $("#addUserWindow");
-        userWindow.window({
-            width:700,
-            height:400,
-            modal:true
-        });
+        userWindow.window('refresh', '${pageContext.request.contextPath}/business/toAddUnit');
         userWindow.window('open');
 	}
 
@@ -184,48 +229,8 @@
 </head>
 <body class="easyui-layout" style="visibility:hidden;">
 
-<div class="easyui-window"  title="用户管理" id="addUserWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:100px;width: 800px; height: 500px; z-index: 1000">
-    <div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
-        <div class="datagrid-toolbar">
-            <a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
-        </div>
-    </div>
-    <div region="center" style="overflow:auto;padding:5px;" border="false">
-        <form id="useForm" method="post" action="/saveUser">
-            <table class="table-edit"  width="95%" align="center">
-                <tr class="title"><td colspan="4">基本信息</td></tr>
-                <tr><td>用户名:</td><td><input type="text" name="username" id="username" class="easyui-validatebox" required="true" /></td>
-                    <td>口令:</td><td><input type="password" name="password" id="password" class="easyui-validatebox" required="true" validType="minLength[5]" /></td></tr>
-                <tr class="title"><td colspan="4">其他信息</td></tr>
-                <tr><td>工资:</td><td><input type="text" name="salary" id="salary" class="easyui-numberbox" /></td>
-                    <td>生日:</td><td><input type="text" name="birthday" id="birthday" class="easyui-datebox" /></td></tr>
-                <tr><td>性别:</td><td>
-                    <select name="gender" id="gender" class="easyui-combobox" style="width: 150px;">
-                        <option value="">请选择</option>
-                        <option value="男">男</option>
-                        <option value="女">女</option>
-                    </select>
-                </td>
-                    <td>单位:</td><td>
-                        <select name="station" id="station" class="easyui-combobox" style="width: 150px;">
-                            <option value="">请选择</option>
-                            <option value="总公司">总公司</option>
-                            <option value="分公司">分公司</option>
-                            <option value="厅点">厅点</option>
-                            <option value="基地运转中心">基地运转中心</option>
-                            <option value="营业所">营业所</option>
-                        </select>
-                    </td></tr>
-                <tr>
-                    <td>联系电话</td>
-                    <td colspan="3">
-                        <input type="text" name="telephone" id="telephone" class="easyui-validatebox" required="true" />
-                    </td>
-                </tr>
-                <tr><td>备注:</td><td colspan="3"><textarea style="width:80%"></textarea></td></tr>
-            </table>
-        </form>
-    </div>
+<div class="easyui-window"  title="用户管理" id="addUserWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:100px;width: 750px; height: 570px; z-index: 1000">
+
 </div>
 
 

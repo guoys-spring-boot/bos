@@ -1,4 +1,4 @@
-package cn.itcast.bos.shiro;
+package cn.itcast.bos.configuration;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -17,6 +19,7 @@ import cn.itcast.bos.domain.Function;
 import cn.itcast.bos.domain.Role;
 import cn.itcast.bos.domain.User;
 import cn.itcast.bos.service.UserService;
+import org.springframework.stereotype.Component;
 
 /**
  * 自定义 校验规则
@@ -24,7 +27,13 @@ import cn.itcast.bos.service.UserService;
  * @author seawind
  * 
  */
+
+@Component
 public class MonitorRealm extends AuthorizingRealm {
+
+    public MonitorRealm(HashedCredentialsMatcher hashedCredentialsMatcher){
+        this.setCredentialsMatcher(hashedCredentialsMatcher);
+    }
 
 	@Autowired
 	private UserService userService;
@@ -51,6 +60,7 @@ public class MonitorRealm extends AuthorizingRealm {
 		}
 		return simpleAuthorizationInfo;
 	}
+
 
 	@Override
 	// 认证

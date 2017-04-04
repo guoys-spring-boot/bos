@@ -22,7 +22,7 @@
 	// create a random instance to generate the codes
 	Random rdm = new Random();
 	String hash1 = Integer.toHexString(rdm.nextInt());
-	System.out.print(hash1);
+
 	// make some confusion
 	for (int i = 0; i < 50; i++) {
 		int x = rdm.nextInt(width);

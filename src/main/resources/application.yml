@@ -8,7 +8,9 @@ spring:
     view:
       prefix: /WEB-INF/pages/
       suffix: .jsp
-
+logging:
+  level:
+    root: INFO
 mybatis:
   mapperLocations: classpath*:cn/itcast/bos/dao/*.xml
   # 配置类型别名

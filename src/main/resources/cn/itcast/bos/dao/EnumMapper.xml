@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- namespace名称空间 确保语句 唯一 -->
+<mapper namespace="cn.itcast.bos.dao.EnumDao">
+	<!-- 如果表列名 和 属性名 完全一致，省略resultMap -->
+
+	<select id="findByEnumType" parameterType="string" resultType="cn.itcast.bos.domain.EnumBean" >
+		select EnumCode, EnumText from BASE_ENUM where EnumType = #{enumType}
+	</select>
+
+</mapper>

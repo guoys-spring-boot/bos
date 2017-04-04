@@ -110,4 +110,5 @@ public class UserController {
     public void deleteUser(String ids){
         userService.deleteUser(ids);
     }
+
 }

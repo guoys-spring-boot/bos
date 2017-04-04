@@ -35,6 +35,7 @@
 	type="text/javascript"></script>	
 <script type="text/javascript">
 	$(function(){
+        $("#addRoleWindow").window('close');
 		// 数据表格属性
 		$("#grid").datagrid({
 			toolbar : [
@@ -43,16 +44,21 @@
 					text : '添加角色',
 					iconCls : 'icon-add',
 					handler : function(){
-						location.href='${pageContext.request.contextPath}/page.do?module=admin&resource=role_add';
+					    var roleWindow = $("#addRoleWindow");
+						//location.href='${pageContext.request.contextPath}/page.do?module=admin&resource=role_add';
+                        roleWindow.window('refresh', '${pageContext.request.contextPath}/page.do?module=admin&resource=role_add');
+                        roleWindow.window('open');
+
 					}
 				}           
 			],
-			url : '${pageContext.request.contextPath}/role_list.action',
+			url : '${pageContext.request.contextPath}/role_list.do',
 			columns : [[
 				{
 					field : 'id',
 					title : '编号',
-					width : 200
+					width : 200,
+                    hidden: true
 				},
 				{
 					field : 'name',
@@ -70,6 +76,10 @@
 </script>	
 </head>
 <body class="easyui-layout">
+
+<div class="easyui-window"  title="角色管理" id="addRoleWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:100px;width: 800px; height: 500px; z-index: 1000">
+</div>
+
 	<div data-options="region:'center'">
 		<table id="grid"></table>
 	</div>

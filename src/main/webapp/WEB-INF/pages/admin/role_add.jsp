@@ -33,61 +33,7 @@
 <script
 	src="${pageContext.request.contextPath }/js/ztree/jquery.ztree.all-3.5.js"
 	type="text/javascript"></script>	
-<script type="text/javascript">
-	$(function(){
-		// 授权树初始化
-		var setting = {
-			data : {
-				key : {
-					title : "t"
-				},
-				simpleData : {
-					enable : true,
-					pIdKey : "_parentId"
-				}
-			},
-			check : {
-				enable : true
-			}
-		};
-		
-		$.ajax({
-			url : '${pageContext.request.contextPath}/function_menu.do',
-			type : 'POST',
-			dataType : 'text',
-			success : function(data) {
-				var zNodes = eval("(" + data + ")");
-				if(zNodes && zNodes.rows){
-                    $.fn.zTree.init($("#functionTree"), setting, zNodes.rows);
-				}
 
-			},
-			error : function(msg) {
-				alert('树加载异常!');
-			}
-		});
-		
-		
-		
-		// 点击保存
-		$('#save').click(function(){
-			if($('#roleForm').form('validate')){
-				// 获取ztree 勾选内容，赋值 页面隐藏域中
-				var treeObj = $.fn.zTree.getZTreeObj("functionTree");
-				var nodes = treeObj.getCheckedNodes(true);
-				
-				var ids = [];
-				for(var i=0; i<nodes.length ; i++){
-					ids.push(nodes[i].id); // 加入数组
-				}
-				$('#functionIds').val(ids.join(","));
-				
-				// 提交表单
-				$('#roleForm').submit();
-			}
-		});
-	});
-</script>	
 </head>
 <body class="easyui-layout">
 		<div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
@@ -96,7 +42,7 @@
 			</div>
 		</div>
 		<div region="center" style="overflow:auto;padding:5px;" border="false">
-			<form id="roleForm" action="${pageContext.request.contextPath }/role_save.action" method="post">
+			<form id="roleForm" action="${pageContext.request.contextPath }/role_save.do" method="post">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="2">角色信息</td>
@@ -120,6 +66,61 @@
 					</tr>
 					</table>
 			</form>
+			<script type="text/javascript">
+                $(function(){
+                    // 授权树初始化
+                    var setting = {
+                        data : {
+                            key : {
+                                title : "t"
+                            },
+                            simpleData : {
+                                enable : true,
+                                pIdKey : "_parentId"
+                            }
+                        },
+                        check : {
+                            enable : true
+                        }
+                    };
+
+                    $.ajax({
+                        url : '${pageContext.request.contextPath}/function_menu.do',
+                        type : 'POST',
+                        dataType : 'text',
+                        success : function(data) {
+                            var zNodes = eval("(" + data + ")");
+                            if(zNodes && zNodes.rows){
+                                $.fn.zTree.init($("#functionTree"), setting, zNodes.rows);
+                            }
+
+                        },
+                        error : function(msg) {
+                            alert('树加载异常!');
+                        }
+                    });
+
+
+
+                    // 点击保存
+                    $('#save').click(function(){
+                        if($('#roleForm').form('validate')){
+                            // 获取ztree 勾选内容，赋值 页面隐藏域中
+                            var treeObj = $.fn.zTree.getZTreeObj("functionTree");
+                            var nodes = treeObj.getCheckedNodes(true);
+
+                            var ids = [];
+                            for(var i=0; i<nodes.length ; i++){
+                                ids.push(nodes[i].id); // 加入数组
+                            }
+                            $('#functionIds').val(ids.join(","));
+
+                            // 提交表单
+                            $('#roleForm').submit();
+                        }
+                    });
+                });
+			</script>
 		</div>
 </body>
 </html>

@@ -193,7 +193,7 @@
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'north',border:false"
-		style="height:80px;padding:10px;background:url('${pageContext.request.contextPath }/images/header_bg.png') no-repeat right;">
+		style="height:60px;padding:10px;background:url('${pageContext.request.contextPath }/images/header_bg.png') no-repeat right;">
 		<div>
 			<img src="${pageContext.request.contextPath }/images/logo.png"
 				border="0">

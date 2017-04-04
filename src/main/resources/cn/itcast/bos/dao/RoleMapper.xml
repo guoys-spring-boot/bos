@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.itcast.bos.dao.RoleDAO" >
+<mapper namespace="cn.itcast.bos.dao.RoleDao" >
   <resultMap id="RoleResultMap" type="cn.itcast.bos.domain.Role" >
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="NAME" property="name" jdbcType="VARCHAR" />
@@ -15,6 +15,15 @@
     from AUTH_ROLE
     where ID = #{id,jdbcType=VARCHAR}
   </select>
+
+
+    <insert id="insertRoleAndFunction">
+        INSERT INTO ROLE_FUNCTION (FUNCTION_ID, ROLE_ID) VALUE ( #{functionId}, #{roleId})
+    </insert>
+
+    <select id="findAll" resultMap="RoleResultMap">
+        select <include refid="Base_Column_List" /> from AUTH_ROLE
+    </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from AUTH_ROLE
     where ID = #{id,jdbcType=VARCHAR}

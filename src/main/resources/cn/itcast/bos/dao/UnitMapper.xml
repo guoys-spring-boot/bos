@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itcast.bos.dao.business.UnitDao" >
+  <resultMap id="UnitResultMap" type="cn.itcast.bos.domain.business.UnitBean" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="parentUnitCode" property="parentUnitCode" jdbcType="VARCHAR" />
+    <result column="ascriptionArea" property="ascriptionArea" jdbcType="VARCHAR" />
+    <result column="organizationCode" property="organizationCode" jdbcType="VARCHAR" />
+    <result column="unitFullName" property="unitFullName" jdbcType="VARCHAR" />
+    <result column="unitShortName" property="unitShortName" jdbcType="VARCHAR" />
+    <result column="unitType" property="unitType" jdbcType="VARCHAR" />
+    <result column="unitProperty" property="unitProperty" jdbcType="VARCHAR" />
+    <result column="unitLevel" property="unitLevel" jdbcType="VARCHAR" />
+    <result column="unitPersonCount" property="unitPersonCount" jdbcType="INTEGER" />
+    <result column="legalEntity" property="legalEntity" jdbcType="VARCHAR" />
+    <result column="legalEntityTelNum" property="legalEntityTelNum" jdbcType="VARCHAR" />
+    <result column="leader" property="leader" jdbcType="VARCHAR" />
+
+    <result column="leaderTelNum" property="leaderTelNum" jdbcType="VARCHAR" />
+    <result column="unitContactPerson" property="unitContactPerson" jdbcType="VARCHAR" />
+    <result column="unitContactPersonTelNum" property="unitContactPersonTelNum" jdbcType="VARCHAR" />
+    <result column="contactQQ" property="contactQQ" jdbcType="VARCHAR" />
+    <result column="contactEmail" property="contactEmail" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="auditingStatus" property="auditingStatus" jdbcType="VARCHAR" />
+    <result column="isAdmin" property="isAdmin" jdbcType="VARCHAR" />
+    <result column="unitAddress" property="unitAddress" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, parentUnitCode, ascriptionArea, organizationCode, unitFullName, unitType, unitProperty, unitLevel,
+    unitPersonCount, legalEntity, legalEntityTelNum, leader, leaderTelNum, unitContactPerson, unitContactPersonTelNum,
+    contactQQ, contactEmail, username, password, auditingStatus, isAdmin, unitAddress, unitShortName
+  </sql>
+  <insert id="insert" parameterType="cn.itcast.bos.domain.business.UnitBean">
+      INSERT INTO BASE_UNIT ( <include refid="Base_Column_List" /> ) VALUE (
+      #{id}, #{parentUnitCode}, #{ascriptionArea}, #{organizationCode}, #{unitFullName}, #{unitType},
+      #{unitProperty}, #{unitLevel}, #{unitPersonCount}, #{legalEntity}, #{legalEntityTelNum}, #{leader},
+      #{leaderTelNum}, #{unitContactPerson}, #{unitContactPersonTelNum}, #{contactQQ}, #{contactEmail}, #{username},
+      #{password}, #{auditingStatus}, #{isAdmin}, #{unitAddress}, #{unitShortName}
+      )
+  </insert>
+  <select id="findById" resultMap="UnitResultMap">
+      select <include refid="Base_Column_List" /> from BASE_UNIT WHERE ID = #{id}
+  </select>
+    <select id="findAll" resultMap="UnitResultMap">
+        select <include refid="Base_Column_List" /> from BASE_UNIT
+    </select>
+  <select id="findTotalCount"  resultType="int">
+      select count(*) from BASE_UNIT
+  </select>
+
+    <select id="findUnitByCondition" parameterType="cn.itcast.bos.domain.business.UnitBean" resultMap="UnitResultMap">
+        select <include refid="Base_Column_List" /> from BASE_UNIT where 1=1
+        <if test="unitLevel != null and unitLevel != ''">
+            and unitLevel = #{unitLevel}
+        </if>
+        <if test="auditingStatus != null and auditingStatus != ''">
+            and auditingStatus = #{auditingStatus}
+        </if>
+    </select>
+
+    <select id="totalCountByCondition" parameterType="cn.itcast.bos.domain.business.UnitBean" resultType="int">
+        select count(*) from BASE_UNIT where 1=1
+        <if test="unitLevel != null and unitLevel != ''">
+            and unitLevel = #{unitLevel}
+        </if>
+        <if test="auditingStatus != null and auditingStatus != ''">
+            and auditingStatus = #{auditingStatus}
+        </if>
+    </select>
+
+
+</mapper>

@@ -25,8 +25,12 @@
 	src="${pageContext.request.contextPath }/js/easyui/ext/jquery.cookie.js"></script>
 <script
 	src="${pageContext.request.contextPath }/js/easyui/locale/easyui-lang-zh_CN.js"
-	type="text/javascript"></script>	
-<script type="text/javascript">
+	type="text/javascript"></script>
+<script
+        src="${pageContext.request.contextPath }/js/platform/common.js"
+        type="text/javascript"></script>
+    <script type="text/javascript">
+
 	$(function(){
 		$("body").css({visibility:"visible"});
 		// 注册按钮事件
@@ -42,11 +46,13 @@
 		// 注册ajax查询
 		$('#ajax').click(function() {
 			var elWin = $("#list").get(0).contentWindow;
-			elWin.$('#grid').datagrid( {
-				pagination : true,
-				url : "${pageContext.request.contextPath}/json/users.json"
-			});
+            elWin.$("#grid").datagrid('load', {
+                unitLevel: $("input[name='unitLevel']").val(),
+                auditingStatus: $("input[name='auditingStatus']").val()
+            });
 		});
+        $.enumCombobox('unitLevel', 'unitLevel', '', '请选择');
+        $.enumCombobox('auditingStatus', 'auditingStatus', '', '请选择');
 	});
 </script>	
 </head>
@@ -59,26 +65,23 @@
 		<form id="form" method="post" >
 			<table class="table-edit" width="100%" >				
 				<tr><td>
-					<b>用户名</b><span class="operator"><a name="username-opt" opt="all"></a></span>
+					<b>上级单位</b><span class="operator"><a name="username-opt" opt="all"></a></span>
 					<input type="text" id="username" name="username"/>
 				</td></tr>
 				<tr><td>
-					<b>性别</b><span class="operator"><a name="gender-opt" opt="all"></a></span>
-					<select id="gender" name="gender" >
-					    <option value=""></option>
-					    <option value="0">女</option>
-					    <option value="1">男</option>
-					</select>
+					<b>单位等级</b><span class="operator"><a name="gender-opt" opt="all"></a></span>
+                    <input id="unitLevel" name="unitLevel" value="">
 				</td></tr>
 				<tr><td>
-					<b>生日</b><span class="operator"><a name="birthday-opt" opt="date"></a></span>
-					<input type="text" id="birthday" name="birthday" value="1977-11-11" class="easyui-datebox" /><br/>
-					<input type="text" id="_birthday2" name="_birthday2" value="1988-11-11" class="easyui-datebox" />
+					<b>审核状态</b><span class="operator"><a name="birthday-opt" opt="date"></a></span>
+                    <input id="auditingStatus" name="auditingStatus" value="">
 				</td></tr>
 
 			</table>
 		</form>
-		
+		<script type="text/javascript">
+            loadEnum('auditingStatus', 'auditingStatus');
+        </script>
 		<div class="datagrid-toolbar">	
 			<a id="ajax" href="#" class="easyui-linkbutton" plain="true" icon="icon-search">查询</a>
 		</div>

@@ -30,7 +30,13 @@
         src="${pageContext.request.contextPath }/js/platform/common.js"
         type="text/javascript"></script>
     <script type="text/javascript">
-
+	function reloadGrid() {
+        var elWin = $("#list").get(0).contentWindow;
+        elWin.$("#grid").datagrid('load', {
+            unitLevel: $("input[name='unitLevel']").val(),
+            auditingStatus: $("input[name='auditingStatus']").val()
+        });
+    }
 	$(function(){
 		$("body").css({visibility:"visible"});
 		// 注册按钮事件
@@ -45,11 +51,7 @@
 		});
 		// 注册ajax查询
 		$('#ajax').click(function() {
-			var elWin = $("#list").get(0).contentWindow;
-            elWin.$("#grid").datagrid('load', {
-                unitLevel: $("input[name='unitLevel']").val(),
-                auditingStatus: $("input[name='auditingStatus']").val()
-            });
+			reloadGrid();
 		});
         $.enumCombobox('unitLevel', 'unitLevel', '', '请选择');
         $.enumCombobox('auditingStatus', 'auditingStatus', '', '请选择');
@@ -79,9 +81,6 @@
 
 			</table>
 		</form>
-		<script type="text/javascript">
-            loadEnum('auditingStatus', 'auditingStatus');
-        </script>
 		<div class="datagrid-toolbar">	
 			<a id="ajax" href="#" class="easyui-linkbutton" plain="true" icon="icon-search">查询</a>
 		</div>

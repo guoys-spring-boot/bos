@@ -32,6 +32,14 @@
         type="text/javascript"></script>
 <script type="text/javascript">
 
+    var dialogOptions = {
+        onDestroy: function () {
+            window.parent.reloadGrid();
+            $("#addUserWindow").window('destroy');
+
+        }
+    };
+
     function openLookupPage(id) {
         var userWindow = $("#addUserWindow");
         userWindow.window('refresh', '${pageContext.request.contextPath}/business/toLookupUnit?unitId=' + id);
@@ -39,9 +47,9 @@
     }
 
     function openEditPage(id) {
-        var userWindow = $("#addUserWindow");
-        userWindow.window('refresh', '${pageContext.request.contextPath}/business/toUpdateUnit?unitId=' + id);
-        userWindow.window('open');
+        var url = '${pageContext.request.contextPath}/business/toUpdateUnit?unitId=' + id;
+        $(window).openWindow('addUserWindow', url, 750, 570, '用户管理', dialogOptions);
+
     }
 
 	// 工具栏
@@ -182,7 +190,7 @@
 	}
 	// 单击
 	function onClickRow(rowIndex){
-
+		$("#grid").datagrid('beginEdit', rowIndex);
 	}
 
 	function doEdit() {
@@ -192,9 +200,8 @@
 
 
 	function doAdd() {
-	    var userWindow = $("#addUserWindow");
-        userWindow.window('refresh', '${pageContext.request.contextPath}/business/toAddUnit');
-        userWindow.window('open');
+        $(window).openWindow('addUserWindow', '${pageContext.request.contextPath}/business/toAddUnit', 750, 570, '用户管理');
+
 	}
 
 	function doView() {
@@ -229,9 +236,9 @@
 </head>
 <body class="easyui-layout" style="visibility:hidden;">
 
-<div class="easyui-window"  title="用户管理" id="addUserWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:100px;width: 750px; height: 570px; z-index: 1000">
-
-</div>
+<!--<div class="easyui-window"  title="用户管理" id="addUserWindow" collapsible="false" minimizable="false" maximizable="true" style="top:20px;left:100px;width: 750px; height: 570px; z-index: 1000">
+    <iframe src="${pageContext.request.contextPath}/business/toAddUnit" id="editFrame" style="width:100%;height:100%;border:0;" ></iframe>
+</div> -->
 
 
     <div region="center" border="false">

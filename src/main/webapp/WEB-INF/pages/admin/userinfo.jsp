@@ -28,8 +28,14 @@
 <script
 	src="${pageContext.request.contextPath }/js/easyui/locale/easyui-lang-zh_CN.js"
 	type="text/javascript"></script>
+<script
+        src="${pageContext.request.contextPath }/js/platform/common.js"
+        type="text/javascript"></script>
+<script
+        src="${pageContext.request.contextPath }/js/jquery.form.min.js"
+        type="text/javascript"></script>
 </head>
-<body class="easyui-layout" style="visibility:hidden;">
+<body class="easyui-layout"  >
 	<div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
 		<div class="datagrid-toolbar" >
             <c:if test="${action eq 'add'}">
@@ -40,7 +46,7 @@
             </c:if>
         </div>
 	</div>
-    <div region="center" style="overflow:auto;padding:5px;" border="false">
+    <div region="center" style="height:600px;overflow:auto;padding:5px;" border="false">
        <form:form id="useForm" method="post" commandName="unit" action="/business/addUnit">
            <table class="table-edit"  width="95%" align="center">
            		<tr class="title"><td colspan="4">基本信息</td></tr>
@@ -125,7 +131,12 @@
                 $("#save").click(function(){
                     var userForm = $("#useForm");
                     if(userForm.form('validate')){
-                        userForm.submit();
+                        userForm.submit(function () {
+                            $(this).ajaxForm(function () {
+                                alert(134);
+                            });
+                            return false;
+                        });
                     }
                 });
 

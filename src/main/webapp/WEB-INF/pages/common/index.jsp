@@ -244,14 +244,12 @@
 		</div>
 	</div>
 	<div data-options="region:'south',border:false"
-		style="height:50px;padding:10px;background:url('${pageContext.request.contextPath }/images/header_bg.png') no-repeat right;">
+		style="height:30px;padding:10px;background:url('${pageContext.request.contextPath }/images/header_bg.png') no-repeat right;">
 		<table style="width: 100%;">
 			<tbody>
 				<tr>
 					<td style="width: 300px;">
-						<div style="color: #999; font-size: 8pt;">
-							传智播客 | Powered by <a href="http://www.itcast.cn/">itcast.cn</a>
-						</div>
+
 					</td>
 					<td style="width: *;" class="co1"><span id="online"
 						style="background: url(${pageContext.request.contextPath }/images/online.png) no-repeat left;padding-left:18px;margin-left:3px;font-size:8pt;color:#005590;">在线人数:1</span>
@@ -260,7 +258,7 @@
 			</tbody>
 		</table>
 	</div>
-	
+
 	<!--修改密码窗口-->
     <div id="editPwdWindow" class="easyui-window" title="修改密码" collapsible="false" minimizable="false" modal="true" closed="true" resizable="false"
         maximizable="false" icon="icon-save"  style="width: 300px; height: 160px; padding: 5px;

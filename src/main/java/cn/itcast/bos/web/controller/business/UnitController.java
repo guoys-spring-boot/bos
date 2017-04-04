@@ -86,6 +86,6 @@ public class UnitController {
             return "admin/userlist";
         }
         unitService.update(unitBean);
-        return "admin/userlist";
+        return "common/close";
     }
 }

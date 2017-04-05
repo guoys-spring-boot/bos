@@ -84,8 +84,10 @@ $.extend({
     },
     createIFrameContainer: function (containerId, url) {
         var $container = $('<div class="easyui-window" id="'+containerId+'"></div>');
-        var $iFrame = $('<iframe src="'+url+'" style="width:100%;height:100%;border:0;" ></iframe>');
+        var $iFrame = $('<iframe src="'+url+'" style="width:100%;height:100%;border:0;display: none" ></iframe>');
+        var $loading = $('<div style="align-items: center;width: 100%; height: 100%" >loading...</div>');
         $container.append($iFrame);
+        $container.append($loading);
         return $container;
     }
 });
@@ -111,12 +113,24 @@ $.fn.extend({
         options.title = title;
         options.width = width;
         options.height = height;
+        var $iframe = $container.find('iframe');
+        var $loadingDiv = $container.find('div');
         if(extOptions){
             $container.window($.mergeJsonObject(options, extOptions));
+            $iframe.load(function () {
+                $iframe.show("fast", "linear");
+                $loadingDiv.hide();
+            });
             return;
         }
         $container.window(options);
         $container.window('open');
+        $container.load(function () {
+            $iframe.show("fast", "linear");
+            $loadingDiv.hide();
+        })
+
+
     },
     closeWindow: function (containerId) {
         $(this).close(containerId, this);

@@ -8,7 +8,8 @@
 <script src="${pageContext.request.contextPath }/js/jquery-1.8.3.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/style.css" />
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/style_grey.css" />
-<style>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/common/checkLogin.js"></script>
+	<style>
 input[type=text] {
 	width: 80%;
 	height: 25px;

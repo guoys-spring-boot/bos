@@ -179,3 +179,12 @@ CREATE TABLE `USER_ROLE` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+CREATE TABLE `wmb_khxm` (
+  `id` varchar(40) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `khxm` varchar(500) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '考核46道内容的标题',
+  `xmlx` varchar(2) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '考核类型',
+  `totalscore` double(11,2) NOT NULL COMMENT '???',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

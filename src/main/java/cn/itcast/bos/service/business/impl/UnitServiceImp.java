@@ -1,7 +1,8 @@
-package cn.itcast.bos.service.business;
+package cn.itcast.bos.service.business.impl;
 
 import cn.itcast.bos.dao.business.UnitDao;
 import cn.itcast.bos.domain.business.UnitBean;
+import cn.itcast.bos.service.business.UnitService;
 import cn.itcast.bos.utils.MD5Utils;
 import cn.itcast.bos.utils.UUIDUtils;
 import org.springframework.stereotype.Service;

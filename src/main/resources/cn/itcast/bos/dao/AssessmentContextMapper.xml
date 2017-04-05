@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itcast.bos.dao.business.AssessmentContentDao">
+    <resultMap id="ContentResultMap" type="cn.itcast.bos.domain.business.AssessmentContent">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="khxm" property="projectName" jdbcType="VARCHAR"/>
+        <result column="xmlx" property="type" jdbcType="VARCHAR"/>
+        <result column="totalscore" property="totalScore"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, khxm, xmlx, totalscore
+    </sql>
+    <insert id="insert" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
+        insert into wmb_khxm (<include refid="Base_Column_List"/>) values (#{id}, #{projectName}, #{type},
+        #{totalScore})
+    </insert>
+
+    <update id="update" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
+        UPDATE wmb_khxm
+        SET khxm = #{projectName}, xmlx = #{type}, totalscore = #{totalScore}
+        WHERE id = #{id}
+    </update>
+    <delete id="delete" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
+        DELETE FROM wmb_khxm
+        WHERE id = #{id}
+    </delete>
+    <select id="findById" resultMap="ContentResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from wmb_khxm where id = #{id}
+    </select>
+    <select id="findAll" resultMap="ContentResultMap" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
+        select
+        <include refid="Base_Column_List"/>
+        from wmb_khxm where 1=1
+        <if test="projectName != null and projectName != ''">
+            and khxm = #{projectName}
+        </if>
+        <if test="type != null and type != ''">
+            and xmlx = #{type}
+        </if>
+    </select>
+    <select id="count" resultType="int" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
+        select
+        count(*)
+        from wmb_khxm where 1=1
+        <if test="projectName != null and projectName != ''">
+            and khxm = #{projectName}
+        </if>
+        <if test="type != null and type != ''">
+            and xmlx = #{type}
+        </if>
+    </select>
+</mapper>

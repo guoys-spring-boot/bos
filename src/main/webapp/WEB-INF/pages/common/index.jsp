@@ -97,7 +97,7 @@
 			});
 		},3000);
 		/*************/
-		
+
 		$("#btnCancel").click(function(){
 			$('#editPwdWindow').window('close');
 		});
@@ -195,8 +195,7 @@
 	<div data-options="region:'north',border:false"
 		style="height:60px;padding:10px;background:url('${pageContext.request.contextPath }/images/header_bg.png') no-repeat right;">
 		<div>
-			<img src="${pageContext.request.contextPath }/images/logo.png"
-				border="0">
+
 		</div>
 		<div id="sessionInfoDiv"
 			style="position: absolute;right: 5px;top:10px;">

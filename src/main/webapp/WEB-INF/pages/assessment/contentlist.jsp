@@ -145,15 +145,8 @@
 
 
 	function doAdd() {
-        $(window).openWindow('addUserWindow', '${pageContext.request.contextPath}/business/toAddUnit', 750, 570, '用户管理', dialogOptions);
+        $(window).openWindow('addUserWindow', '${path}/assessmentContent/toAddContent', 750, 570, '考核项目', dialogOptions);
 
-	}
-
-	function doView() {
-		alert("编辑用户");
-		var item = $('#grid').datagrid('getSelected');
-		console.info(item);
-		//window.location.href = "edit.html";
 	}
 
 	function doDelete() {

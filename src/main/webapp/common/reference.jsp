@@ -29,5 +29,8 @@
 <script
         src="${pageContext.request.contextPath }/js/jquery.form.min.js"
         type="text/javascript"></script>
+<script
+        src="${pageContext.request.contextPath }/js/easyui/outOfBounds.js"
+        type="text/javascript"></script>
 
 <script src="${path}/common/checkLogin.js" ></script>

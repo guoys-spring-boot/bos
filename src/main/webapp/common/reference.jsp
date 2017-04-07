@@ -4,30 +4,30 @@
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 <!-- 导入jquery核心类库 -->
 <script type="text/javascript"
-        src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
+        src="${path}/js/jquery-1.8.3.js"></script>
 <!-- 导入easyui类库 -->
 <link rel="stylesheet" type="text/css"
-      href="${pageContext.request.contextPath }/js/easyui/themes/default/easyui.css">
+      href="${path}/js/easyui/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css"
-      href="${pageContext.request.contextPath }/js/easyui/themes/icon.css">
+      href="${path}/js/easyui/themes/icon.css">
 <link rel="stylesheet" type="text/css"
-      href="${pageContext.request.contextPath }/js/easyui/ext/portal.css">
+      href="${path}/js/easyui/ext/portal.css">
 <link rel="stylesheet" type="text/css"
-      href="${pageContext.request.contextPath }/css/default.css">
+      href="${path}/css/default.css">
 <script type="text/javascript"
-        src="${pageContext.request.contextPath }/js/easyui/jquery.easyui.min.js"></script>
+        src="${path}/js/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath }/js/easyui/ext/jquery.portal.js"></script>
+        src="${path}/js/easyui/ext/jquery.portal.js"></script>
 <script type="text/javascript"
-        src="${pageContext.request.contextPath }/js/easyui/ext/jquery.cookie.js"></script>
+        src="${path}/js/easyui/ext/jquery.cookie.js"></script>
 <script
-        src="${pageContext.request.contextPath }/js/easyui/locale/easyui-lang-zh_CN.js"
+        src="${path}/js/easyui/locale/easyui-lang-zh_CN.js"
         type="text/javascript"></script>
 <script
-        src="${pageContext.request.contextPath }/js/platform/common.js"
+        src="${path}/js/platform/common.js"
         type="text/javascript"></script>
 <script
-        src="${pageContext.request.contextPath }/js/jquery.form.min.js"
+        src="${path}/js/jquery.form.min.js"
         type="text/javascript"></script>
 
-<script src="${path}/common/checkLogin.js" ></script>
+<script src="${path}/common/checkLogin.js"></script>

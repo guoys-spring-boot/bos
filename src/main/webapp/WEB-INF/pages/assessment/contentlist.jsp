@@ -20,12 +20,12 @@
     function openLookupPage(id) {
 
         var url = '${pageContext.request.contextPath}/business/toLookupUnit?unitId=' + id;
-        $(window).openWindow('addUserWindow', url, 750, 570, '用户管理', dialogOptions);
+        $(window).openWindow('addUserWindow', url, 750, 770, '用户管理', dialogOptions);
     }
 
     function openEditPage(id) {
         var url = '${pageContext.request.contextPath}/business/toUpdateUnit?unitId=' + id;
-        $(window).openWindow('addUserWindow', url, 750, 570, '用户管理', dialogOptions);
+        $(window).openWindow('addUserWindow', url, 750, 770, '用户管理', dialogOptions);
 
     }
 
@@ -135,7 +135,7 @@
 	}
 	// 单击
 	function onClickRow(rowIndex){
-		$("#grid").datagrid('beginEdit', rowIndex);
+		//$("#grid").datagrid('beginEdit', rowIndex);
 	}
 
 	function doEdit() {
@@ -145,10 +145,10 @@
 
 
 	function doAdd() {
-        $(window).openWindow('addUserWindow', '${path}/assessmentContent/toAddContent', 750, 570, '考核项目', dialogOptions);
+        $(window).openWindow('addUserWindow', '${path}/assessmentContent/toAddContent', 750, 770, '考核项目', dialogOptions);
 
 	}
-
+	var isDeleteIndex;
 	function doDelete() {
 
 		var ids = [];

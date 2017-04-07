@@ -61,7 +61,7 @@
     <script type="text/javascript">
         var grid = $("#grid");
 
-
+        var isDeleteIndex = false;
         $(function () {
 
             $("#save").click(function () {
@@ -85,20 +85,56 @@
 
         function doAdd() {
 
-            grid.datagrid('insertRow', {row:{}});
+            var rows = grid.datagrid('getRows');
+            var rowIndex = -1;
+            if(!rows || rows.length == 0){
+                rowIndex = '1';
+            }else{
+                $._log("row不为空， ：" + JSON.stringify(rows, null , 4));
+                var lastRow = rows[rows.length - 1];
+
+                if(lastRow && lastRow.id && lastRow.id.indexOf("default_rowId_") != -1){
+                    var str = lastRow.id.split("_")[2];
+                    rowIndex = parseInt(str) + 1;
+                }else{
+                    $._log("row不为空， ：" + rows.length);
+                    rowIndex = rows.length + 1;
+                }
+            }
+            var rowId = "default_rowId_" + rowIndex;
+            grid.datagrid('insertRow', {row:{id:rowId}});
 
         }
 
         function onClickRow(rowIndex) {
-            $("#grid").datagrid('beginEdit', rowIndex);
+            if(!isDeleteIndex){
+                $("#grid").datagrid('beginEdit', rowIndex);
+            }else {
+                isDeleteIndex = false;
+            }
+
         }
 
-        function deleteRow(rowIndex) {
-            alert($(this).html());
-            $("#grid").datagrid('deleteRow', rowIndex);
+        function deleteRow(rowId) {
+            var rowIndex = grid.datagrid('getRowIndex', rowId);
+            grid.datagrid('deleteRow', rowIndex);
+            isDeleteIndex = true;
+            //grid.datagrid('unselectRow', rowIndex);
         }
 
-        var columns = [[{
+        var columns = [[
+            {
+                field: 'id',
+                title: 'id',
+                hidden: true,
+                formatter: function (value, row, rowIndex) {
+                    if(!value || value == undefined){
+                        return "default_rowId_" + rowIndex;
+                    }
+                    return value;
+                }
+            },
+            {
             field: 'totalScore',
             title: '考核评分项',
             width: 190,
@@ -121,7 +157,7 @@
             title: '操作',
             width: 50,
             formatter : function(value, row, rowIndex){
-                return "<a href='#' onclick='deleteRow("+rowIndex+")'>删除</a>"
+                return "<a href='#' onclick='deleteRow(\""+row.id+"\")'>删除</a>"
             }
         }]];
 
@@ -144,7 +180,7 @@
             fit:true,
             onClickRow : onClickRow,
             data: [{
-                "id":"id",
+                "id":"id123",
                 "totalScore": "单位没有建立精神文明建设组织领导机构的扣1分",
                 "unitType": "上传单位建立精神文明建设组织领导机构的文稿电子版，落款处有单位印章",
                 "unitProperty": "1.0",

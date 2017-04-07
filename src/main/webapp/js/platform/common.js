@@ -89,11 +89,34 @@ $.extend({
         $container.append($iFrame);
         $container.append($loading);
         return $container;
+    },
+    _log : function (str) {
+        if(console){
+            console.log(str);
+        }
     }
 });
 
 $.fn.extend({
     openWindow: function (containerId, url, width, height, title ,extOptions) {
+
+        if(!width){
+            width = 750;
+        }
+        if(!height){
+            height = 570;
+        }
+
+        // 修正window的高度和宽度
+        var _width = width > this.width() ? this.width() -10 : width;
+        var _height = height > this.height() ? this.height() -10 : height;
+
+        if(_width < width){
+            $._log("修正宽度为：" + _width);
+        }
+        if(_height < height){
+            $._log("修正高度为:" + _height);
+        }
 
         var $document = $($(this)[0].document);
         var $container = $document.find("#" + containerId);
@@ -106,13 +129,14 @@ $.fn.extend({
         var options = {
             minimizable: false,
             collapsible: false,
+            zIndex:90000,
             onClose: function () {
                 $container.window('destroy');
             }
         };
         options.title = title;
-        options.width = width;
-        options.height = height;
+        options.width = _width;
+        options.height = _height;
         var $iframe = $container.find('iframe');
         var $loadingDiv = $container.find('div');
         if(extOptions){

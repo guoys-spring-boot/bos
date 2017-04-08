@@ -247,12 +247,7 @@
 		<table style="width: 100%;">
 			<tbody>
 				<tr>
-					<td style="width: 300px;">
 
-					</td>
-					<td style="width: *;" class="co1"><span id="online"
-						style="background: url(${pageContext.request.contextPath }/images/online.png) no-repeat left;padding-left:18px;margin-left:3px;font-size:8pt;color:#005590;">在线人数:1</span>
-					</td>
 				</tr>
 			</tbody>
 		</table>

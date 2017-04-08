@@ -1,5 +1,8 @@
 package cn.itcast.bos.domain.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by gys on 2017/4/5.
  */
@@ -13,7 +16,46 @@ public class AssessmentContent {
     // 考核类型
     private String type;
 
+
+    private List<AssessmentStd> assessmentStdList = new ArrayList<AssessmentStd>();
+
     private double totalScore;
+
+    public List<AssessmentStd> getAssessmentStdList() {
+        return assessmentStdList;
+    }
+
+    private ArrayList<AssessmentStd> needInserts = new ArrayList<AssessmentStd>();
+    private ArrayList<AssessmentStd> needUpdates = new ArrayList<AssessmentStd>();
+    private  ArrayList<AssessmentStd> needDeletes = new ArrayList<AssessmentStd>();
+
+    public ArrayList<AssessmentStd> getNeedInserts() {
+        return needInserts;
+    }
+
+    public void setNeedInserts(ArrayList<AssessmentStd> needInserts) {
+        this.needInserts = needInserts;
+    }
+
+    public ArrayList<AssessmentStd> getNeedUpdates() {
+        return needUpdates;
+    }
+
+    public void setNeedUpdates(ArrayList<AssessmentStd> needUpdates) {
+        this.needUpdates = needUpdates;
+    }
+
+    public ArrayList<AssessmentStd> getNeedDeletes() {
+        return needDeletes;
+    }
+
+    public void setNeedDeletes(ArrayList<AssessmentStd> needDeletes) {
+        this.needDeletes = needDeletes;
+    }
+
+    public void setAssessmentStdList(List<AssessmentStd> assessmentStdList) {
+        this.assessmentStdList = assessmentStdList;
+    }
 
     public double getTotalScore() {
         return totalScore;
@@ -53,7 +95,11 @@ public class AssessmentContent {
                 "id='" + id + '\'' +
                 ", projectName='" + projectName + '\'' +
                 ", type='" + type + '\'' +
+                ", assessmentStdList=" + assessmentStdList +
                 ", totalScore=" + totalScore +
+                ", needInserts=" + needInserts +
+                ", needUpdates=" + needUpdates +
+                ", needDeletes=" + needDeletes +
                 '}';
     }
 }

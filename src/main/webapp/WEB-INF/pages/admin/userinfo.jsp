@@ -104,14 +104,11 @@
 
                 $("#save").click(function(){
                     var userForm = $("#useForm");
-                    if(userForm.form('validate')){
-                        userForm.submit(function () {
-                            $(this).ajaxForm(function () {
-                                alert(134);
-                            });
-                            return false;
-                        });
-                    }
+                    userForm.form('submit', {
+                        success: function () {
+                            $(window).closeWindow('addUserWindow');
+                        }
+                    })
                 });
 
                 $("#update").click(function(){

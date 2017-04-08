@@ -108,8 +108,8 @@ $.fn.extend({
         }
 
         // 修正window的高度和宽度
-        var _width = width > this.width() ? this.width() -10 : width;
-        var _height = height > this.height() ? this.height() -10 : height;
+        var _width = width > this.width() ? this.width() -20 : width;
+        var _height = height > this.height() ? this.height() -20 : height;
 
         if(_width < width){
             $._log("修正宽度为：" + _width);
@@ -184,5 +184,67 @@ $.fn.extend({
             return $(this[0].document);
         }
         return $($(window)[0].document);
+    },
+    _confirm: function(content, success, width, height, title){
+        if(!title){
+            title = "警告";
+        }
+        if(!width || !$.isNumeric(width)){
+            width = 300;
+        }
+
+        if(!height || !$.isNumeric(height)){
+            height = 200;
+        }
+        var $confirmDialog =  $("<div>"+content+"</div>");
+        var options = {
+            collapsible:false,
+            minimizable:false,
+            maximizable:false,
+            resizable:false,
+            title:title,
+            width:width,
+            height:height,
+            buttons:[
+                {
+                    text:"确定",
+                    handler:function(){
+                        if($.isFunction(success)){
+                            success();
+                        }
+                        $confirmDialog.dialog('destroy');
+                    }
+                },{
+                    text:"取消",
+                    handler:function(){
+                        $confirmDialog.dialog('destroy');
+                    }
+                }
+            ]
+        };
+
+        $confirmDialog.dialog(options);
+        $confirmDialog.dialog('open');
+    },
+    _addGridChanges: function (girdId, prefix, type) {
+
+        var grid = $("#" + girdId);
+        var rows = grid.datagrid('getRows');
+        for (var i = 0; i < rows.length; i++){
+            var rowIndex = grid.datagrid('getRowIndex', rows[i]);
+            grid.datagrid('endEdit', rowIndex);
+        }
+
+        if(prefix && prefix != undefined){
+            var changes = grid.datagrid('getChanges', type);
+            for(var j = 0; j< changes.length; j++){
+                var record = changes[j];
+                for (var attr in record){
+                    var name =  prefix + "["+ j + "]." + attr;
+                    var input = $("<input type='hidden' name='"+name+"' value='"+record[attr]+"'  />");
+                    $(this).append(input);
+                }
+            }
+        }
     }
 });

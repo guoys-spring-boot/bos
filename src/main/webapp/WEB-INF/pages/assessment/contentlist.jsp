@@ -17,15 +17,21 @@
         }
     };
 
+    var grid = $("#grid");
+
     function openLookupPage(id) {
 
-        var url = '${pageContext.request.contextPath}/business/toLookupUnit?unitId=' + id;
-        $(window).openWindow('addUserWindow', url, 750, 770, '用户管理', dialogOptions);
+        var url = '${pageContext.request.contextPath}/assessmentContent/toLookupContent?contentId=' + id;
+        $(window).openWindow('addUserWindow', url, 750, 770, '考核项目', dialogOptions);
     }
 
     function openEditPage(id) {
-        var url = '${pageContext.request.contextPath}/business/toUpdateUnit?unitId=' + id;
-        $(window).openWindow('addUserWindow', url, 750, 770, '用户管理', dialogOptions);
+        if(!id){
+            alert("没有选中行");
+            return;
+        }
+        var url = '${pageContext.request.contextPath}/assessmentContent/toUpdateContent?contentId=' + id;
+        $(window).openWindow('addUserWindow', url, 750, 770, '考核项目', dialogOptions);
 
     }
 
@@ -99,7 +105,7 @@
             pagination: true,
 			fit : true,
 			border : false,
-            singleSelect:true,
+            singleSelect:false,
 			rownumbers : true,
 			striped : true,
 			toolbar : toolbar,
@@ -148,26 +154,25 @@
         $(window).openWindow('addUserWindow', '${path}/assessmentContent/toAddContent', 750, 770, '考核项目', dialogOptions);
 
 	}
-	var isDeleteIndex;
 	function doDelete() {
 
-		var ids = [];
-		var items = $('#grid').datagrid('getSelections');
-		for(var i=0; i<items.length; i++){
-		    ids.push(items[i].id);	    
-		}
-
-		$.ajax("/deleteUser", {
-		    data: {
-		        ids:ids.join(",")
-            },
-            success: function (data) {
-                $('#grid').datagrid('reload');
-                $('#grid').datagrid('uncheckAll');
+	    $(this)._confirm("确定删除吗?", function () {
+            var ids = [];
+            var items = $('#grid').datagrid('getSelections');
+            for(var i=0; i<items.length; i++){
+                ids.push(items[i].id);
             }
-        });
 
-		
+            $.ajax("/assessmentContent/deleteContent", {
+                data: {
+                    ids:ids.join(",")
+                },
+                success: function (data) {
+                    $("#grid").datagrid('reload');
+                    //grid.datagrid('uncheckAll');
+                }
+            });
+        });
 
 	}
 </script>		

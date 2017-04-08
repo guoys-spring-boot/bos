@@ -13,7 +13,7 @@
 <div region="north" style="height:31px;overflow:hidden;" split="false" border="false">
     <div class="datagrid-toolbar">
         <c:if test="${action eq 'add'}">
-            <a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
+            <a id="contentSave" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
         </c:if>
         <c:if test="${action eq 'update'}">
             <a id="update" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
@@ -21,22 +21,23 @@
     </div>
 </div>
 <div region="center" style="height:600px;overflow:auto;padding:5px;" border="false">
+    <div region="north" border="false" style="overflow: auto">
+
     <form:form id="contentForm" method="post" commandName="assessmentContent"
                action="${path}/assessmentContent/addContent">
-        <div region="north" border="false" style="overflow: auto">
             <table class="table-edit" width="95%" align="center">
                 <tr>
                     <td>考核类型:</td>
-                    <td><form:input path="type" disabled="${disabled}" type="text" class="easyui-validatebox"
+                    <td><form:input path="type" disabled="${disabled}" type="text"
                                     required="true"/></td>
                     <td>考核总分:</td>
-                    <td><form:input path="totalScore" disabled="${disabled}" type="text" class="easyui-validatebox"
+                    <td><form:input path="totalScore" disabled="${disabled}" type="text" class="easyui-numberbox" precision="2"
                                     required="true"/></td>
                 </tr>
                 <tr>
                     <td>考核项目:</td>
                     <td colspan="3">
-                        <form:textarea path="projectName" disabled="${disabled}" style="width:84%" required="true"/>
+                        <form:textarea path="projectName" disabled="${disabled}" rows="5" style="width:84%" required="true"/>
                     </td>
 
                 </tr>
@@ -53,29 +54,40 @@
                 </tr>
                 <form:hidden path="id"/>
             </table>
-            <div style="width: 670px; height: 300px">
+    </form:form>
+
+        <div style="width: 700px; height: 250px">
                 <table id="grid" ></table>
             </div>
         </div>
-    </form:form>
     <script type="text/javascript">
         var grid = $("#grid");
 
-        var isDeleteIndex = false;
         $(function () {
 
-            $("#save").click(function () {
+            $("#contentSave").click(function () {
                 var contentForm = $("#contentForm");
+                contentForm._addGridChanges("grid", "assessmentStdList", "inserted");
                 if (contentForm.form('validate')) {
-                    contentForm.submit();
+                    contentForm.form('submit', {
+                        success:function () {
+                           $(window).closeWindow('addUserWindow');
+                        }
+                    });
                 }
+                //contentForm.submit();
             });
 
             $("#update").click(function () {
-                var userForm = $("#useForm");
-                if (userForm.form('validate')) {
-                    userForm.attr("action", "${path}/business/updateUnit");
-                    userForm.submit();
+                var contentForm = $("#contentForm");
+                contentForm._addGridChanges("grid", "needInserts", "inserted");
+                contentForm._addGridChanges("grid", "needUpdates", "updated");
+                contentForm._addGridChanges("grid", "needDeletes", "deleted");
+                if (contentForm.form('validate')) {
+                    contentForm.attr("action", "${path}/assessmentContent/updateContent");
+                    contentForm.form('submit', function () {
+                        $(window).closeWindow('addUserWindow');
+                    })
                 }
             });
 
@@ -84,85 +96,73 @@
         });
 
         function doAdd() {
-
-            var rows = grid.datagrid('getRows');
-            var rowIndex = -1;
-            if(!rows || rows.length == 0){
-                rowIndex = '1';
-            }else{
-                $._log("row不为空， ：" + JSON.stringify(rows, null , 4));
-                var lastRow = rows[rows.length - 1];
-
-                if(lastRow && lastRow.id && lastRow.id.indexOf("default_rowId_") != -1){
-                    var str = lastRow.id.split("_")[2];
-                    rowIndex = parseInt(str) + 1;
-                }else{
-                    $._log("row不为空， ：" + rows.length);
-                    rowIndex = rows.length + 1;
-                }
-            }
-            var rowId = "default_rowId_" + rowIndex;
-            grid.datagrid('insertRow', {row:{id:rowId}});
-
+            grid.datagrid('insertRow', {row:{}});
         }
 
         function onClickRow(rowIndex) {
-            if(!isDeleteIndex){
-                $("#grid").datagrid('beginEdit', rowIndex);
-            }else {
-                isDeleteIndex = false;
-            }
-
+            $("#grid").datagrid('beginEdit', rowIndex);
         }
 
-        function deleteRow(rowId) {
-            var rowIndex = grid.datagrid('getRowIndex', rowId);
+        function deleteRow(target) {
+            var tr = $(target).closest('tr.datagrid-row');
+            var rowIndex =  parseInt(tr.attr('datagrid-row-index'));
             grid.datagrid('deleteRow', rowIndex);
-            isDeleteIndex = true;
-            //grid.datagrid('unselectRow', rowIndex);
         }
 
-        var columns = [[
-            {
-                field: 'id',
-                title: 'id',
-                hidden: true,
-                formatter: function (value, row, rowIndex) {
-                    if(!value || value == undefined){
-                        return "default_rowId_" + rowIndex;
-                    }
-                    return value;
-                }
-            },
-            {
-            field: 'totalScore',
+        var itemCol = {
+            field: 'item',
             title: '考核评分项',
-            width: 190,
-            editor:{
-                type: "textarea",
-                options:{
-                    required: true
-                }
-            }
-        }, {
-            field: 'unitType',
+            width: 190
+        };
+
+        var remarkCol = {
+            field: 'remark',
             title: '报送说明',
             width: 335
-        }, {
-            field: 'unitProperty',
+        };
+
+
+        var scoreCol = {
+            field: 'score',
             title: '考核分数',
             width: 60
-        },{
+        };
+
+        var delRow = {
             field: 'delRow',
             title: '操作',
             width: 50,
             formatter : function(value, row, rowIndex){
-                return "<a href='#' onclick='deleteRow(\""+row.id+"\")'>删除</a>"
+                return "<a href='#' onclick='deleteRow(this)'>删除</a>";
             }
-        }]];
+        };
+        var columns = [[itemCol, remarkCol, scoreCol]];
+        if('${action}' == 'add' || '${action}' == 'update'){
+            itemCol.editor = {
+                type: "textarea",
+                options:{
+                    required: true
+                }
+            };
+            remarkCol.editor = {
+                type: "textarea",
+                options:{
+                    required: true
+                }
+            };
+            scoreCol.editor = {
+                type: "numberbox",
+                options:{
+                    required: true
+                }
+            };
+            columns[0].push(delRow);
+
+        }
+
 
         var toolbar = [{
-            id: 'button-add',
+            id: 'button-add-row',
             text: '新增一行',
             iconCls: 'icon-add',
             handler: doAdd
@@ -178,15 +178,9 @@
             toolbar: toolbar,
             nowrap: false,
             fit:true,
-            onClickRow : onClickRow,
-            data: [{
-                "id":"id123",
-                "totalScore": "单位没有建立精神文明建设组织领导机构的扣1分",
-                "unitType": "上传单位建立精神文明建设组织领导机构的文稿电子版，落款处有单位印章",
-                "unitProperty": "1.0",
-                "delRow":""
-            }],
-            //url : "/assessmentContent/listContent",
+            onDblClickRow : onClickRow,
+
+            url : "${path}/assessmentContent/listContentStd?contentId=${assessmentContent.id}",
             idField: 'id',
             columns: columns
         });

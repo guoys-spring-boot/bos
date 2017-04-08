@@ -19,7 +19,7 @@ var easyuiPanelOnMove = function(left, top) {
     if (buttom > browserHeight) {  
         t = browserHeight - height;  
     }  
-    $(this).parent().css({/* 修正面板位置 */  
+    $(this).parent().css({/* 修正面板位置 */
         left : l,  
         top : t  
     });  

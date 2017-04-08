@@ -6,6 +6,18 @@
         <result column="khxm" property="projectName" jdbcType="VARCHAR"/>
         <result column="xmlx" property="type" jdbcType="VARCHAR"/>
         <result column="totalscore" property="totalScore"/>
+        <collection property="assessmentStdList" ofType="cn.itcast.bos.domain.business.AssessmentStd" >
+            <id column="id" property="id" />
+            <result column="khpfx" property="item"/>
+            <result column="score" property="score"/>
+            <result column="shuoming" property="remark"/>
+        </collection>
+     </resultMap>
+    <resultMap id="StdResultMap" type="cn.itcast.bos.domain.business.AssessmentStd">
+        <id column="id" property="id" />
+        <result column="khpfx" property="item"/>
+        <result column="score" property="score"/>
+        <result column="shuoming" property="remark"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, khxm, xmlx, totalscore
@@ -27,7 +39,7 @@
     <select id="findById" resultMap="ContentResultMap">
         select
         <include refid="Base_Column_List"/>
-        from wmb_khxm where id = #{id}
+        from wmb_khxm xm where id = #{id}
     </select>
     <select id="findAll" resultMap="ContentResultMap" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
         select
@@ -50,5 +62,9 @@
         <if test="type != null and type != ''">
             and xmlx = #{type}
         </if>
+    </select>
+
+    <select id="findStdByContentId" resultMap="StdResultMap" >
+        select * from wmb_khxzb where khxmid = #{contentId}
     </select>
 </mapper>

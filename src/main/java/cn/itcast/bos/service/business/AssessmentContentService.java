@@ -1,6 +1,7 @@
 package cn.itcast.bos.service.business;
 
 import cn.itcast.bos.domain.business.AssessmentContent;
+import cn.itcast.bos.domain.business.AssessmentStd;
 
 import java.util.List;
 
@@ -15,10 +16,14 @@ public interface AssessmentContentService {
 
     void delete(String id);
 
+    void deleteBatch(String ids);
+
     List<AssessmentContent> list(String type);
 
     AssessmentContent findById(String id);
 
     int count(String type);
+
+    List<AssessmentStd> listStds(String contentId);
 
 }

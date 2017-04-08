@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itcast.bos.dao.business.AssessmentStdDao">
+
+
+    <sql id="Base_Column_List">
+        id, khxmid,khpfx , shuoming, score
+    </sql>
+    <insert id="insert" parameterType="cn.itcast.bos.domain.business.AssessmentStd">
+        insert into wmb_khxzb (<include refid="Base_Column_List"/>) values (#{id}, #{contentId}, #{item},
+        #{remark}, #{score})
+    </insert>
+
+    <update id="update" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
+        UPDATE wmb_khxzb
+        SET khpfx = #{item}, shuoming = #{remark}, score = #{score}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByContentId" >
+        DELETE FROM wmb_khxzb
+        WHERE khxmid = #{contentId}
+    </delete>
+
+    <delete id="delete" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
+        DELETE FROM wmb_khxzb
+        WHERE id = #{id}
+    </delete>
+
+</mapper>

@@ -65,8 +65,9 @@ public class AssessmentContentController {
     }
 
     @RequestMapping("/updateContent")
-    public void updateContent(AssessmentContent content){
+    public String updateContent(AssessmentContent content){
         contentService.update(content);
+        return "assessment/contentinfo";
     }
 
     @RequestMapping("/addContent")

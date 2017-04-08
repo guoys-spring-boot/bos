@@ -66,6 +66,12 @@
         $(function () {
 
             $("#contentSave").click(function () {
+
+                if(!$("#projectName").val()){
+                    $(this)._alert("考核项目不能为空");
+                    return;
+                }
+
                 var contentForm = $("#contentForm");
                 contentForm._addGridChanges("grid", "assessmentStdList", "inserted");
                 if (contentForm.form('validate')) {
@@ -79,14 +85,20 @@
             });
 
             $("#update").click(function () {
+                if(!$("#projectName").val()){
+                    $(this)._alert("考核项目不能为空");
+                    return;
+                }
                 var contentForm = $("#contentForm");
                 contentForm._addGridChanges("grid", "needInserts", "inserted");
                 contentForm._addGridChanges("grid", "needUpdates", "updated");
                 contentForm._addGridChanges("grid", "needDeletes", "deleted");
                 if (contentForm.form('validate')) {
                     contentForm.attr("action", "${path}/assessmentContent/updateContent");
-                    contentForm.form('submit', function () {
-                        $(window).closeWindow('addUserWindow');
+                    contentForm.form('submit', {
+                        success:function () {
+                            $(window).closeWindow('addUserWindow');
+                        }
                     })
                 }
             });
@@ -99,8 +111,10 @@
             grid.datagrid('insertRow', {row:{}});
         }
 
-        function onClickRow(rowIndex) {
-            $("#grid").datagrid('beginEdit', rowIndex);
+        function onClickCell(rowIndex, field) {
+            grid.datagrid('beginEdit', rowIndex);
+            var ed = grid.datagrid('getEditor', {index:rowIndex,field:field});
+            $(ed.target).focus();
         }
 
         function deleteRow(target) {
@@ -137,6 +151,7 @@
             }
         };
         var columns = [[itemCol, remarkCol, scoreCol]];
+        var toolbar = [];
         if('${action}' == 'add' || '${action}' == 'update'){
             itemCol.editor = {
                 type: "textarea",
@@ -158,15 +173,15 @@
             };
             columns[0].push(delRow);
 
+            toolbar = [{
+                id: 'button-add-row',
+                text: '新增一行',
+                iconCls: 'icon-add',
+                handler: doAdd
+            }];
+
         }
 
-
-        var toolbar = [{
-            id: 'button-add-row',
-            text: '新增一行',
-            iconCls: 'icon-add',
-            handler: doAdd
-        }];
 
         grid.datagrid({
             iconCls: 'icon-forward',
@@ -178,7 +193,7 @@
             toolbar: toolbar,
             nowrap: false,
             fit:true,
-            onDblClickRow : onClickRow,
+            onDblClickCell : onClickCell,
 
             url : "${path}/assessmentContent/listContentStd?contentId=${assessmentContent.id}",
             idField: 'id',

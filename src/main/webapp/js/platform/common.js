@@ -185,46 +185,21 @@ $.fn.extend({
         }
         return $($(window)[0].document);
     },
-    _confirm: function(content, success, width, height, title){
+    _confirm: function(content, success, title){
         if(!title){
             title = "警告";
         }
-        if(!width || !$.isNumeric(width)){
-            width = 300;
+        $.messager.confirm(title, content, function (r) {
+            if(r && $.isFunction(success)){
+                success();
+            }
+        })
+    },
+    _alert: function (content, title) {
+        if(!title){
+            title = "警告";
         }
-
-        if(!height || !$.isNumeric(height)){
-            height = 200;
-        }
-        var $confirmDialog =  $("<div>"+content+"</div>");
-        var options = {
-            collapsible:false,
-            minimizable:false,
-            maximizable:false,
-            resizable:false,
-            title:title,
-            width:width,
-            height:height,
-            buttons:[
-                {
-                    text:"确定",
-                    handler:function(){
-                        if($.isFunction(success)){
-                            success();
-                        }
-                        $confirmDialog.dialog('destroy');
-                    }
-                },{
-                    text:"取消",
-                    handler:function(){
-                        $confirmDialog.dialog('destroy');
-                    }
-                }
-            ]
-        };
-
-        $confirmDialog.dialog(options);
-        $confirmDialog.dialog('open');
+        $.messager.alert(title, content);
     },
     _addGridChanges: function (girdId, prefix, type) {
 

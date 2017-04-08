@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 <!-- 导入jquery核心类库 -->
 <jsp:include page="${pageContext.request.contextPath}/common/reference.jsp" />
+
 <script type="text/javascript">
 
     var dialogOptions = {
@@ -36,22 +37,7 @@
     }
 
 	// 工具栏
-	var toolbar = [ {
-		id : 'button-view',	
-		text : '修改',
-		iconCls : 'icon-edit',
-		handler : doEdit
-	}, {
-		id : 'button-add',
-		text : '新增',
-		iconCls : 'icon-add',
-		handler : doAdd
-	}, {
-		id : 'button-delete',
-		text : '删除',
-		iconCls : 'icon-cancel',
-		handler : doDelete
-	}];
+	var toolbar = '#toolbar';
 
 
 	//定义冻结列
@@ -145,8 +131,16 @@
 	}
 
 	function doEdit() {
-        var item = $('#grid').datagrid('getSelected');
-        openEditPage(item.id);
+        var items = $('#grid').datagrid('getSelections');
+        if(items.length <= 0){
+            $(this)._alert("没有选中行");
+            return;
+        }
+        if(items.length > 1){
+            $(this)._alert("不能选中多行");
+            return;
+        }
+        openEditPage(items[0].id);
     }
 
 
@@ -155,15 +149,20 @@
 
 	}
 	function doDelete() {
-
+        var grid = $('#grid');
+        var items = grid.datagrid('getSelections');
+        if(items.length <= 0){
+            $(this)._alert("没有选中行");
+            return;
+        }
 	    $(this)._confirm("确定删除吗?", function () {
             var ids = [];
-            var items = $('#grid').datagrid('getSelections');
+
             for(var i=0; i<items.length; i++){
                 ids.push(items[i].id);
             }
 
-            $.ajax("/assessmentContent/deleteContent", {
+            $.ajax("${path}/assessmentContent/deleteContent", {
                 data: {
                     ids:ids.join(",")
                 },
@@ -175,9 +174,15 @@
         });
 
 	}
+
 </script>		
 </head>
 <body class="easyui-layout" style="visibility:hidden;">
+    <div id="toolbar">
+        <a href="#" class="easyui-linkbutton" onclick="doEdit()" data-options="iconCls:'icon-edit',plain:true">修改</a>
+        <a href="#" class="easyui-linkbutton" onclick="doAdd()" data-options="iconCls:'icon-add',plain:true">新增</a>
+        <a href="#" class="easyui-linkbutton" onclick="doDelete()" data-options="iconCls:'icon-cancel',plain:true">删除</a>
+    </div>
 
     <div region="center" border="false">
     	<table id="grid"></table>

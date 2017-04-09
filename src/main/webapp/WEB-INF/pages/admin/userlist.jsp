@@ -53,6 +53,8 @@
 	var isAdmin = $.loadEnum('yesOrNo');
 	var auditingStatus = $.loadEnum('auditingStatus');
 
+	var ascriptionArea = $.loadEnum('ascriptionArea');
+
 	//定义冻结列
 	var frozenColumns = [[{
 		field : 'id',
@@ -86,7 +88,10 @@
 		field : 'ascriptionArea',
 		title : '归属区域',
 		width : 60,
-		rowspan : 1
+		rowspan : 1,
+        formatter : function(value, row, index){
+            return ascriptionArea[value];
+        }
 	}, {
 		field : 'unitType',
 		title : '单位类型',
@@ -178,7 +183,7 @@
 
 	function doAdd() {
         $(window).openWindow('addUserWindow', '${pageContext.request.contextPath}/business/toAddUnit', 750, 570, '用户管理', dialogOptions);
-
+		//$(window)._openTab("tabs", '${pageContext.request.contextPath}/business/toAddUnit', '用户管理', window.top);
 	}
 
 	function doView() {
@@ -196,15 +201,24 @@
 		    ids.push(items[i].id);	    
 		}
 
-		$.ajax("/deleteUser", {
-		    data: {
-		        ids:ids.join(",")
-            },
-            success: function (data) {
-                $('#grid').datagrid('reload');
-                $('#grid').datagrid('uncheckAll');
-            }
+		if(ids.length <=0){
+		    $(this)._alert("没有选中的行");
+		    return;
+        }
+
+        $(this)._confirm("确定要删除?", function () {
+            $.ajax("${path}/business/deleteUnit", {
+                data: {
+                    ids:ids.join(",")
+                },
+                success: function (data) {
+                    $('#grid').datagrid('reload');
+                    $('#grid').datagrid('uncheckAll');
+                }
+            });
         });
+
+
 
 		
 

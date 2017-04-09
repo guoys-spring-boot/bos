@@ -3,6 +3,7 @@ package cn.itcast.bos.dao.business;
 import cn.itcast.bos.dao.BaseDAO;
 import cn.itcast.bos.domain.business.UnitBean;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface UnitDao extends BaseDAO<UnitBean> {
     List<UnitBean> findUnitByCondition(UnitBean unitBean);
 
     int totalCountByCondition(UnitBean unitBean);
+
+    UnitBean findByUserName(@Param("username") String username);
 }

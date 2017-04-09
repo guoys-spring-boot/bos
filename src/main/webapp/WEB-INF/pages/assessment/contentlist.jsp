@@ -97,7 +97,7 @@
 			toolbar : toolbar,
             height:'auto',
             nowrap:false,
-			url : "/assessmentContent/listContent",
+			url : "${path}/assessmentContent/listContent",
 			idField : 'id', 
 			frozenColumns : frozenColumns,
 			columns : columns,

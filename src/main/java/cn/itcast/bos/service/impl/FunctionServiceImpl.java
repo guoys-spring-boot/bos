@@ -16,8 +16,10 @@ public class FunctionServiceImpl implements FunctionService {
 	@Autowired
 	private FunctionDAO functionDAO;
 
-	public List<Function> findMenu(User user) {
+	public List<Function> findMenu(String username) {
 		// 隐含条件 generateMenu = 1 ， order by zindex
+		User user = new User();
+		user.setUsername(username);
 		return functionDAO.findMenu(user);
 	}
 

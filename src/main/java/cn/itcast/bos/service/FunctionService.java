@@ -16,9 +16,9 @@ public interface FunctionService {
 	/**
 	 * 查询用户可以看见的菜单
 	 * 
-	 * @param user
+	 * @param username
 	 * @return
 	 */
-	public List<Function> findMenu(User user);
+	public List<Function> findMenu(String username);
 
 }

@@ -168,7 +168,9 @@
             scoreCol.editor = {
                 type: "numberbox",
                 options:{
-                    required: true
+                    required: true,
+                    precision: 2
+
                 }
             };
             columns[0].push(delRow);

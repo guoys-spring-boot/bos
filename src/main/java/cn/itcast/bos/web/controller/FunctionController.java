@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import cn.itcast.bos.domain.business.UnitBean;
 import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,10 +33,10 @@ public class FunctionController {
 	@ResponseBody
 	public Object menu(HttpSession session) {
 		// 查询当前用户具有功能
-		User user = (User) session.getAttribute("user");
+		UnitBean user = (UnitBean) session.getAttribute("user");
 
 		// 调用业务层 ，返回Function对象集合
-		List<Function> functions = functionService.findMenu(user);
+		List<Function> functions = functionService.findMenu(user.getUsername());
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("total", functions.size());

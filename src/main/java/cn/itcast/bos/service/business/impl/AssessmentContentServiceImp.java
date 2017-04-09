@@ -34,6 +34,9 @@ public class AssessmentContentServiceImp implements AssessmentContentService {
         content.setId(UUIDUtils.generatePrimaryKey());
         if(content.getAssessmentStdList() != null){
             for (AssessmentStd std : content.getAssessmentStdList()) {
+                if(StringUtils.isBlank(std.getItem()) || StringUtils.isBlank(std.getItem())){
+                    continue;
+                }
                 std.setId(UUIDUtils.generatePrimaryKey());
                 std.setContentId(content.getId());
                 stdDao.insert(std);
@@ -54,6 +57,9 @@ public class AssessmentContentServiceImp implements AssessmentContentService {
         }
         ArrayList<AssessmentStd> needInserts = content.getNeedInserts();
         for (AssessmentStd needInsert : needInserts) {
+            if(StringUtils.isBlank(needInsert.getItem()) || StringUtils.isBlank(needInsert.getItem())){
+                continue;
+            }
             needInsert.setContentId(content.getId());
             needInsert.setId(UUIDUtils.generatePrimaryKey());
             stdDao.insert(needInsert);

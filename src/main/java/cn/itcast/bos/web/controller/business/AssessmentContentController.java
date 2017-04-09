@@ -31,8 +31,10 @@ public class AssessmentContentController {
 
     @RequestMapping("/listContent")
     @ResponseBody
-    public Object listContent(int page, int rows, String type){
-        rows = rows <= 0 ? 10 : rows;
+    public Object listContent(Integer page, Integer rows, String type){
+        page = page == null ? 0 : page;
+        rows = rows == null ? Integer.MAX_VALUE : rows;
+        rows = rows <= 0 ? Integer.MAX_VALUE : rows;
         page = page < 0 ? 0 : page;
         PageHelper.startPage(page, rows);
         List<AssessmentContent> list = contentService.list(type);

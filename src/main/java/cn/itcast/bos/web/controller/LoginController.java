@@ -2,6 +2,8 @@ package cn.itcast.bos.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.itcast.bos.domain.business.UnitBean;
+import cn.itcast.bos.service.business.UnitService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -25,12 +27,10 @@ import cn.itcast.bos.utils.MD5Utils;
 @Controller
 public class LoginController {
 
-	public LoginController() {
-		System.out.println("login Server");
+	public LoginController(UnitService unitService) {
+		this.unitService = unitService;
 	}
-
-	@Autowired
-	private UserService userService;
+	private UnitService unitService;
 
 	@RequestMapping("/login.do")
 	// 用户登录
@@ -54,7 +54,8 @@ public class LoginController {
 		try {
 			// shiro 提供登陆方法
 			userSubject.login(token);
-			request.getSession().setAttribute("user", user);
+			UnitBean unitBean = unitService.findByUsername(user.getUsername());
+			request.getSession().setAttribute("user", unitBean);
 			// 重定向主页
 			return "redirect:index.jsp";
 		} catch (UnknownAccountException e) {
@@ -66,18 +67,6 @@ public class LoginController {
 			model.addAttribute("msg", "密码错误");
 			return "forward:login.jsp";
 		}
-
-		// 判断用户名和密码
-		// User loginUser = userService.findUserByLogin(user);
-		// if (loginUser == null) {
-		// // 登录失败
-		// model.addAttribute("msg", "用户名或者密码错误");
-		// return "forward:login.jsp";
-		// } else {
-		// request.getSession().setAttribute("user", loginUser);
-		// // 重定向主页
-		// return "redirect:index.jsp";
-		// }
 
 	}
 

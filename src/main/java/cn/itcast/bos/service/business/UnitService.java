@@ -20,4 +20,8 @@ public interface UnitService {
     UnitBean findById(String id);
 
     void update(UnitBean bean);
+
+    void deleteBatch(String ids);
+
+    UnitBean findByUsername(String username);
 }

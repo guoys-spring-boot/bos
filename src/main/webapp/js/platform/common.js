@@ -201,6 +201,39 @@ $.fn.extend({
         }
         $.messager.alert(title, content);
     },
+    _openTab: function(containerId, url, title, containerWindow){
+        if(!url || url == undefined){
+            return;
+        }
+        if(!title || title == undefined){
+            return;
+        }
+        if(title.length > 5){
+            title = title.substring(0, 5) + "...";
+        }
+
+        if(!containerWindow || containerWindow == undefined){
+            containerWindow = this;
+        }
+
+        var $container = $(containerWindow)[0].$("#" + containerId);
+
+        if($container.tabs('exists', title)){
+            $container.tabs('select', title);
+            return;
+        }
+
+        var content = '<div style="width:100%;height:100%;overflow:hidden;">'
+            + '<iframe src="'
+            + url
+            + '" scrolling="auto" style="width:100%;height:100%;border:0;" ></iframe></div>';
+
+        $container.tabs('add', {
+            title : title,
+            content : content,
+            closable : true
+        });
+    },
     _addGridChanges: function (girdId, prefix, type) {
 
         var grid = $("#" + girdId);

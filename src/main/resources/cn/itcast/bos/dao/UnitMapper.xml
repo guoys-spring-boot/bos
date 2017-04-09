@@ -41,7 +41,10 @@
       )
   </insert>
   <select id="findById" resultMap="UnitResultMap">
-      select <include refid="Base_Column_List" /> from BASE_UNIT WHERE ID = #{id}
+      select c.ID, p.unitFullName as parentUnitCode, c.ascriptionArea, c.organizationCode, c.unitFullName, c.unitType, c.unitProperty, c.unitLevel,
+      c.unitPersonCount, c.legalEntity, c.legalEntityTelNum, c.leader, c.leaderTelNum, c.unitContactPerson, c.unitContactPersonTelNum,
+      c.contactQQ, c.contactEmail, c.username, c.password, c.auditingStatus, c.isAdmin, c.unitAddress, c.unitShortName
+      from BASE_UNIT c left join BASE_UNIT p on c.parentUnitCode = p.id WHERE c.ID = #{id}
   </select>
     <select id="findAll" resultMap="UnitResultMap">
         select <include refid="Base_Column_List" /> from BASE_UNIT
@@ -72,9 +75,7 @@
 
     <update id="update" parameterType="cn.itcast.bos.domain.business.UnitBean">
         UPDATE BASE_UNIT t SET
-        <if test="parentUnitCode != null and parentUnitCode != ''" >
-            parentUnitCode = #{parentUnitCode},
-        </if>
+
         <if test="ascriptionArea != null and ascriptionArea != ''" >
             ascriptionArea = #{ascriptionArea},
         </if>
@@ -139,4 +140,11 @@
         where id = #{id}
     </update>
 
+    <delete id="delete" parameterType="cn.itcast.bos.domain.business.UnitBean" >
+        delete from BASE_UNIT where id = #{id}
+    </delete>
+
+    <select id="findByUserName" resultMap="UnitResultMap">
+        select <include refid="Base_Column_List"/> from BASE_UNIT where username = #{username}
+    </select>
 </mapper>

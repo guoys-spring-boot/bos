@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +31,14 @@ public class UnitController {
     }
 
     @RequestMapping("/addUnit")
-    public String addUnit(UnitBean unit, BindingResult result){
+    public String addUnit(UnitBean unit, BindingResult result, HttpServletRequest request){
 
         if(result.hasErrors()){
             System.out.println("校验失败");
             return "admin/userinfo";
         }
+        UnitBean unitBean = (UnitBean) request.getSession().getAttribute("user");
+        unit.setParentUnitCode(unitBean.getId());
         unitService.saveUnit(unit);
         return "admin/userlist";
     }
@@ -51,8 +54,11 @@ public class UnitController {
     }
 
     @RequestMapping("/toAddUnit")
-    public String toAddUnit(Model model){
-        model.addAttribute("unit", new UnitBean());
+    public String toAddUnit(Model model, HttpServletRequest request){
+        UnitBean unitBean = (UnitBean) request.getSession().getAttribute("user");
+        UnitBean toAdd = new UnitBean();
+        toAdd.setParentUnitCode(unitBean.getUnitFullName());
+        model.addAttribute("unit", toAdd);
         model.addAttribute("action", "add");
         return "admin/userinfo";
     }
@@ -87,5 +93,11 @@ public class UnitController {
         }
         unitService.update(unitBean);
         return "common/close";
+    }
+
+    @ResponseBody
+    @RequestMapping("/deleteUnit")
+    public void deleteUnit(String ids){
+        unitService.deleteBatch(ids);
     }
 }

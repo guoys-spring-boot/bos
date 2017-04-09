@@ -15,10 +15,10 @@
   <select id="findMenu" parameterType="User" resultMap="FunctionResultMap">
   	<if test="username != 'admin'">
   	select distinct <include refid="Base_Column_List"/>
-  		from AUTH_FUNCTION, ROLE_FUNCTION, USER_ROLE, T_USER
-  		where AUTH_FUNCTION.id = ROLE_FUNCTION.function_id and  ROLE_FUNCTION.role_id = USER_ROLE.role_id and USER_ROLE.user_id = T_USER.id
+  		from AUTH_FUNCTION, ROLE_FUNCTION, USER_ROLE, BASE_UNIT
+  		where AUTH_FUNCTION.id = ROLE_FUNCTION.function_id and  ROLE_FUNCTION.role_id = USER_ROLE.role_id and USER_ROLE.user_id = BASE_UNIT.id
   		and AUTH_FUNCTION.generatemenu='1'
-  		and T_USER.username = #{username} 
+  		and BASE_UNIT.username = #{username}
   		order by AUTH_FUNCTION.zindex
   	</if>
   	<if test="username=='admin'">

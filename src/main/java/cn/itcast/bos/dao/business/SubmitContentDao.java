@@ -1,0 +1,18 @@
+package cn.itcast.bos.dao.business;
+
+import cn.itcast.bos.dao.BaseDAO;
+import cn.itcast.bos.domain.business.SubmitContent;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * Created by gys on 2017/4/9.
+ */
+
+@Mapper
+public interface SubmitContentDao extends BaseDAO<SubmitContent> {
+
+    List<SubmitContent> findByUnitId(@Param("unitId") String unitId);
+}

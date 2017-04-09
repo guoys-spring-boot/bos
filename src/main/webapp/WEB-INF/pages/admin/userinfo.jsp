@@ -11,22 +11,25 @@
 </head>
 <body class="easyui-layout"  >
 	<div region="north" style="height:31px;overflow:hidden;" split="false" border="false" >
-		<div class="datagrid-toolbar" >
+        <div class="datagrid-toolbar" >
             <c:if test="${action eq 'add'}">
-			    <a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
+                <a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
             </c:if>
             <c:if test="${action eq 'update'}">
                 <a id="update" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
             </c:if>
         </div>
-	</div>
+    </div>
     <div region="center" style="height:600px;overflow:auto;padding:5px;" border="false">
        <form:form id="useForm" method="post" commandName="unit" action="/business/addUnit">
            <table class="table-edit"  width="95%" align="center">
            		<tr class="title"><td colspan="4">基本信息</td></tr>
 	           	<tr>
-                    <td>上级单位:</td><td><form:input path="parentUnitCode" disabled="${disabled}" type="text" class="easyui-validatebox" required="true" /></td>
-					<td>归属区域:</td><td><form:input path="ascriptionArea" disabled="${disabled}" type="text" class="easyui-validatebox" required="true" /></td>
+                    <td>上级单位:</td>
+                    <td>
+                        <form:input path="parentUnitCode" disabled="true" type="text" class="easyui-validatebox" required="true" />
+                    </td>
+					<td>归属区域:</td><td><form:input path="ascriptionArea" disabled="${disabled}" type="text" class="easyui-combobox" required="true" /></td>
                 </tr>
                <tr>
                    <td>机构代码:</td><td><form:input path="organizationCode" disabled="${disabled}" type="text" name="organizationCode" id="organizationCode" class="easyui-validatebox" required="true" /></td>
@@ -83,7 +86,7 @@
                <tr>
                    <td>登录密码:</td>
                    <td>
-                        <form:input path="password" disabled="${disabled}" type="password" name="password" id="password" class="easyui-validatebox" required="true" />
+                        <form:input path="password" disabled="${disabled}" type="text" class="easyui-validatebox" required="true" />
                     </td>
                    <td>审核状态:</td><td>
                        <form:input path="auditingStatus" disabled="${disabled}" type="text" name="auditingStatus" id="auditingStatus" class="easyui-combobox" required="true" style="width: 150px;" />
@@ -124,7 +127,7 @@
                 $.enumCombobox('unitProperty', 'unitProperty');
                 $.enumCombobox('unitType', 'unitType');
                 $.enumCombobox('isAdmin', 'yesOrNo');
-
+                $.enumCombobox('ascriptionArea', 'ascriptionArea')
             });
 
 		</script>

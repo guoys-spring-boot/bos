@@ -7,6 +7,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Insert title here</title>
+    <c:if test="${disabled != true}">
+        <c:set var="disabled" value="false"/>
+    </c:if>
     <!-- 导入jquery核心类库 -->
     <jsp:include page="${pageContext.request.contextPath}/common/reference.jsp"/>
     <script type="text/javascript" src="${path}/js/ueditor/ueditor.config.js"></script>
@@ -44,13 +47,42 @@
             $("#save").click(function () {
                 $("#submitContentForm").submit();
             });
+
+            var frozenColumns = [[{
+                field : 'id',
+                checkbox : true,
+                rowspan : 1
+            }, {
+                field : 'name',
+                title : '名称',
+                width : 130,
+                rowspan : 1,
+                sortable : false
+            }]];
+
+            $('#attachmentGrid').datagrid( {
+                iconCls : 'icon-forward',
+                fit : true,
+                border : false,
+                singleSelect:false,
+                rownumbers : true,
+                striped : true,
+                //toolbar : toolbar,
+                height:'auto',
+                nowrap:false,
+                url : "${path}/submitContent/listAttachment",
+                idField : 'id',
+                frozenColumns : frozenColumns
+            });
         })
     </script>
 </head>
 <body class="easyui-layout" style="visibility:hidden;">
 <div region="east" title="附件列表" icon="icon-forward" style="width:180px;overflow:auto;" split="false" border="true">
-
-
+    <div style="margin-bottom:20px">
+        <table id="attachmentGrid"></table>
+        <input type="file" id="file" name="file">
+    </div>
 </div>
 <div region="center" style="overflow:hidden;" border="false">
     <form id="submitContentForm" action="${path}/submitContent/addSubmitContent" method="post">
@@ -59,7 +91,7 @@
                 <a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <label for="assessmentProject">考核项目：</label>
-                <select disabled="disabled" id="assessmentProject" required="true" class="easyui-combogrid" name="project.id" style="width:400px;"></select>
+                <select id="assessmentProject" required="true" class="easyui-combogrid" name="project.id" style="width:400px;"></select>
             </div>
         </div>
         <div region="center" split="false" border="false">
@@ -75,6 +107,16 @@
                         initialFrameHeight: height,
                         readonly:${disabled}
                     });
+
+                    $("#file").AjaxFileUpload({
+                        action:"${path}/submitContent/upload",
+                        onComplete: function(filename, response) {
+                            $("#attachmentGrid").datagrid('insertRow', {
+                                row:response
+                            });
+                            $("#file").val('');
+                        }
+                    })
                 } catch (error) {
                     alert(error);
                 }

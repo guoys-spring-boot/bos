@@ -1,8 +1,12 @@
 package cn.itcast.bos.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import sun.misc.BASE64Encoder;
 
 public class FileUtils {
@@ -28,5 +32,22 @@ public class FileUtils {
 				filename = filename.replace("+"," ");
 			}
 			return filename;
+		}
+
+	/**
+	 * 根据当前时间创建一个文件夹
+	 * @param prefix
+	 * @return
+	 */
+		public static String generateDir(String prefix){
+		    if(StringUtils.isBlank(prefix)){
+		        prefix = "";
+            }
+            if(!prefix.endsWith("/")){
+		        prefix += "/";
+            }
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			return prefix + sdf.format(new Date()) + "/";
 		}
 }

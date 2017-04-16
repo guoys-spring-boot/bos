@@ -8,6 +8,11 @@ spring:
     view:
       prefix: /WEB-INF/pages/
       suffix: .jsp
+  http:
+    multipart:
+      maxFileSize: 50MB
+
+
 logging:
   level:
     root: INFO

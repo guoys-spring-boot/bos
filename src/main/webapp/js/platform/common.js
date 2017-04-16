@@ -42,6 +42,21 @@ $.extend({
 
     },
     /**
+     *  使用url加载enumbox数据
+     * @param containerId
+     * @param url
+     * @param initCode
+     * @param initText
+     */
+    enumComboboxFromUrl: function (containerId, url) {
+        var options = {
+            url: url,
+            valueField:'id',
+            textField:'text'
+        };
+        $("#" + containerId).combobox(options);
+    },
+    /**
      *  根据一个enumType获取一个Combobox的配置信息
      * @param enumType 枚举类型
      * @param initCode 初始化值

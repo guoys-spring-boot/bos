@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,11 +35,26 @@ public class AttachServiceImp implements AttachmentService {
 
     @Override
     public List<Attachment> findByForeignKey(String key) {
+        if(StringUtils.isBlank(key)){
+            return new ArrayList<Attachment>();
+        }
         return attachmentDao.findByForeignKey(key);
     }
 
     @Override
     public void updateForeign(String id, String key) {
         attachmentDao.updateForeignKey(id, key);
+    }
+
+    @Override
+    public Attachment findById(String id) {
+        return attachmentDao.findById(id);
+    }
+
+    @Override
+    public void deleteById(String id) {
+        Attachment attachment = new Attachment();
+        attachment.setId(id);
+        attachmentDao.delete(attachment);
     }
 }

@@ -7,18 +7,21 @@ import cn.itcast.bos.service.business.AttachmentService;
 import cn.itcast.bos.service.business.SubmitContentService;
 import cn.itcast.bos.utils.FileUtils;
 import cn.itcast.bos.utils.UUIDUtils;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,16 +43,17 @@ public class SubmitContentController {
 
     @RequestMapping("/addSubmitContent")
     @ResponseBody
-    public void addSubmitContent(SubmitContent content, HttpServletRequest request){
+    public void addSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert, HttpServletRequest request){
 
         UnitBean bean =  (UnitBean)request.getSession().getAttribute("user");
         content.setUnitId(bean.getId());
-        submitContentService.save(content);
+        submitContentService.save(content, needInsert);
     }
 
     @RequestMapping("/toAddSubmitContent")
     public String toAddSubmitContent(Model model){
         model.addAttribute("submitContent", new SubmitContent());
+        model.addAttribute("action", "add");
         return "submit/submitindex";
     }
 
@@ -59,10 +63,11 @@ public class SubmitContentController {
         UnitBean bean = (UnitBean)request.getSession().getAttribute("user");
         page = page == null ? 0 : page;
         rows = rows == null ? Integer.MAX_VALUE : rows;
-        PageHelper.startPage(page, rows);
+        Page<Object> page1 = PageHelper.startPage(page, rows);
         Map<String, Object> result = new HashMap<String, Object>();
-        result.put("total", 10);
+
         result.put("rows", submitContentService.listSubmitContent(bean.getId()));
+        result.put("total", page1.getTotal());
         return result;
     }
 
@@ -72,6 +77,18 @@ public class SubmitContentController {
             return "submit/submitindex";
         }
         model.addAttribute("disabled", true);
+        model.addAttribute("action", "lookup");
+        model.addAttribute("submitContent", submitContentService.findById(id));
+        return "submit/submitindex";
+    }
+
+    @RequestMapping("/toEditSubmitContent")
+    public String toEditSubmitContent(String id, Model model){
+        if(StringUtils.isBlank(id)){
+            return "submit/submitindex";
+        }
+        model.addAttribute("disabled", false);
+        model.addAttribute("action", "edit");
         model.addAttribute("submitContent", submitContentService.findById(id));
         return "submit/submitindex";
     }
@@ -103,5 +120,39 @@ public class SubmitContentController {
         attachment.setUri(path + actualName);
         attachmentService.insert(attachment);
         return attachment;
+    }
+
+    @ResponseBody
+    @RequestMapping("/listAttachment")
+    public Object listAttachment(String foreignKey){
+
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        result.put("total", 0);
+        result.put("rows", attachmentService.findByForeignKey(foreignKey));
+        return result;
+    }
+
+    @RequestMapping("/downloadAttachment")
+    public void downloadAttachment(String id, HttpServletRequest request ,HttpServletResponse response) throws IOException{
+        Attachment attachment = attachmentService.findById(id);
+        if(attachment == null){
+            throw new IOException("文件不存在");
+        }
+        String path = request.getServletContext().getRealPath("/") + "/" + attachment.getUri();
+        InputStream inputStream = new FileInputStream(path);
+        response.setHeader("conent-type", "application/octet-stream");
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=" + FileUtils.encodeDownloadFilename(attachment.getName(), request.getHeader("user-agent")));
+        OutputStream os = response.getOutputStream();
+
+        IOUtils.copy(inputStream, os);
+        inputStream.close();
+    }
+
+    @RequestMapping("/updateSubmitContent")
+    @ResponseBody
+    public void updateSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert,
+                                    @RequestParam("needDelete")String needDelete){
+        submitContentService.update(content, needInsert, needDelete);
     }
 }

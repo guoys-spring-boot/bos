@@ -1,5 +1,7 @@
 package cn.itcast.bos.domain.business;
 
+import cn.itcast.bos.domain.Role;
+
 /**
  * Created by gys on 2017/4/3.
  */
@@ -114,6 +116,8 @@ public class UnitBean {
     private String isAdmin;
 
     private String unitAddress;
+
+    private Role role;
 
     public String getId() {
         return id;
@@ -297,6 +301,22 @@ public class UnitBean {
 
     public void setUnitAddress(String unitAddress) {
         this.unitAddress = unitAddress;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    /**
+     *  考核内容是否需要打分
+     * @return true or false
+     */
+    public boolean needSubmit(){
+        return "5".equals(this.getUnitLevel()) || "6".equals(this.getUnitLevel());
     }
 
     @Override

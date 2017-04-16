@@ -38,6 +38,10 @@ public class UnitServiceImp implements UnitService {
         bean.setId(UUIDUtils.generatePrimaryKey());
         bean.setPassword(MD5Utils.md5(bean.getPassword()));
         unitDao.insert(bean);
+
+        if(bean.getRole() != null && StringUtils.isNotBlank(bean.getRole().getId())){
+            unitDao.saveUnitRole(bean.getId(), bean.getRole().getId());
+        }
     }
 
     @Override
@@ -67,11 +71,17 @@ public class UnitServiceImp implements UnitService {
     @Override
     public void update(UnitBean bean){
 
-        if(StringUtils.isNotBlank(bean.getUsername()) && this.findByUsername(bean.getUsername()) != null){
-            throw new RuntimeException("用户名已存在");
+        UnitBean _bean = this.findByUsername(bean.getUsername());
+
+        if(StringUtils.isNotBlank(bean.getUsername()) && _bean != null && !bean.getId().equals(_bean.getId())){
+            throw new RuntimeException("username already existed");
+        }
+        unitDao.deleteRoleByUnitId(bean.getId());
+        unitDao.update(bean);
+        if(bean.getRole() != null && StringUtils.isNotBlank(bean.getRole().getId())){
+            unitDao.saveUnitRole(bean.getId(), bean.getRole().getId());
         }
 
-        unitDao.update(bean);
     }
 
     @Override
@@ -94,5 +104,10 @@ public class UnitServiceImp implements UnitService {
             return null;
         }
         return unitDao.findByUserName(username);
+    }
+
+    @Override
+    public void updatePassword(String unitId, String password) {
+        unitDao.updatePassword(unitId, MD5Utils.md5(password));
     }
 }

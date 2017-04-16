@@ -13,6 +13,8 @@ public class SubmitContent {
 
     private String content;
 
+    private Double score;
+
     public String getId() {
         return id;
     }
@@ -43,5 +45,13 @@ public class SubmitContent {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 }

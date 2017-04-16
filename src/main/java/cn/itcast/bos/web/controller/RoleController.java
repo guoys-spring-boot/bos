@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,5 +40,20 @@ public class RoleController {
     public String saveRole(Role role, String functionIds){
         roleService.saveRole(role, functionIds);
         return "admin/role";
+    }
+
+    @RequestMapping("/listRoleAsEnum")
+    @ResponseBody
+    public Object listRoleAsEnum(){
+        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        List<Role> roles = roleService.listRole();
+        for (Role role : roles) {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("id", role.getId());
+            map.put("text", role.getName());
+            result.add(map);
+        }
+
+        return result;
     }
 }

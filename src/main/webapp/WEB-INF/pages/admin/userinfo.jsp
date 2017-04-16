@@ -92,9 +92,14 @@
                        <form:input path="auditingStatus" disabled="${disabled}" type="text" name="auditingStatus" id="auditingStatus" class="easyui-combobox" required="true" style="width: 150px;" />
                     </td>
                </tr>
-               <tr><td>是否为区域管理:</td>
-                   <td colspan="3">
+               <tr>
+                   <td>是否为区域管理:</td>
+                   <td >
                        <form:input path="isAdmin" disabled="${disabled}" type="text" name="isAdmin" id="isAdmin" class="easyui-combobox" required="true" />
+                   </td>
+                   <td>角色:</td>
+                   <td >
+                       <form:input path="role.id" id="roleId" disabled="${disabled}" type="text" class="easyui-combobox" required="true" />
                    </td>
                </tr>
 	           	<tr><td>单位地址:</td><td colspan="3"><form:textarea path="unitAddress" disabled="${disabled}" id="unitAddress" name="unitAddress" required="true" style="width:80%" /></td></tr>
@@ -127,7 +132,8 @@
                 $.enumCombobox('unitProperty', 'unitProperty');
                 $.enumCombobox('unitType', 'unitType');
                 $.enumCombobox('isAdmin', 'yesOrNo');
-                $.enumCombobox('ascriptionArea', 'ascriptionArea')
+                $.enumCombobox('ascriptionArea', 'ascriptionArea');
+                $.enumComboboxFromUrl("roleId", '${path}/listRoleAsEnum');
             });
 
 		</script>

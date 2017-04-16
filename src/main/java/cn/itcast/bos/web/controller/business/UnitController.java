@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,5 +100,25 @@ public class UnitController {
     @RequestMapping("/deleteUnit")
     public void deleteUnit(String ids){
         unitService.deleteBatch(ids);
+    }
+
+    @RequestMapping("/updatePassword")
+    @ResponseBody
+    public Object updatePassword(@RequestParam("password") String password, HttpServletRequest request){
+        Map<String, Object> result = new HashMap<String, Object>();
+        try{
+            UnitBean unitBean = (UnitBean) request.getSession().getAttribute("user");
+            unitService.updatePassword(unitBean.getId(), password);
+            result.put("success", true);
+            result.put("msg", "修改密码成功！");
+        }catch (Exception e){
+            result.put("success", false);
+            result.put("msg", "修改密码失败！");
+        }
+
+        return result;
+
+
+
     }
 }

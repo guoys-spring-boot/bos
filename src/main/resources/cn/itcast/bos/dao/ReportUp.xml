@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itcast.bos.dao.business.ReportDao">
+    <resultMap id="ReportResultMap" type="cn.itcast.bos.domain.business.ReportUpBean">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="khxmid" property="khxmid" jdbcType="VARCHAR"/>
+        <result column="dwid" property="dwid" jdbcType="VARCHAR"/>
+        <result column="khxm" property="khxm" jdbcType="VARCHAR"/>
+        <result column="xmlx" property="xmlx" jdbcType="VARCHAR"/>
+        <result column="totalscore" property="totalscore" jdbcType="VARCHAR"/>
+        <result column="unitShortName" property="unitShortName" jdbcType="VARCHAR"/>
+        <result column="unitLevel" property="unitLevel" jdbcType="VARCHAR"/>
+        <result column="xmlxmc" property="xmlxmc" jdbcType="VARCHAR"/>
+        <result column="levelmc" property="levelmc" jdbcType="VARCHAR"/>
+        <result column="score" property="score" />
+    </resultMap>
+
+    <select id="findById" resultMap="ReportResultMap">
+        SELECT K.*,b1.EnumText AS xmlxmc,b2.EnumText AS levelmc FROM
+        (
+        SELECT RS.id,RS.khxmid,RS.dwid,KM.khxm,KM.xmlx,KM.totalscore,BS.unitShortName,BS.unitLevel FROM
+        wmb_sbnr RS
+        LEFT JOIN wmb_khxm KM ON RS.khxmid=KM.id
+        LEFT JOIN base_unit BS ON RS.dwid=BS.id
+        )K,base_enum b1,base_enum b2
+        where K.xmlx=b1.EnumCode and b1.EnumType='assessmentType'
+        AND K.unitLevel=b2.EnumCode and b2.EnumType='unitLevel' AND K.ID = #{id}
+    </select>
+    <select id="findAll" resultMap="ReportResultMap">
+        SELECT K.*,b1.EnumText AS xmlxmc,b2.EnumText AS levelmc FROM
+        (
+        SELECT RS.id,RS.khxmid,RS.dwid,KM.khxm,KM.xmlx,KM.totalscore,BS.unitShortName,BS.unitLevel, sum(sc.scroe) as score FROM
+        wmb_sbnr RS
+        LEFT JOIN wmb_khxm KM ON RS.khxmid=KM.id
+        LEFT JOIN BASE_UNIT BS ON RS.dwid=BS.id
+        LEFT JOIN wmb_score sc ON sc.sbnrid = RS.id
+        where RS.dwid in (select id from BASE_UNIT where parentUnitCode = #{dwid})
+        <if test="xmlx != null and xmlx != ''">
+            and KM.xmlx = #{xmlx}
+        </if>
+        <if test="unitLevel != null and unitLevel != ''">
+            and BS.unitLevel = #{unitLevel}
+        </if>
+        group by RS.id
+        )K,BASE_ENUM b1,BASE_ENUM b2
+        where K.xmlx=b1.EnumCode and b1.EnumType='assessmentType'
+        AND K.unitLevel=b2.EnumCode and b2.EnumType='unitLevel'
+    </select>
+    <select id="findTotalCount" resultType="int">
+        select count(*) from (SELECT K.*,b1.EnumText AS xmlxmc,b2.EnumText AS levelmc FROM
+        (
+        SELECT RS.id,RS.khxmid,RS.dwid,KM.khxm,KM.xmlx,KM.totalscore,BS.unitShortName,BS.unitLevel FROM
+        wmb_sbnr RS
+        LEFT JOIN wmb_khxm KM ON RS.khxmid=KM.id
+        LEFT JOIN base_unit BS ON RS.dwid=BS.id
+        )K,base_enum b1,base_enum b2
+        where K.xmlx=b1.EnumCode and b1.EnumType='assessmentType'
+        AND K.unitLevel=b2.EnumCode and b2.EnumType='unitLevel')M
+    </select>
+    <select id="totalCountByCondition" parameterType="cn.itcast.bos.domain.business.ReportUpBean" resultType="int">
+        select count(*) from (SELECT K.*,b1.EnumText AS xmlxmc,b2.EnumText AS levelmc FROM
+        (
+        SELECT RS.id,RS.khxmid,RS.dwid,KM.khxm,KM.xmlx,KM.totalscore,BS.unitShortName,BS.unitLevel FROM
+        wmb_sbnr RS
+        LEFT JOIN wmb_khxm KM ON RS.khxmid=KM.id
+        LEFT JOIN base_unit BS ON RS.dwid=BS.id
+        )K,base_enum b1,base_enum b2
+        where K.xmlx=b1.EnumCode and b1.EnumType='assessmentType'
+        AND K.unitLevel=b2.EnumCode and b2.EnumType='unitLevel')M
+    </select>
+</mapper>

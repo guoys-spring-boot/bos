@@ -15,4 +15,5 @@ import java.util.List;
 public interface SubmitContentDao extends BaseDAO<SubmitContent> {
 
     List<SubmitContent> findByUnitId(@Param("unitId") String unitId);
+
 }

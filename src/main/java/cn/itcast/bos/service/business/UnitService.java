@@ -24,4 +24,6 @@ public interface UnitService {
     void deleteBatch(String ids);
 
     UnitBean findByUsername(String username);
+
+    void updatePassword(String unitId, String password);
 }

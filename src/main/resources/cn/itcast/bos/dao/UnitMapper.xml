@@ -1,60 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.itcast.bos.dao.business.UnitDao" >
-  <resultMap id="UnitResultMap" type="cn.itcast.bos.domain.business.UnitBean" >
-    <id column="ID" property="id" jdbcType="VARCHAR" />
-    <result column="parentUnitCode" property="parentUnitCode" jdbcType="VARCHAR" />
-    <result column="ascriptionArea" property="ascriptionArea" jdbcType="VARCHAR" />
-    <result column="organizationCode" property="organizationCode" jdbcType="VARCHAR" />
-    <result column="unitFullName" property="unitFullName" jdbcType="VARCHAR" />
-    <result column="unitShortName" property="unitShortName" jdbcType="VARCHAR" />
-    <result column="unitType" property="unitType" jdbcType="VARCHAR" />
-    <result column="unitProperty" property="unitProperty" jdbcType="VARCHAR" />
-    <result column="unitLevel" property="unitLevel" jdbcType="VARCHAR" />
-    <result column="unitPersonCount" property="unitPersonCount" jdbcType="INTEGER" />
-    <result column="legalEntity" property="legalEntity" jdbcType="VARCHAR" />
-    <result column="legalEntityTelNum" property="legalEntityTelNum" jdbcType="VARCHAR" />
-    <result column="leader" property="leader" jdbcType="VARCHAR" />
+<mapper namespace="cn.itcast.bos.dao.business.UnitDao">
+    <resultMap id="UnitResultMap" type="cn.itcast.bos.domain.business.UnitBean">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="parentUnitCode" property="parentUnitCode" jdbcType="VARCHAR"/>
+        <result column="ascriptionArea" property="ascriptionArea" jdbcType="VARCHAR"/>
+        <result column="organizationCode" property="organizationCode" jdbcType="VARCHAR"/>
+        <result column="unitFullName" property="unitFullName" jdbcType="VARCHAR"/>
+        <result column="unitShortName" property="unitShortName" jdbcType="VARCHAR"/>
+        <result column="unitType" property="unitType" jdbcType="VARCHAR"/>
+        <result column="unitProperty" property="unitProperty" jdbcType="VARCHAR"/>
+        <result column="unitLevel" property="unitLevel" jdbcType="VARCHAR"/>
+        <result column="unitPersonCount" property="unitPersonCount" jdbcType="INTEGER"/>
+        <result column="legalEntity" property="legalEntity" jdbcType="VARCHAR"/>
+        <result column="legalEntityTelNum" property="legalEntityTelNum" jdbcType="VARCHAR"/>
+        <result column="leader" property="leader" jdbcType="VARCHAR"/>
 
-    <result column="leaderTelNum" property="leaderTelNum" jdbcType="VARCHAR" />
-    <result column="unitContactPerson" property="unitContactPerson" jdbcType="VARCHAR" />
-    <result column="unitContactPersonTelNum" property="unitContactPersonTelNum" jdbcType="VARCHAR" />
-    <result column="contactQQ" property="contactQQ" jdbcType="VARCHAR" />
-    <result column="contactEmail" property="contactEmail" jdbcType="VARCHAR" />
-    <result column="username" property="username" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="auditingStatus" property="auditingStatus" jdbcType="VARCHAR" />
-    <result column="isAdmin" property="isAdmin" jdbcType="VARCHAR" />
-    <result column="unitAddress" property="unitAddress" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    ID, parentUnitCode, ascriptionArea, organizationCode, unitFullName, unitType, unitProperty, unitLevel,
-    unitPersonCount, legalEntity, legalEntityTelNum, leader, leaderTelNum, unitContactPerson, unitContactPersonTelNum,
-    contactQQ, contactEmail, username, password, auditingStatus, isAdmin, unitAddress, unitShortName
-  </sql>
-  <insert id="insert" parameterType="cn.itcast.bos.domain.business.UnitBean">
-      INSERT INTO BASE_UNIT ( <include refid="Base_Column_List" /> ) VALUE (
-      #{id}, #{parentUnitCode}, #{ascriptionArea}, #{organizationCode}, #{unitFullName}, #{unitType},
-      #{unitProperty}, #{unitLevel}, #{unitPersonCount}, #{legalEntity}, #{legalEntityTelNum}, #{leader},
-      #{leaderTelNum}, #{unitContactPerson}, #{unitContactPersonTelNum}, #{contactQQ}, #{contactEmail}, #{username},
-      #{password}, #{auditingStatus}, #{isAdmin}, #{unitAddress}, #{unitShortName}
-      )
-  </insert>
-  <select id="findById" resultMap="UnitResultMap">
-      select c.ID, p.unitFullName as parentUnitCode, c.ascriptionArea, c.organizationCode, c.unitFullName, c.unitType, c.unitProperty, c.unitLevel,
-      c.unitPersonCount, c.legalEntity, c.legalEntityTelNum, c.leader, c.leaderTelNum, c.unitContactPerson, c.unitContactPersonTelNum,
-      c.contactQQ, c.contactEmail, c.username, c.password, c.auditingStatus, c.isAdmin, c.unitAddress, c.unitShortName
-      from BASE_UNIT c left join BASE_UNIT p on c.parentUnitCode = p.id WHERE c.ID = #{id}
-  </select>
-    <select id="findAll" resultMap="UnitResultMap">
-        select <include refid="Base_Column_List" /> from BASE_UNIT
+        <result column="leaderTelNum" property="leaderTelNum" jdbcType="VARCHAR"/>
+        <result column="unitContactPerson" property="unitContactPerson" jdbcType="VARCHAR"/>
+        <result column="unitContactPersonTelNum" property="unitContactPersonTelNum" jdbcType="VARCHAR"/>
+        <result column="contactQQ" property="contactQQ" jdbcType="VARCHAR"/>
+        <result column="contactEmail" property="contactEmail" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="auditingStatus" property="auditingStatus" jdbcType="VARCHAR"/>
+        <result column="isAdmin" property="isAdmin" jdbcType="VARCHAR"/>
+        <result column="unitAddress" property="unitAddress" jdbcType="VARCHAR"/>
+        <association property="role" resultMap="RoleResultMap" />
+    </resultMap>
+    <resultMap id="RoleResultMap" type="cn.itcast.bos.domain.Role">
+        <id column="roleId" property="id"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, parentUnitCode, ascriptionArea, organizationCode, unitFullName, unitType, unitProperty, unitLevel,
+        unitPersonCount, legalEntity, legalEntityTelNum, leader, leaderTelNum, unitContactPerson, unitContactPersonTelNum,
+        contactQQ, contactEmail, username, password, auditingStatus, isAdmin, unitAddress, unitShortName
+    </sql>
+    <insert id="insert" parameterType="cn.itcast.bos.domain.business.UnitBean">
+        INSERT INTO BASE_UNIT (
+        <include refid="Base_Column_List"/>
+        ) VALUE (
+        #{id}, #{parentUnitCode}, #{ascriptionArea}, #{organizationCode}, #{unitFullName}, #{unitType},
+        #{unitProperty}, #{unitLevel}, #{unitPersonCount}, #{legalEntity}, #{legalEntityTelNum}, #{leader},
+        #{leaderTelNum}, #{unitContactPerson}, #{unitContactPersonTelNum}, #{contactQQ}, #{contactEmail}, #{username},
+        #{password}, #{auditingStatus}, #{isAdmin}, #{unitAddress}, #{unitShortName}
+        )
+    </insert>
+    <select id="findById" resultMap="UnitResultMap">
+        select c.ID, p.unitFullName as parentUnitCode, c.ascriptionArea, c.organizationCode, c.unitFullName, c.unitType,
+        c.unitProperty, c.unitLevel,
+        c.unitPersonCount, c.legalEntity, c.legalEntityTelNum, c.leader, c.leaderTelNum, c.unitContactPerson,
+        c.unitContactPersonTelNum,
+        c.contactQQ, c.contactEmail, c.username, c.password, c.auditingStatus, c.isAdmin, c.unitAddress, c.unitShortName, USER_ROLE.ROLE_ID as roleId
+        from BASE_UNIT c left join BASE_UNIT p on c.parentUnitCode = p.id left join USER_ROLE ON c.id = USER_ROLE.USER_ID WHERE c.ID = #{id}
     </select>
-  <select id="findTotalCount"  resultType="int">
-      select count(*) from BASE_UNIT
-  </select>
+    <select id="findAll" resultMap="UnitResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_UNIT
+    </select>
+    <select id="findTotalCount" resultType="int">
+        select count(*) from BASE_UNIT
+    </select>
 
     <select id="findUnitByCondition" parameterType="cn.itcast.bos.domain.business.UnitBean" resultMap="UnitResultMap">
-        select <include refid="Base_Column_List" /> from BASE_UNIT where 1=1
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_UNIT where 1=1
         <if test="unitLevel != null and unitLevel != ''">
             and unitLevel = #{unitLevel}
         </if>
@@ -76,75 +88,91 @@
     <update id="update" parameterType="cn.itcast.bos.domain.business.UnitBean">
         UPDATE BASE_UNIT t SET
 
-        <if test="ascriptionArea != null and ascriptionArea != ''" >
+        <if test="ascriptionArea != null and ascriptionArea != ''">
             ascriptionArea = #{ascriptionArea},
         </if>
-        <if test="organizationCode != null and organizationCode != ''" >
+        <if test="organizationCode != null and organizationCode != ''">
             organizationCode = #{organizationCode},
         </if>
-        <if test="unitFullName != null and unitFullName != ''" >
+        <if test="unitFullName != null and unitFullName != ''">
             unitFullName = #{unitFullName},
         </if>
-        <if test="unitType != null and unitType != ''" >
+        <if test="unitType != null and unitType != ''">
             unitType = #{unitType},
         </if>
-        <if test="unitProperty != null and unitProperty != ''" >
+        <if test="unitProperty != null and unitProperty != ''">
             unitProperty = #{unitProperty},
         </if>
-        <if test="unitLevel != null and unitLevel != ''" >
+        <if test="unitLevel != null and unitLevel != ''">
             unitLevel = #{unitLevel},
         </if>
-        <if test="unitPersonCount != null and unitPersonCount != ''" >
+        <if test="unitPersonCount != null and unitPersonCount != ''">
             unitPersonCount = #{unitPersonCount},
         </if>
-        <if test="legalEntity != null and legalEntity != ''" >
+        <if test="legalEntity != null and legalEntity != ''">
             legalEntity = #{legalEntity},
         </if>
-        <if test="legalEntityTelNum != null and legalEntityTelNum != ''" >
+        <if test="legalEntityTelNum != null and legalEntityTelNum != ''">
             legalEntityTelNum = #{legalEntityTelNum},
         </if>
-        <if test="leader != null and leader != ''" >
+        <if test="leader != null and leader != ''">
             leader = #{leader},
         </if>
-        <if test="leaderTelNum != null and leaderTelNum != ''" >
+        <if test="leaderTelNum != null and leaderTelNum != ''">
             leaderTelNum = #{leaderTelNum},
         </if>
-        <if test="unitContactPerson != null and unitContactPerson != ''" >
+        <if test="unitContactPerson != null and unitContactPerson != ''">
             unitContactPerson = #{unitContactPerson},
         </if>
-        <if test="unitContactPersonTelNum != null and unitContactPersonTelNum != ''" >
+        <if test="unitContactPersonTelNum != null and unitContactPersonTelNum != ''">
             unitContactPersonTelNum = #{unitContactPersonTelNum},
         </if>
-        <if test="contactQQ != null and contactQQ != ''" >
+        <if test="contactQQ != null and contactQQ != ''">
             contactQQ = #{contactQQ},
         </if>
-        <if test="username != null and username != ''" >
+        <if test="username != null and username != ''">
             username = #{username},
         </if>
-        <if test="contactEmail != null and contactEmail != ''" >
+        <if test="contactEmail != null and contactEmail != ''">
             contactEmail = #{contactEmail},
         </if>
-        <if test="auditingStatus != null and auditingStatus != ''" >
+        <if test="auditingStatus != null and auditingStatus != ''">
             auditingStatus = #{auditingStatus},
         </if>
-        <if test="isAdmin != null and isAdmin != ''" >
+        <if test="isAdmin != null and isAdmin != ''">
             isAdmin = #{isAdmin},
         </if>
-        <if test="unitShortName != null and unitShortName != ''" >
+        <if test="unitShortName != null and unitShortName != ''">
             unitShortName = #{unitShortName},
         </if>
-        <if test="unitAddress != null and unitAddress != ''" >
+        <if test="unitAddress != null and unitAddress != ''">
             unitAddress = #{unitAddress},
         </if>
         password = password
         where id = #{id}
     </update>
 
-    <delete id="delete" parameterType="cn.itcast.bos.domain.business.UnitBean" >
-        delete from BASE_UNIT where id = #{id}
+    <delete id="delete" parameterType="cn.itcast.bos.domain.business.UnitBean">
+        DELETE FROM BASE_UNIT
+        WHERE id = #{id}
     </delete>
 
     <select id="findByUserName" resultMap="UnitResultMap">
-        select <include refid="Base_Column_List"/> from BASE_UNIT where username = #{username}
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_UNIT where username = #{username}
     </select>
+
+    <update id="updatePassword">
+        UPDATE BASE_UNIT
+        SET password = #{password}
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteRoleByUnitId">
+        DELETE FROM USER_ROLE
+        WHERE USER_ID = #{unitId}
+    </delete>
+    <insert id="saveUnitRole">
+        INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES (#{unitId}, #{roleId})
+    </insert>
 </mapper>

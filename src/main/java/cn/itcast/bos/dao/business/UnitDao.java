@@ -19,4 +19,10 @@ public interface UnitDao extends BaseDAO<UnitBean> {
     int totalCountByCondition(UnitBean unitBean);
 
     UnitBean findByUserName(@Param("username") String username);
+
+    void updatePassword(@Param("id")String id, @Param("password")String password);
+
+    void deleteRoleByUnitId(@Param("unitId")String unitId);
+
+    void saveUnitRole(@Param("unitId") String unitId, @Param("roleId") String roleId);
 }

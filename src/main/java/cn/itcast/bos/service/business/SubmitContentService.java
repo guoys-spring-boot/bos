@@ -9,9 +9,12 @@ import java.util.List;
  */
 public interface SubmitContentService {
 
-    void save(SubmitContent content);
+    void save(SubmitContent content, String attachments);
 
     List<SubmitContent> listSubmitContent(String unitId);
 
+
     SubmitContent findById(String id);
+
+    void update(SubmitContent content, String needInsert, String needDelete);
 }

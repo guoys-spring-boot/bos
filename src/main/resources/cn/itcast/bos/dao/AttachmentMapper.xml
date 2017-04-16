@@ -21,4 +21,10 @@
     <update id="updateForeignKey" >
         update wmb_fujian SET sbnrid = #{key} where id = #{id}
     </update>
+    <select id="findById" resultMap="AttachmentResultMap">
+        select <include refid="Base_Column_List"/> from wmb_fujian where id = #{id}
+    </select>
+    <delete id="delete">
+        DELETE FROM wmb_fujian where id = #{id}
+    </delete>
 </mapper>

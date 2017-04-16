@@ -72,21 +72,7 @@
 					onClick : onClick
 				}
 		};
-		
-		// 系统管理菜单加载
-		$.ajax({
-			url : '${pageContext.request.contextPath}/json/admin.json',
-			type : 'GET',
-			dataType : 'text',
-			success : function(data) {
-				var zNodes = eval("(" + data + ")");
-				$.fn.zTree.init($("#adminMenu"), adminsetting, zNodes);
-			},
-			error : function(msg) {
-				alert('菜单加载异常!');
-			}
-		});
-		
+
 		// 页面加载后 右下角 弹出窗口
 		/**************/
 		window.setTimeout(function(){
@@ -118,7 +104,7 @@
 			}
 			
 			// 使用 ajax发起请求，将新密码提交到服务器 完成修改
-			$.post("${pageContext.request.contextPath}/updatePassword.do",{password : txtNewPass}, function(data){
+			$.post("${pageContext.request.contextPath}/business/updatePassword",{password : txtNewPass}, function(data){
 				if(data.success){
 					// 成功
 					$.messager.alert('信息',data.msg,'info');
@@ -226,9 +212,6 @@
 		<div class="easyui-accordion" fit="true" border="false">
 			<div title="基本功能" data-options="iconCls:'icon-mini-add'" style="overflow:auto">
 				<ul id="treeMenu" class="ztree"></ul>
-			</div>
-			<div title="系统管理" data-options="iconCls:'icon-mini-add'" style="overflow:auto">  
-				<ul id="adminMenu" class="ztree"></ul>
 			</div>
 		</div>
 	</div>

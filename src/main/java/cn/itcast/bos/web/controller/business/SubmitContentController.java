@@ -21,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by gys on 2017/4/9.
@@ -68,6 +65,12 @@ public class SubmitContentController {
 
         result.put("rows", submitContentService.listSubmitContent(bean.getId()));
         result.put("total", page1.getTotal());
+        List<Map<String, Object>> footer = new ArrayList<Map<String, Object>>();
+        Map<String, Object> content = new HashMap<String, Object>();
+        content.put("score", submitContentService.getAlreadyScore(bean.getId()));
+        content.put("projectName", "总分:");
+        footer.add(content);
+        result.put("footer", footer);
         return result;
     }
 

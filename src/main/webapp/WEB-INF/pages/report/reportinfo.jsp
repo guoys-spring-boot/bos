@@ -44,14 +44,7 @@
                 <tr>
                     <td colspan="4">&nbsp;</td>
                 </tr>
-                <tr class="title">
-                    <td colspan="4">考核评审标准:</td>
-                </tr>
-                <tr >
-                    <td colspan="4">
 
-                    </td>
-                </tr>
                 <form:hidden path="id"/>
                 <input type="hidden" id="scores" name="scores"/>
             </table>

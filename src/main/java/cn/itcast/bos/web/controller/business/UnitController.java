@@ -2,6 +2,7 @@ package cn.itcast.bos.web.controller.business;
 
 import cn.itcast.bos.domain.business.UnitBean;
 import cn.itcast.bos.service.business.UnitService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +50,9 @@ public class UnitController {
     @ResponseBody
     public Object listUnit(int page, int rows, UnitBean unitBean){
         Map<String, Object> result = new HashMap<String, Object>();
-        PageHelper.startPage(page, rows);
+        Page<Object> page1 = PageHelper.startPage(page, rows);
         result.put("rows", unitService.listUnit(unitBean));
-        result.put("total", unitService.countUnit(unitBean));
+        result.put("total", page1.getTotal());
         return result;
     }
 
@@ -118,7 +120,20 @@ public class UnitController {
 
         return result;
 
+    }
 
+    @RequestMapping("/listAllParentUnit")
+    @ResponseBody
+    public Object listAllParentUnit(){
+        List<UnitBean> allParentUnit = unitService.findAllParentUnit();
+        List<Map<String, Object>> results = new ArrayList<Map<String, Object>>();
+        for (UnitBean unitBean : allParentUnit) {
+            Map<String, Object> result = new HashMap<String, Object>();
+            result.put("id", unitBean.getId());
+            result.put("text", unitBean.getUnitShortName());
+            results.add(result);
+        }
 
+        return results;
     }
 }

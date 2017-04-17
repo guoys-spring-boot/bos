@@ -73,6 +73,13 @@
         <if test="auditingStatus != null and auditingStatus != ''">
             and auditingStatus = #{auditingStatus}
         </if>
+        <if test="parentUnitCode != null and parentUnitCode != ''">
+            and parentUnitCode = #{parentUnitCode}
+        </if>
+        <if test="unitFullName != null and unitFullName != ''">
+            <bind name="pattern" value="'%' + unitFullName + '%'" />
+            and unitFullName like #{pattern}
+        </if>
     </select>
 
     <select id="totalCountByCondition" parameterType="cn.itcast.bos.domain.business.UnitBean" resultType="int">
@@ -175,4 +182,7 @@
     <insert id="saveUnitRole">
         INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES (#{unitId}, #{roleId})
     </insert>
+    <select id="findAllParentUnit" resultMap="UnitResultMap">
+        select distinct t2.id, t2.unitShortName from BASE_UNIT t1 join  BASE_UNIT t2 on t1.`parentUnitCode` = t2.id
+    </select>
 </mapper>

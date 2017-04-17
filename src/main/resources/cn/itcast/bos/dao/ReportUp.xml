@@ -41,6 +41,10 @@
         <if test="unitLevel != null and unitLevel != ''">
             and BS.unitLevel = #{unitLevel}
         </if>
+        <if test="unitShortName != null and unitShortName != ''">
+            <bind name="pattern" value="'%' + unitShortName + '%'" />
+            and BS.unitShortName like #{pattern}
+        </if>
         group by RS.id
         )K,BASE_ENUM b1,BASE_ENUM b2
         where K.xmlx=b1.EnumCode and b1.EnumType='assessmentType'

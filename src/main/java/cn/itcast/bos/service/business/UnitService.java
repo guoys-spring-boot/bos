@@ -26,4 +26,6 @@ public interface UnitService {
     UnitBean findByUsername(String username);
 
     void updatePassword(String unitId, String password);
+
+    List<UnitBean> findAllParentUnit();
 }

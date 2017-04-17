@@ -25,4 +25,6 @@ public interface UnitDao extends BaseDAO<UnitBean> {
     void deleteRoleByUnitId(@Param("unitId")String unitId);
 
     void saveUnitRole(@Param("unitId") String unitId, @Param("roleId") String roleId);
+
+    List<UnitBean> findAllParentUnit();
 }

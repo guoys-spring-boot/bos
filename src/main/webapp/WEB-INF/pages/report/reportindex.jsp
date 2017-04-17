@@ -12,7 +12,8 @@
         var elWin = $("#list").get(0).contentWindow;
         elWin.$("#grid").datagrid('load', {
             xmlx: $("input[name='assessmentType']").val(),
-			unitLevel : $("input[name='unitLevel']").val()
+			unitLevel : $("input[name='unitLevel']").val(),
+            unitShortName : $("#unitShortName").val()
         });
     }
 	$(function(){
@@ -52,6 +53,10 @@
 				<tr><td>
 					<b>单位等级</b><span class="operator"><a name="gender-opt" opt="all"></a></span>
                     <input id="unitLevel" name="unitLevel" value="">
+				</td></tr>
+				<tr><td>
+					<b>单位名称</b><span class="operator"><a name="gender-opt" opt="all"></a></span>
+					<input id="unitShortName" class="easyui-textbox" name="unitShortName" value="">
 				</td></tr>
 			</table>
 		</form>

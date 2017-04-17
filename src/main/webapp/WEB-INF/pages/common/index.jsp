@@ -173,7 +173,7 @@
 	}
 	// 版权信息
 	function showAbout(){
-		$.messager.alert("宅急送 v1.0","设计: yuyang<br/> 管理员邮箱: yuyang@itcast.cn <br/> QQ: 117038615");
+		$.messager.alert("恩施文明办 v1.0","设计: xxx<br/> 管理员邮箱: gys@xxx.cn <br/> QQ: xxxxxx");
 	}
 </script>
 </head>
@@ -185,7 +185,7 @@
 		</div>
 		<div id="sessionInfoDiv"
 			style="position: absolute;right: 5px;top:10px;">
-			[<strong>超级管理员==${user.username }==</strong>]，欢迎你！您使用[<strong>192.168.1.100</strong>]IP登录！
+			[<strong>==${user.unitShortName }==</strong>]，欢迎你！
 		</div>
 		<div style="position: absolute; right: 5px; bottom: 10px; ">
 			<a href="javascript:void(0);" class="easyui-menubutton"
@@ -219,8 +219,7 @@
 		<div id="tabs" fit="true" class="easyui-tabs" border="false">
 			<div title="消息中心" id="subWarp"
 				style="width:100%;height:100%;overflow:hidden">
-				<iframe src="${pageContext.request.contextPath }/page.do?module=common&resource=home"
-					style="width:100%;height:100%;border:0;"></iframe>
+
 				<%--				这里显示公告栏、预警信息和代办事宜--%>
 			</div>
 		</div>

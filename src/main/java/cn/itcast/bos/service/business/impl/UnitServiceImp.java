@@ -110,4 +110,9 @@ public class UnitServiceImp implements UnitService {
     public void updatePassword(String unitId, String password) {
         unitDao.updatePassword(unitId, MD5Utils.md5(password));
     }
+
+    @Override
+    public List<UnitBean> findAllParentUnit() {
+        return unitDao.findAllParentUnit();
+    }
 }

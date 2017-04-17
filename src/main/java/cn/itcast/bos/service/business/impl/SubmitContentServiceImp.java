@@ -64,4 +64,16 @@ public class SubmitContentServiceImp implements SubmitContentService {
             }
         }
     }
+
+    @Override
+    public double getAlreadyScore(String unitId) {
+        List<SubmitContent> submitContents = listSubmitContent(unitId);
+        double total = 0d;
+        for (SubmitContent submitContent : submitContents) {
+            if(submitContent.getScore() != null){
+                total += submitContent.getScore();
+            }
+        }
+        return total;
+    }
 }

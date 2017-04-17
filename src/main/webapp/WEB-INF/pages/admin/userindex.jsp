@@ -12,7 +12,9 @@
         var elWin = $("#list").get(0).contentWindow;
         elWin.$("#grid").datagrid('load', {
             unitLevel: $("input[name='unitLevel']").val(),
-            auditingStatus: $("input[name='auditingStatus']").val()
+            auditingStatus: $("input[name='auditingStatus']").val(),
+            parentUnitCode : $("input[name='parentUnitCode']").val(),
+            unitFullName : $("#unitFullName").val()
         });
     }
 	$(function(){
@@ -31,8 +33,9 @@
 		$('#ajax').click(function() {
 			reloadGrid();
 		});
-        $.enumCombobox('unitLevel', 'unitLevel', '', '请选择');
-        $.enumCombobox('auditingStatus', 'auditingStatus', '', '请选择');
+        $.enumCombobox('unitLevel', 'unitLevel');
+        $.enumCombobox('auditingStatus', 'auditingStatus');
+        $.enumComboboxFromUrl('parentUnitCode', '${path}/business/listAllParentUnit')
 	});
 </script>	
 </head>
@@ -46,8 +49,12 @@
 			<table class="table-edit" width="100%" >				
 				<tr><td>
 					<b>上级单位</b><span class="operator"><a name="username-opt" opt="all"></a></span>
-					<input type="text" id="username" name="username"/>
+					<input type="text" id="parentUnitCode" name="parentUnitCode"/>
 				</td></tr>
+                <tr><td>
+                    <b>单位名称</b><span class="operator"><a name="username-opt" opt="all"></a></span>
+                    <input type="text" class="easyui-text" id="unitFullName" name="unitFullName"/>
+                </td></tr>
 				<tr><td>
 					<b>单位等级</b><span class="operator"><a name="gender-opt" opt="all"></a></span>
                     <input id="unitLevel" name="unitLevel" value="">

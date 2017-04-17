@@ -38,7 +38,10 @@
             rowspan: 1,
             sortable: false,
             formatter: function (value, row) {
-                return row.project.projectName;
+                if(row.project){
+                    return row.project.projectName;
+                }
+                return value;
             }
         },
             {
@@ -48,6 +51,9 @@
                 rowspan: 1,
                 sortable: false,
                 formatter: function (value, row, index) {
+                    if(!row.project){
+                        return value;
+                    }
                     return assessmentType[row.project.type];
                 }
             }]];
@@ -60,7 +66,10 @@
             width: 60,
             rowspan: 1,
             formatter: function (value, row, index) {
-                return row.project.totalScore;
+                if(row.project){
+                    return row.project.totalScore;
+                }
+                return value;
             }
             },
             {
@@ -73,6 +82,9 @@
                 title: '上报内容',
                 width: 100,
                 formatter: function (value, row, index) {
+                    if(!row.project){
+                        return value;
+                    }
                     if (row.score == undefined || isNaN(row.project.totalScore) || Number(row.project.totalScore) == 0) {
                         return "<a href='#' onclick='doEdit(\"" + row.id + "\", \"" + row.project.projectName + "\")'>修改上报内容</a>";
                     }
@@ -99,7 +111,8 @@
                 url: "${path}/submitContent/listSubmitContent",
                 idField: 'id',
                 frozenColumns: frozenColumns,
-                columns: columns
+                columns: columns,
+                showFooter: true
             });
 
 

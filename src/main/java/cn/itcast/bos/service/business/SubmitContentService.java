@@ -17,4 +17,11 @@ public interface SubmitContentService {
     SubmitContent findById(String id);
 
     void update(SubmitContent content, String needInsert, String needDelete);
+
+    /**
+     *  统计总分
+     * @param unitId 单位id
+     * @return
+     */
+    double getAlreadyScore(String unitId);
 }

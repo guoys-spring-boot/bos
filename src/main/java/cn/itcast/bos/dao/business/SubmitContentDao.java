@@ -1,6 +1,7 @@
 package cn.itcast.bos.dao.business;
 
 import cn.itcast.bos.dao.BaseDAO;
+import cn.itcast.bos.domain.business.Score;
 import cn.itcast.bos.domain.business.SubmitContent;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,5 +16,7 @@ import java.util.List;
 public interface SubmitContentDao extends BaseDAO<SubmitContent> {
 
     List<SubmitContent> findByUnitId(@Param("unitId") String unitId);
+
+    List<Score> findScoresByContentId(@Param("contentId") String contentId);
 
 }

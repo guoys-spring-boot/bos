@@ -180,11 +180,11 @@
                 </c:if>
             </div>
         </div>
-        <div region="center" split="false" border="false">
+        <div region="center" align="center" split="false" border="false">
             <form:textarea  path="content"  disabled="${disabled}" />
             <script type="text/javascript">
-                var width = $(window).width() * 0.80;
-                var height = $(window).height() * 0.71;
+                var width = $(window).width() * 0.82;
+                var height = $(window).height() * 0.75;
                 //$("#content").val('${submitContent.content}');
                 //$("#assessmentProject").val('${project.id}');
                 try {
@@ -193,6 +193,7 @@
                         initialFrameHeight: height,
                         readonly:${disabled}
                     });
+                    
 
                     $("#file").AjaxFileUpload({
                         action:"${path}/submitContent/upload",

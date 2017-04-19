@@ -17,6 +17,8 @@ public class Score {
 
     private String remark;
 
+    private AssessmentStd assessmentStd;
+
     public String getId() {
         return id;
     }
@@ -63,5 +65,13 @@ public class Score {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public AssessmentStd getAssessmentStd() {
+        return assessmentStd;
+    }
+
+    public void setAssessmentStd(AssessmentStd assessmentStd) {
+        this.assessmentStd = assessmentStd;
     }
 }

@@ -27,7 +27,10 @@
 
 
         //定义冻结列
-        var frozenColumns = [[{
+        var frozenColumns = [[]];
+
+        // 定义标题栏
+        var columns = [[{
             field: 'id',
             checkbox: true,
             rowspan: 1
@@ -56,11 +59,7 @@
                     }
                     return assessmentType[row.project.type];
                 }
-            }]];
-
-
-        // 定义标题栏
-        var columns = [[{
+            },{
             field: 'project.totalScore',
             title: '考核总分',
             width: 60,
@@ -95,9 +94,10 @@
 
         var assessmentType = $.loadEnum('assessmentType');
         $(function () {
+            var grid = $('#grid');
             // 初始化 datagrid
             // 创建grid
-            $('#grid').datagrid({
+            grid.datagrid({
                 iconCls: 'icon-forward',
                 pagination: true,
                 fit: true,
@@ -115,6 +115,79 @@
                 showFooter: true
             });
 
+            grid.datagrid({
+                view: detailview,
+                detailFormatter:function(index,row){
+                    return '<div style="padding:2px"><table class="ddv"></table></div>';
+                },
+                onExpandRow: function(index,row){
+                    var ddv = $(this).datagrid('getRowDetail',index).find('table.ddv');
+                    ddv.datagrid({
+                        url:'${path}/submitContent/listScoreDetails?contentId='+row.id,
+                        fitColumns:true,
+                        singleSelect:true,
+                        rownumbers:true,
+                        height:'auto',
+                        striped: true,
+                        //nowrap: false,
+                        columns:[[
+                            {
+                                field:'item',
+                                title:'考核评分项',
+                                width:200,
+                                formatter: function (value, row, index) {
+                                    if(row.assessmentStd){
+                                        return row.assessmentStd.item;
+                                    }
+                                    return value;
+                                }
+                            },
+                            {
+                                field:'remark',
+                                title:'备注',
+                                width:200,
+                                formatter: function (value, row, index) {
+                                    if(row.assessmentStd){
+                                        return row.assessmentStd.remark;
+                                    }
+                                    return value;
+                                }
+                            },
+                            {
+                                field:'score',
+                                title:'总分',
+                                width:50,
+                                formatter: function (value, row, index) {
+                                    if(row.assessmentStd){
+                                        return row.assessmentStd.score;
+                                    }
+                                    return value;
+                                }
+                            },
+                            {
+                                field:'getScore',
+                                title:'得分',
+                                width:50,
+                                formatter: function (value, row, index) {
+                                    if(row.score){
+                                        return row.score;
+                                    }
+                                    return value;
+                                }
+                            }
+                        ]],
+                        onResize:function(){
+                            grid.datagrid('fixDetailRowHeight',index);
+                        },
+                        onLoadSuccess:function(){
+                            setTimeout(function(){
+                                grid.datagrid('fixDetailRowHeight',index);
+                            },0);
+                        }
+                    });
+                    grid.datagrid('fixDetailRowHeight',index);
+                }
+            });
 
             $("body").css({visibility: "visible"});
 

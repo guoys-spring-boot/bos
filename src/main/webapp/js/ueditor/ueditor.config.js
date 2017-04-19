@@ -52,6 +52,10 @@
         ]],
         enableAutoSave: false,
         saveInterval: 50000000,
+        elementPathEnabled : false,
+
+        //wordCount
+        wordCount:false,
         //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
         //,labelMap:{
         //    'anchor':'', 'undo':''

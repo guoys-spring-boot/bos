@@ -1,8 +1,6 @@
 package cn.itcast.bos.web.controller.business;
 
-import cn.itcast.bos.domain.business.Attachment;
-import cn.itcast.bos.domain.business.SubmitContent;
-import cn.itcast.bos.domain.business.UnitBean;
+import cn.itcast.bos.domain.business.*;
 import cn.itcast.bos.service.business.AttachmentService;
 import cn.itcast.bos.service.business.SubmitContentService;
 import cn.itcast.bos.utils.FileUtils;
@@ -157,5 +155,11 @@ public class SubmitContentController {
     public void updateSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert,
                                     @RequestParam("needDelete")String needDelete){
         submitContentService.update(content, needInsert, needDelete);
+    }
+
+    @RequestMapping("/listScoreDetails")
+    @ResponseBody
+    public Object listScoreDetails(String contentId){
+        return submitContentService.listScoresByContentId(contentId);
     }
 }

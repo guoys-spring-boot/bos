@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.itcast.bos.dao.business.ScoreDao" >
-  <resultMap id="RoleResultMap" type="cn.itcast.bos.domain.business.Score" >
+  <resultMap id="ScoreResultMap" type="cn.itcast.bos.domain.business.Score" >
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="dwid" property="unitId" jdbcType="VARCHAR" />
     <result column="sbnrid" property="contentId" jdbcType="VARCHAR" />

@@ -1,5 +1,6 @@
 package cn.itcast.bos.service.business;
 
+import cn.itcast.bos.domain.business.Score;
 import cn.itcast.bos.domain.business.SubmitContent;
 
 import java.util.List;
@@ -24,4 +25,11 @@ public interface SubmitContentService {
      * @return
      */
     double getAlreadyScore(String unitId);
+
+    /**
+     * 根据上报内容id获取详细得分
+     * @param contentId 上报内容ID
+     * @return
+     */
+    List<Score> listScoresByContentId(String contentId);
 }

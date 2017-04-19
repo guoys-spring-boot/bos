@@ -7,17 +7,33 @@
         <result property="unitId" column="dwid" />
         <result property="score" column="score" />
         <association property="project" resultMap="ProjectMap"/>
-     </resultMap>
+        <collection property="scoreDetails" resultMap="ScoreResultMap"/>
+    </resultMap>
     <resultMap id="ProjectMap" type="cn.itcast.bos.domain.business.AssessmentContent">
         <id column="projectId" property="id"/>
         <result column="khxm" property="projectName"/>
         <result column="xmlx" property="type" />
         <result column="totalscore" property="totalScore"/>
     </resultMap>
-
+    <resultMap id="ScoreResultMap" type="cn.itcast.bos.domain.business.Score" >
+        <id column="ScoreId" property="id" jdbcType="VARCHAR" />
+        <result column="dwid" property="unitId" jdbcType="VARCHAR" />
+        <result column="sbnrid" property="contentId" jdbcType="VARCHAR" />
+        <result column="detailScore" property="score" />
+        <result column="beizhu" property="remark" jdbcType="VARCHAR" />
+        <association property="assessmentStd" resultMap="StdResultMap"/>
+    </resultMap>
+    <resultMap id="StdResultMap" type="cn.itcast.bos.domain.business.AssessmentStd">
+        <id column="StdId" property="id"/>
+        <result column="stdItem" property="item" />
+        <result column="stdRemark" property="remark" />
+        <result column="stdScore" property="score"/>
+    </resultMap>
     <select id="findByUnitId" resultMap="ContentResultMap">
+
         select sb.id, sb.dwid,sb.content , sb.khxmid as projectId, xm.khxm, xm.xmlx, xm.totalscore, sum(sc.scroe) as score
         from wmb_sbnr sb join wmb_khxm xm on xm.id = sb.khxmid left join wmb_score sc on sb.id = sc.sbnrid where sb.dwid=#{unitId} group by sb.id order by xm.xmlx
+
     </select>
     <insert id="insert" parameterType="cn.itcast.bos.domain.business.SubmitContent">
         insert into wmb_sbnr (id, khxmid, dwid, content) VALUE (#{id}, #{project.id}, #{unitId}, #{content})
@@ -29,4 +45,9 @@
     <update id="update" parameterType="cn.itcast.bos.domain.business.SubmitContent">
         UPDATE wmb_sbnr SET khxmid = #{project.id}, content = #{content} where id = #{id}
     </update>
+
+    <select id="findScoresByContentId" resultMap="ScoreResultMap">
+        select score.id as stdId, score.scroe as detailScore, xzb.khpfx as stdItem, xzb.shuoming as stdRemark, xzb.score as stdScore from wmb_score score
+        right join wmb_khxzb xzb on score.khbzid = xzb.id where score.sbnrid = #{contentId}
+    </select>
 </mapper>

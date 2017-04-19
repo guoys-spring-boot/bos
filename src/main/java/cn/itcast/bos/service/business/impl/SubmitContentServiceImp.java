@@ -1,6 +1,7 @@
 package cn.itcast.bos.service.business.impl;
 
 import cn.itcast.bos.dao.business.SubmitContentDao;
+import cn.itcast.bos.domain.business.Score;
 import cn.itcast.bos.domain.business.SubmitContent;
 import cn.itcast.bos.service.business.AttachmentService;
 import cn.itcast.bos.service.business.SubmitContentService;
@@ -75,5 +76,10 @@ public class SubmitContentServiceImp implements SubmitContentService {
             }
         }
         return total;
+    }
+
+    @Override
+    public List<Score> listScoresByContentId(String contentId) {
+        return submitContentDao.findScoresByContentId(contentId);
     }
 }

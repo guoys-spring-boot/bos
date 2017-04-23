@@ -89,12 +89,16 @@ public class UnitController {
         return "admin/userinfo";
     }
     @RequestMapping("/updateUnit")
-    public String updateUnit(UnitBean unitBean){
+    public String updateUnit(UnitBean unitBean, @RequestParam("from") String from){
         if(unitBean == null || StringUtils.isBlank(unitBean.getId())){
             return "admin/userlist";
         }
         unitService.update(unitBean);
-        return "common/close";
+        if("index".equalsIgnoreCase(from)){
+            return "forward:/business/toUpdateUnit?unitId="+unitBean.getId()+"&from=" + from;
+        }else{
+            return "common/close";
+        }
     }
 
     @ResponseBody

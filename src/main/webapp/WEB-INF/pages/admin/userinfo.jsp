@@ -27,7 +27,13 @@
 	           	<tr>
                     <td>上级单位:</td>
                     <td>
-                        <form:input path="parentUnitCode" type="text" class="easyui-validatebox" />
+                        <!-- 是否为主页的请求 -->
+                        <c:if test="${param.from eq 'index'}">
+                            <form:input path="parentUnitCode" disabled="true" type="text" class="easyui-validatebox" />
+                        </c:if>
+                        <c:if test="${!param.from eq 'index'}">
+                            <form:input path="parentUnitCode" disabled="${disabled}" type="text" class="easyui-validatebox" />
+                        </c:if>
                     </td>
 					<td>归属区域:</td><td><form:input path="ascriptionArea" disabled="${disabled}" type="text" class="easyui-combobox" required="true" /></td>
                 </tr>
@@ -39,7 +45,14 @@
                    <td>单位简称:</td><td><form:input path="unitShortName" disabled="${disabled}" type="text" name="unitShortName" id="unitShortName" class="easyui-validatebox" required="true" /></td>
                    <td>单位类型:</td>
                    <td>
-                       <form:input path="unitType" disabled="${disabled}" type="text" name="unitType" id="unitType" class="easyui-combobox" required="true" style="width: 150px;" />
+                       <!-- 是否为主页的请求 -->
+                       <c:if test="${param.from eq 'index'}">
+                           <form:input path="unitType" disabled="true" type="text" name="unitType" id="unitType" class="easyui-combobox" required="true" style="width: 150px;" />
+                       </c:if>
+                       <c:if test="${!param.from eq 'index'}">
+                           <form:input path="unitType" disabled="${disabled}" type="text" name="unitType" id="unitType" class="easyui-combobox" required="true" style="width: 150px;" />
+                       </c:if>
+
                    </td>
                </tr>
 				<tr class="title"><td colspan="4">其他信息</td></tr>
@@ -50,7 +63,13 @@
                    </td>
                    <td>单位等级:</td>
                    <td>
-                       <form:input path="unitLevel" disabled="${disabled}" type="text" name="unitLevel" id="unitLevel" class="easyui-combobox" required="true" style="width: 150px;" />
+                       <!-- 是否为主页的请求 -->
+                       <c:if test="${param.from eq 'index'}">
+                           <form:input path="unitLevel" disabled="true" type="text" name="unitLevel" id="unitLevel" class="easyui-combobox" required="true" style="width: 150px;" />
+                       </c:if>
+                       <c:if test="${!param.from eq 'index'}">
+                        <form:input path="unitLevel" disabled="${disabled}" type="text" name="unitLevel" id="unitLevel" class="easyui-combobox" required="true" style="width: 150px;" />
+                       </c:if>
                    </td>
                </tr>
                <tr>
@@ -106,6 +125,7 @@
 	           	<tr><td>单位地址:</td><td colspan="3"><form:textarea path="unitAddress" disabled="${disabled}" id="unitAddress" name="unitAddress" required="true" style="width:80%" /></td></tr>
            </table>
            <form:hidden path="id"/>
+           <input type="hidden" name="from" value="${param.from}" /> >
        </form:form>
 		<script type="text/javascript">
 

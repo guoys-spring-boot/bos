@@ -220,7 +220,7 @@
 			<div title="个人信息" id="subWarp"
 				style="width:100%;height:100%;overflow:hidden">
 
-				<iframe src="${path}/business/toLookupUnit?unitId=${sessionScope.user.id}" style="width: 95%; height: 95%" frameborder="0"></iframe>
+				<iframe src="${path}/business/toUpdateUnit?unitId=${sessionScope.user.id}&from=index" style="width: 95%; height: 95%" frameborder="0"></iframe>
 			</div>
 		</div>
 	</div>

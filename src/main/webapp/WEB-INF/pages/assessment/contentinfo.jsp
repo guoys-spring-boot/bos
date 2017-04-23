@@ -31,7 +31,7 @@
                     <td><form:input path="type" disabled="${disabled}" type="text"
                                     required="true"/></td>
                     <td>考核总分:</td>
-                    <td><form:input path="totalScore" disabled="${disabled}" type="text" class="easyui-numberbox" precision="2"
+                    <td><form:input path="totalScore" disabled="true" type="text" class="easyui-numberbox" precision="2"
                                     required="true"/></td>
                 </tr>
                 <tr>
@@ -62,6 +62,8 @@
         </div>
     <script type="text/javascript">
         var grid = $("#grid");
+
+        var editRowIndex;
 
         $(function () {
 
@@ -112,9 +114,30 @@
         }
 
         function onClickCell(rowIndex, field) {
+            if(editRowIndex != undefined){
+
+                grid.datagrid('endEdit', editRowIndex);
+            }
             grid.datagrid('beginEdit', rowIndex);
             var ed = grid.datagrid('getEditor', {index:rowIndex,field:field});
             $(ed.target).focus();
+            $(".numberbox-f").bind('input propertychange', caculateTotalScore);
+            editRowIndex = rowIndex;
+        }
+
+        function caculateTotalScore() {
+            var rows = grid.datagrid('getRows');
+            var totalScore = 0;
+            for(var index = 0; index < rows.length; index++){
+                if(index != editRowIndex){
+                    totalScore += Number(rows[index].score);
+                }
+            }
+
+            totalScore += Number($(this).val());
+
+            $("#totalScore").val(totalScore);
+            $("input[name='totalScore']").val(totalScore);
         }
 
         function deleteRow(target) {

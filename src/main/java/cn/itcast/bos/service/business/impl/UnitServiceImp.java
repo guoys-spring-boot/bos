@@ -37,6 +37,9 @@ public class UnitServiceImp implements UnitService {
 
         bean.setId(UUIDUtils.generatePrimaryKey());
         bean.setPassword(MD5Utils.md5(bean.getPassword()));
+
+        // 设置审核状态为待审核
+        bean.setAuditingStatus("2");
         unitDao.insert(bean);
 
         if(bean.getRole() != null && StringUtils.isNotBlank(bean.getRole().getId())){

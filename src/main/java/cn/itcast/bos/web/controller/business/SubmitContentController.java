@@ -37,12 +37,13 @@ public class SubmitContentController {
     private SubmitContentService submitContentService;
 
     @RequestMapping("/addSubmitContent")
-    @ResponseBody
-    public void addSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert, HttpServletRequest request){
+    public String addSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert, HttpServletRequest request){
 
         UnitBean bean =  (UnitBean)request.getSession().getAttribute("user");
         content.setUnitId(bean.getId());
         submitContentService.save(content, needInsert);
+
+        return "redirect:/submitContent/toAddSubmitContent";
     }
 
     @RequestMapping("/toAddSubmitContent")
@@ -151,10 +152,11 @@ public class SubmitContentController {
     }
 
     @RequestMapping("/updateSubmitContent")
-    @ResponseBody
-    public void updateSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert,
+    public String updateSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert,
                                     @RequestParam("needDelete")String needDelete){
         submitContentService.update(content, needInsert, needDelete);
+
+        return "redirect:/submitContent/toEditSubmitContent?id=" + content.getId();
     }
 
     @RequestMapping("/listScoreDetails")

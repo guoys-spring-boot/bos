@@ -78,7 +78,7 @@
 		window.setTimeout(function(){
 			$.messager.show({
 				title:"消息提示",
-				msg:'欢迎登录，${user.username}！ <a href="javascript:void" onclick="top.showAbout();">联系管理员</a>',
+				msg:'欢迎登录，${user.unitShortName}',
 				timeout:5000
 			});
 		},3000);
@@ -217,10 +217,10 @@
 	</div>
 	<div data-options="region:'center'">
 		<div id="tabs" fit="true" class="easyui-tabs" border="false">
-			<div title="消息中心" id="subWarp"
+			<div title="个人信息" id="subWarp"
 				style="width:100%;height:100%;overflow:hidden">
 
-				<%--				这里显示公告栏、预警信息和代办事宜--%>
+				<iframe src="${path}/business/toLookupUnit?unitId=${sessionScope.user.id}" style="width: 95%; height: 95%" frameborder="0"></iframe>
 			</div>
 		</div>
 	</div>

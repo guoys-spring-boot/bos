@@ -82,7 +82,7 @@
             rowspan : 1,
             sortable : false,
 			formatter: function (value, row, index) {
-				if(row.unitLevel == '5' || row.unitLevel == '6'){
+				if(row.unitLevel == '1' || row.unitLevel == '2'){
 				    if(row.score > 0){
 				        return "已审核";
                     }

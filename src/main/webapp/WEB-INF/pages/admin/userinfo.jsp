@@ -27,7 +27,7 @@
 	           	<tr>
                     <td>上级单位:</td>
                     <td>
-                        <form:input path="parentUnitCode" disabled="true" type="text" class="easyui-validatebox" required="true" />
+                        <form:input path="parentUnitCode" type="text" class="easyui-validatebox" />
                     </td>
 					<td>归属区域:</td><td><form:input path="ascriptionArea" disabled="${disabled}" type="text" class="easyui-combobox" required="true" /></td>
                 </tr>
@@ -88,19 +88,20 @@
                    <td>
                         <form:input path="password" disabled="${disabled}" type="text" class="easyui-validatebox" required="true" />
                     </td>
-                   <td>审核状态:</td><td>
+                   <!--<td>审核状态:</td><td>
                        <form:input path="auditingStatus" disabled="${disabled}" type="text" name="auditingStatus" id="auditingStatus" class="easyui-combobox" required="true" style="width: 150px;" />
-                    </td>
+                    </td> -->
+                   <td>角色:</td>
+                   <td >
+                       <form:input path="role.id" id="roleId" disabled="${disabled}" type="text" class="easyui-combobox" required="true" />
+                   </td>
                </tr>
                <tr>
                    <td>是否为区域管理:</td>
                    <td >
                        <form:input path="isAdmin" disabled="${disabled}" type="text" name="isAdmin" id="isAdmin" class="easyui-combobox" required="true" />
                    </td>
-                   <td>角色:</td>
-                   <td >
-                       <form:input path="role.id" id="roleId" disabled="${disabled}" type="text" class="easyui-combobox" required="true" />
-                   </td>
+
                </tr>
 	           	<tr><td>单位地址:</td><td colspan="3"><form:textarea path="unitAddress" disabled="${disabled}" id="unitAddress" name="unitAddress" required="true" style="width:80%" /></td></tr>
            </table>
@@ -134,6 +135,7 @@
                 $.enumCombobox('isAdmin', 'yesOrNo');
                 $.enumCombobox('ascriptionArea', 'ascriptionArea');
                 $.enumComboboxFromUrl("roleId", '${path}/listRoleAsEnum');
+                $.enumComboboxFromUrl('parentUnitCode', '${path}/business/listAllParentUnit');
             });
 
 		</script>

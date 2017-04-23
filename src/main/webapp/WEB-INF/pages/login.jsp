@@ -5,14 +5,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>登陆页面</title>
-<script src="${pageContext.request.contextPath }/js/jquery-1.8.3.js" type="text/javascript"></script>
+    <jsp:include page="${pageContext.request.contextPath}/common/reference.jsp" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/style.css" />
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath }/css/style_grey.css" />
+
     <script type="text/javascript" >
         if(window.top != window.self){
             alert("你还没有登录或者登录已过期");
             window.top.location = window.location;
         }
+
 
     </script>
 <style>
@@ -74,8 +76,7 @@ body{
 							name="password" value="" tabindex="2" title="请输入密码" />
 						<label for="pwdInput" class="placeholder" id="pwdPlaceholder">密码：</label>
 					</div>
-					<div class="loginFormIpt loginFormIptWiotTh"
-						style="margin-top:58px;">
+					<div class="loginFormIpt loginFormIptWiotTh" style="margin-top:58px;">
 						<div id="codeInputLine" class="loginFormIpt showPlaceholder"
 							style="margin-left:0px;margin-top:-40px;width:50px;">
 							<input id="loginform:codeInput" class="loginFormTdIpt" type="text"
@@ -88,6 +89,9 @@ body{
 							id="loginform:loginBtn" class="btn btn-login"
 							style="margin-top:-36px;">登录</span>
 						</a>
+					</div>
+					<div  class="loginFormIpt loginFormIptWiotTh" >
+						<a href="#" onclick="$(window).openWindow('addUserWindow', '${pageContext.request.contextPath}/business/toAddUnit', 750, 570, '用户管理', {})" >单位注册？</a>
 					</div>
 				</form>
 			</div>

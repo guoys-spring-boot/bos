@@ -43,6 +43,8 @@ public class LoginController {
 			return "login";
 		}
 
+
+
 		// 使用shiro 进行权限控制
 		Subject userSubject = SecurityUtils.getSubject();
 		// 将用户名和密码 封装成 令牌
@@ -52,9 +54,16 @@ public class LoginController {
 		token.setRememberMe(true);
 
 		try {
-			// shiro 提供登陆方法
+            UnitBean unitBean = unitService.findByUsername(user.getUsername());
+
+            if(!"1".equals(unitBean.getAuditingStatus()) && !"admin".equals(unitBean.getUsername())){
+                model.addAttribute("msg", "该单位还没有审核通过");
+                return "login";
+            }
+
+		    // shiro 提供登陆方法
 			userSubject.login(token);
-			UnitBean unitBean = unitService.findByUsername(user.getUsername());
+
 			request.getSession().setAttribute("user", unitBean);
 			// 重定向主页
 			return "redirect:index.jsp";

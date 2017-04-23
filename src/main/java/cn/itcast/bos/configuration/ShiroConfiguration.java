@@ -76,6 +76,12 @@ public class ShiroConfiguration {
         filterChainDefinitionManager.put("/css/**", "anon");
         filterChainDefinitionManager.put("/images/**", "anon");
         filterChainDefinitionManager.put("/json/**", "anon");
+        filterChainDefinitionManager.put("/business/toAddUnit", "anon");
+        filterChainDefinitionManager.put("/business/addUnit", "anon");
+        filterChainDefinitionManager.put("/business/listAllParentUnit", "anon");
+        filterChainDefinitionManager.put("/base/loadEnum", "anon");
+        filterChainDefinitionManager.put("/listRoleAsEnum", "anon");
+
         filterChainDefinitionManager.put("/validatecode.jsp","anon");
         //filterChainDefinitionManager.put("/user/**", "authc,roles[user]");
         filterChainDefinitionManager.put("/shop/**", "authc,roles[shop]");

@@ -35,7 +35,7 @@
 		});
         $.enumCombobox('unitLevel', 'unitLevel');
         $.enumCombobox('auditingStatus', 'auditingStatus');
-        $.enumComboboxFromUrl('parentUnitCode', '${path}/business/listAllParentUnit')
+        $.enumComboboxFromUrl('parentUnitCode', '${path}/business/listAllParentUnit');
 	});
 </script>	
 </head>

@@ -40,8 +40,8 @@ public class UnitController {
             System.out.println("校验失败");
             return "admin/userinfo";
         }
-        UnitBean unitBean = (UnitBean) request.getSession().getAttribute("user");
-        unit.setParentUnitCode(unitBean.getId());
+        //UnitBean unitBean = (UnitBean) request.getSession().getAttribute("user");
+        //unit.setParentUnitCode(unitBean.getId());
         unitService.saveUnit(unit);
         return "admin/userlist";
     }
@@ -60,7 +60,6 @@ public class UnitController {
     public String toAddUnit(Model model, HttpServletRequest request){
         UnitBean unitBean = (UnitBean) request.getSession().getAttribute("user");
         UnitBean toAdd = new UnitBean();
-        toAdd.setParentUnitCode(unitBean.getUnitFullName());
         model.addAttribute("unit", toAdd);
         model.addAttribute("action", "add");
         return "admin/userinfo";

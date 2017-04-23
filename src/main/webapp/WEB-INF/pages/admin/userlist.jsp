@@ -29,6 +29,32 @@
 
     }
 
+    function pass(id) {
+        $(this)._confirm("确定要通过这条记录?", function () {
+            updateAuditingStatus(id, '1');
+        });
+    }
+
+    function refuse(id) {
+        $(this)._confirm("确定要拒绝这条记录?", function () {
+            updateAuditingStatus(id, '3');
+        });
+    }
+
+    function updateAuditingStatus(id, status) {
+        var url = "${path}/business/updateUnit";
+        $.ajax(url, {
+            data : {
+                id : id,
+                auditingStatus : status
+            },
+            success: function(){
+                window.parent.reloadGrid();
+            },
+            async: false
+        })
+    }
+
 	// 工具栏
 	var toolbar = [ {
 		id : 'button-view',	
@@ -129,7 +155,17 @@
         formatter : function(value, row, index){
             return auditingStatus[value];
         }
-    }]];
+    }, {
+        field : 'op',
+        title : '审核状态',
+        width : 86,
+        formatter : function(value, row, index){
+            if(row.auditingStatus != '1' && row.auditingStatus != '3'){
+                return "<a href='#' onclick=\"pass('"+row.id+"')\">通过</a>&nbsp;<a href='#' onclick=\"refuse('"+row.id+"')\" >拒绝</a>"
+            }
+        }
+    }
+    ]];
 	$(function(){
 		// 初始化 datagrid
 		// 创建grid
@@ -186,13 +222,6 @@
 		//$(window)._openTab("tabs", '${pageContext.request.contextPath}/business/toAddUnit', '用户管理', window.top);
 	}
 
-	function doView() {
-		alert("编辑用户");
-		var item = $('#grid').datagrid('getSelected');
-		console.info(item);
-		//window.location.href = "edit.html";
-	}
-
 	function doDelete() {
 
 		var ids = [];
@@ -212,8 +241,9 @@
                     ids:ids.join(",")
                 },
                 success: function (data) {
-                    $('#grid').datagrid('reload');
-                    $('#grid').datagrid('uncheckAll');
+                    //$('#grid').datagrid('reload');
+                    //$('#grid').datagrid('uncheckAll');
+                    window.parent.reloadGrid();
                 }
             });
         });

@@ -39,6 +39,7 @@
             textField: 'projectName',
             pagination: true,
             url: '${url}',
+            onSelect: onSelect,
             columns: [[
                 {field: 'projectName', title: '考核项目', width: 470},
                 {
@@ -54,6 +55,12 @@
 
         function _download(id) {
             location.href = '${path}/submitContent/downloadAttachment?id=' + id;
+        }
+
+        function onSelect(rowIndex, row) {
+            $("#contentDetails").datagrid('load', {
+                "contentId" : row.id
+            });
         }
 
         $(function () {
@@ -87,7 +94,7 @@
                     var record = changes[i];
                     ids.push(record.id);
                 }
-                $("input[name='content']").val(UE.getEditor('content').getContent());
+
                 $("#needInsert").val(ids.join(","));
 
                 var needDeletes = grid.datagrid('getChanges', 'deleted');
@@ -98,7 +105,6 @@
                 }
 
                 $("#needDelete").val(needDeleteIds.join(","));
-
                 $("#submitContentForm").attr("action", "${path}/submitContent/updateSubmitContent");
                 $("#submitContentForm").submit();
             });
@@ -181,10 +187,25 @@
             </div>
         </div>
         <div region="center" align="center" split="false" border="false">
-            <form:textarea  path="content"  disabled="${disabled}" />
+
+            <div region="north" align="center" split="false" border="false">
+                <table class="easyui-datagrid" id="contentDetails" style="height:100px"
+                       data-options="url:'${path}/assessmentContent/listContentStd',fitColumns:true,singleSelect:true">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'item',width:70">考核评分项</th>
+                        <th data-options="field:'remark',width:100">报送说明</th>
+                        <th data-options="field:'score',width:30">总分</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div region="center" align="center" split="false" border="false">
+            <form:textarea style="display:none"  path="content"  disabled="${disabled}"  />
             <script type="text/javascript">
                 var width = $(window).width() * 0.82;
-                var height = $(window).height() * 0.75;
+                var height = $(window).height() * 0.55;
                 //$("#content").val('${submitContent.content}');
                 //$("#assessmentProject").val('${project.id}');
                 try {
@@ -193,7 +214,11 @@
                         initialFrameHeight: height,
                         readonly:${disabled}
                     });
-                    
+
+                    ue.ready(function () {
+                       $("#content").show();
+                    });
+
 
                     $("#file").AjaxFileUpload({
                         action:"${path}/submitContent/upload",
@@ -209,9 +234,9 @@
                 }
 
             </script>
+            </div>
         </div>
         <input id="needInsert" name="needInsert" type="hidden" />
-        <input name="content" type="hidden" />
         <input name="needDelete" id="needDelete" type="hidden" />
         <input name="id" id="id" type="hidden" value="${submitContent.id}" />
     </form:form>

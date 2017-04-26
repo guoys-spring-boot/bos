@@ -2,6 +2,7 @@ package cn.itcast.bos.web.controller.business;
 
 import cn.itcast.bos.domain.business.AssessmentContent;
 import cn.itcast.bos.domain.business.AssessmentStd;
+import cn.itcast.bos.service.EnumService;
 import cn.itcast.bos.service.business.AssessmentContentService;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -10,10 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by gys on 2017/4/5.
@@ -25,8 +23,11 @@ public class AssessmentContentController {
 
     private AssessmentContentService contentService;
 
-    public AssessmentContentController(AssessmentContentService service){
+    private EnumService enumService;
+
+    public AssessmentContentController(AssessmentContentService service, EnumService enumService){
         this.contentService = service;
+        this.enumService = enumService;
     }
 
     @RequestMapping("/listContent")
@@ -43,6 +44,59 @@ public class AssessmentContentController {
         result.put("rows", list);
         result.put("total", total);
         return result;
+    }
+    @RequestMapping("/listContentAsTree")
+    @ResponseBody
+    public Object listContentAsTree(String type){
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        List<AssessmentContent> list = contentService.list(type);
+        Map<String, String> assessmentType = enumService.getEnum("assessmentType");
+        Map<String, Object> currentType = null;
+        for (AssessmentContent content : list) {
+            if(currentType == null || !currentType.get("id").equals(content.getType())){
+                currentType = new HashMap<String, Object>();
+                currentType.put("id", content.getType());
+                currentType.put("projectName", assessmentType.get(content.getType()));
+                rows.add(currentType);
+            }
+
+            Map<String, Object> record = new HashMap<String, Object>();
+            record.put("id", content.getId());
+            record.put("projectName", content.getProjectName());
+            record.put("type", content.getType());
+            record.put("_parentId", content.getType());
+            rows.add(record);
+
+        }
+        return rows;
+    }
+
+    @RequestMapping("/listContentAsTree2")
+    @ResponseBody
+    public Object listContentAsTree2(String type){
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        List<AssessmentContent> list = contentService.list(type);
+        Map<String, String> assessmentType = enumService.getEnum("assessmentType");
+        Map<String, Object> currentType = null;
+        for (AssessmentContent content : list) {
+            if(currentType == null || !currentType.get("id").equals(content.getType())){
+                currentType = new LinkedHashMap<String, Object>();
+                currentType.put("id", content.getType());
+                currentType.put("projectName", assessmentType.get(content.getType()));
+                List<Map<String, Object>> children = new ArrayList<Map<String, Object>>();
+                currentType.put("children", children);
+                rows.add(currentType);
+            }
+
+            Map<String, Object> record = new LinkedHashMap<String, Object>();
+            record.put("id", content.getId());
+            record.put("projectName", content.getProjectName());
+            record.put("type", content.getType());
+            record.put("_parentId", content.getType());
+            ((List<Map<String, Object>>) currentType.get("children")).add(record);
+
+        }
+        return rows;
     }
 
     @RequestMapping("/toAddContent")

@@ -12,10 +12,10 @@
     </c:if>
 
     <c:if test="${sessionScope.user.needSubmit()}">
-        <c:set var="url" value="${path}/assessmentContent/listContent"/>
+        <c:set var="url" value="${path}/assessmentContent/listContentAsTree2"/>
     </c:if>
     <c:if test="${!sessionScope.user.needSubmit()}">
-        <c:set var="url" value="${path}/assessmentContent/listContent?type=10"/>
+        <c:set var="url" value="${path}/assessmentContent/listContentAsTree2?type=10"/>
     </c:if>
     <!-- 导入jquery核心类库 -->
     <jsp:include page="${pageContext.request.contextPath}/common/reference.jsp"/>
@@ -34,10 +34,11 @@
             panelWidth: 670,
             idField: 'id',
             striped: true,
+            labelPosition:'left',
             value:'${submitContent.project.id}',
-            nowrap: false,
+            nowrap: true,
+            treeField:'projectName',
             textField: 'projectName',
-            pagination: true,
             url: '${url}',
             onSelect: onSelect,
             columns: [[
@@ -57,14 +58,18 @@
             location.href = '${path}/submitContent/downloadAttachment?id=' + id;
         }
 
-        function onSelect(rowIndex, row) {
+        function onSelect(row) {
+            if(!row._parentId){
+                throw new Error();
+            }
             $("#contentDetails").datagrid('load', {
                 "contentId" : row.id
             });
+            //throw new Error();
         }
 
         $(function () {
-            $("#assessmentProject").combogrid(options);
+            $("#assessmentProject").combotreegrid(options);
             $("#save").click(function () {
 
                 if(!$("input[name='project.id']").val()){
@@ -190,7 +195,7 @@
 
             <div region="north" align="center" split="false" border="false">
                 <table class="easyui-datagrid" id="contentDetails" style="height:100px"
-                       data-options="url:'${path}/assessmentContent/listContentStd',fitColumns:true,singleSelect:true">
+                       data-options="url:'${path}/assessmentContent/listContentStd',fitColumns:true,singleSelect:true,striped: true,nowrap:false">
                     <thead>
                     <tr>
                         <th data-options="field:'item',width:70">考核评分项</th>
@@ -204,8 +209,8 @@
             <div region="center" align="center" split="false" border="false">
             <form:textarea style="display:none"  path="content"  disabled="${disabled}"  />
             <script type="text/javascript">
-                var width = $(window).width() * 0.82;
-                var height = $(window).height() * 0.55;
+                var width = $(window).width() * 0.85;
+                var height = $(window).height() * 0.63;
                 //$("#content").val('${submitContent.content}');
                 //$("#assessmentProject").val('${project.id}');
                 try {

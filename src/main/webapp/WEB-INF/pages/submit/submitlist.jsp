@@ -129,7 +129,7 @@
                         rownumbers:true,
                         height:'auto',
                         striped: true,
-                        //nowrap: false,
+                        nowrap: false,
                         columns:[[
                             {
                                 field:'item',

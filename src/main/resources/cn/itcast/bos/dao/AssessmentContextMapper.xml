@@ -51,6 +51,7 @@
         <if test="type != null and type != ''">
             and xmlx = #{type}
         </if>
+        order by xmlx
     </select>
     <select id="count" resultType="int" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
         select

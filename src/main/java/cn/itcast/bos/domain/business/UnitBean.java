@@ -316,7 +316,7 @@ public class UnitBean {
      * @return true or false
      */
     public boolean needSubmit(){
-        return "5".equals(this.getUnitLevel()) || "6".equals(this.getUnitLevel());
+        return "1".equals(this.getUnitLevel()) || "2".equals(this.getUnitLevel());
     }
 
     @Override

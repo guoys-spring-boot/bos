@@ -186,11 +186,13 @@
 			onDblClickRow : doDblClickRow
 		});
 
+        window.parent.reloadGrid();
+
 		var pager = $("#grid").datagrid("getPager");
 		if(pager){
 		    pager.pagination({
                 onBeforeRefresh:function(){
-                    alert('before refresh');
+
                 }
             })
         }

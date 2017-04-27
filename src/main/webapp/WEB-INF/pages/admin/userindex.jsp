@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -33,9 +34,11 @@
 		$('#ajax').click(function() {
 			reloadGrid();
 		});
+		//reloadGrid();
         $.enumCombobox('unitLevel', 'unitLevel');
         $.enumCombobox('auditingStatus', 'auditingStatus');
         $.enumComboboxFromUrl('parentUnitCode', '${path}/business/listAllParentUnit');
+
 	});
 </script>	
 </head>
@@ -49,8 +52,13 @@
 			<table class="table-edit" width="100%" >				
 				<tr><td>
 					<b>上级单位</b><span class="operator"><a name="username-opt" opt="all"></a></span>
-					<input type="text" id="parentUnitCode" name="parentUnitCode"/>
-				</td></tr>
+                    <c:if test="${sessionScope.user.isAdmin()}">
+					    <input type="text" id="parentUnitCode" value="${sessionScope.user.id}" name="parentUnitCode"/>
+                    </c:if>
+                    <c:if test="${!sessionScope.user.isAdmin()}">
+                        <input readonly="readonly" type="text" id="parentUnitCode" value="${sessionScope.user.id}" name="parentUnitCode"/>
+                    </c:if>
+                </td></tr>
                 <tr><td>
                     <b>单位名称</b><span class="operator"><a name="username-opt" opt="all"></a></span>
                     <input type="text" class="easyui-text" id="unitFullName" name="unitFullName"/>

@@ -319,6 +319,10 @@ public class UnitBean {
         return "1".equals(this.getUnitLevel()) || "2".equals(this.getUnitLevel());
     }
 
+    public boolean isAdmin(){
+        return this.username != null && this.username.toUpperCase().equals("ADMIN");
+    }
+
     @Override
     public String toString() {
         return "UnitBean{" +

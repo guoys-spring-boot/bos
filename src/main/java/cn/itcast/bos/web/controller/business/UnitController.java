@@ -89,7 +89,7 @@ public class UnitController {
         return "admin/userinfo";
     }
     @RequestMapping("/updateUnit")
-    public String updateUnit(UnitBean unitBean, @RequestParam("from") String from){
+    public String updateUnit(UnitBean unitBean, @RequestParam(value="from", required = false) String from){
         if(unitBean == null || StringUtils.isBlank(unitBean.getId())){
             return "admin/userlist";
         }

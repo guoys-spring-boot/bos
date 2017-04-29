@@ -31,7 +31,7 @@
 
         var assessmentType = $.loadEnum('assessmentType');
         var options = {
-            panelWidth: 670,
+            panelWidth: 650,
             idField: 'id',
             striped: true,
             labelPosition:'left',
@@ -184,10 +184,10 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <label for="assessmentProject">考核项目：</label>
                 <c:if test="${disabled}">
-                    <select id="assessmentProject" disabled="disabled" required="true" class="easyui-combogrid" name="project.id" style="width:400px;"></select>
+                    <select id="assessmentProject" disabled="disabled" required="true" class="easyui-combogrid" name="project.id" style="width:430px;"></select>
                 </c:if>
                 <c:if test="${!disabled}">
-                    <select id="assessmentProject" required="true" class="easyui-combogrid" name="project.id" style="width:400px;"></select>
+                    <select id="assessmentProject" required="true" class="easyui-combogrid" name="project.id" style="width:430px;"></select>
                 </c:if>
             </div>
         </div>

@@ -40,6 +40,28 @@
             updateAuditingStatus(id, '3');
         });
     }
+    
+    function doResetPsd() {
+        var url = "${path}/business/resetPwd";
+
+        var selected = $('#grid').datagrid('getSelected');
+        if(selected == null){
+            $(this)._alert("请选中一行");
+            return;
+        }
+
+        $(this)._confirm("确定重置密码?", function () {
+            $.ajax(url, {
+                data : {
+                    id : selected.id
+                },
+                success: function(){
+                    $(this)._alert("密码已经重置为123456", "提示");
+                },
+                async: false
+            })
+        });
+    }
 
     function updateAuditingStatus(id, status) {
         var url = "${path}/business/updateUnit";
@@ -71,7 +93,12 @@
 		text : '删除',
 		iconCls : 'icon-cancel',
 		handler : doDelete
-	}];
+	}, {
+        id : 'button-edit',
+        text : '重置密码',
+        iconCls : 'icon-edit',
+        handler : doResetPsd
+    }];
 
 	var unitTypes = $.loadEnum('unitType');
 	var unitProperty = $.loadEnum('unitProperty');

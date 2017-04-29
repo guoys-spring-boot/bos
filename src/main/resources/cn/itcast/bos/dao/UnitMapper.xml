@@ -30,6 +30,8 @@
     </resultMap>
     <resultMap id="RoleResultMap" type="cn.itcast.bos.domain.Role">
         <id column="roleId" property="id"/>
+        <result column="HOMEPAGE" property="homePage"/>
+        <result column="HOMEPAGETITLE" property="homePageTitle" />
     </resultMap>
     <sql id="Base_Column_List">
         ID, parentUnitCode, ascriptionArea, organizationCode, unitFullName, unitType, unitProperty, unitLevel,
@@ -51,8 +53,10 @@
         c.unitProperty, c.unitLevel,
         c.unitPersonCount, c.legalEntity, c.legalEntityTelNum, c.leader, c.leaderTelNum, c.unitContactPerson,
         c.unitContactPersonTelNum,
-        c.contactQQ, c.contactEmail, c.username, c.password, c.auditingStatus, c.isAdmin, c.unitAddress, c.unitShortName, USER_ROLE.ROLE_ID as roleId
-        from BASE_UNIT c left join BASE_UNIT p on c.parentUnitCode = p.id left join USER_ROLE ON c.id = USER_ROLE.USER_ID WHERE c.ID = #{id}
+        c.contactQQ, c.contactEmail, c.username, c.password, c.auditingStatus, c.isAdmin, c.unitAddress, c.unitShortName,
+            USER_ROLE.ROLE_ID as roleId, AUTH_ROLE.HOMEPAGE AS HOMEPAGE, AUTH_ROLE.HOMEPAGETITLE AS HOMEPAGETITLE
+        from BASE_UNIT c left join BASE_UNIT p on c.parentUnitCode = p.id left join USER_ROLE ON c.id = USER_ROLE.USER_ID
+            LEFT JOIN AUTH_ROLE on USER_ROLE.ROLE_ID = AUTH_ROLE.ID WHERE c.ID = #{id}
     </select>
     <select id="findAll" resultMap="UnitResultMap">
         select

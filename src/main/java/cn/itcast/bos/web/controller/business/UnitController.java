@@ -46,6 +46,14 @@ public class UnitController {
         return "admin/userlist";
     }
 
+    @RequestMapping("/resetPwd")
+    @ResponseBody
+    public void resetPwd(UnitBean unitBean){
+        if(StringUtils.isNotEmpty(unitBean.getId())){
+            unitService.updatePassword(unitBean.getId(), "123456");
+        }
+    }
+
     @RequestMapping("/listUnit")
     @ResponseBody
     public Object listUnit(int page, int rows, UnitBean unitBean){

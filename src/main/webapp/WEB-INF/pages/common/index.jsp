@@ -115,6 +115,19 @@
 				$('#editPwdWindow').window('close');
 			});
 		});
+        var homePage = '${(empty sessionScope.user.role) ? '' :  sessionScope.user.role.homePage}';
+		if(homePage != ''){
+            var content = '<div style="width:100%;height:100%;overflow:hidden;">'
+                + '<iframe src="'
+                + homePage
+                + '" scrolling="auto" style="width:100%;height:100%;border:0;" ></iframe></div>';
+
+            $('#tabs').tabs('add', {
+                title : "${sessionScope.user.role.homePageTitle}",
+                content : content,
+                closable : true
+            });
+        }
 	});
 
 	function onClick(event, treeId, treeNode, clickFlag) {

@@ -14,6 +14,10 @@ public class Role {
 
 	private String description;
 
+	private String homePage;
+
+	private String homePageTitle;
+
 	private List<Function> functions;
 
 	public String getId() {
@@ -44,7 +48,23 @@ public class Role {
 		return functions;
 	}
 
-	public void setFunctions(List<Function> functions) {
+	public String getHomePage() {
+		return homePage;
+	}
+
+	public void setHomePage(String homePage) {
+		this.homePage = homePage;
+	}
+
+    public String getHomePageTitle() {
+        return homePageTitle;
+    }
+
+    public void setHomePageTitle(String homePageTitle) {
+        this.homePageTitle = homePageTitle;
+    }
+
+    public void setFunctions(List<Function> functions) {
 		this.functions = functions;
 	}
 }

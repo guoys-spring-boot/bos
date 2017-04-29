@@ -64,7 +64,7 @@ public class LoginController {
 		    // shiro 提供登陆方法
 			userSubject.login(token);
 
-			request.getSession().setAttribute("user", unitBean);
+			request.getSession().setAttribute("user", unitService.findById(unitBean.getId()));
 			// 重定向主页
 			return "redirect:index.jsp";
 		} catch (UnknownAccountException e) {

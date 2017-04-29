@@ -37,6 +37,12 @@
           <groupId>org.apache.tomcat.embed</groupId>
           <artifactId>tomcat-embed-jasper</artifactId>
       </dependency>
+
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-tomcat</artifactId>
+          <scope>provided</scope>
+      </dependency>
       <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
       <dependency>
           <groupId>org.springframework.boot</groupId>
@@ -102,5 +108,18 @@
           <systemPath>${project.basedir}/lib/json.jar</systemPath>
       </dependency>
   </dependencies>
-
+    <build>
+        <plugins>
+            <!-- ... -->
+            <!-- maven打包的时候告诉maven不需要web.xml,否刚会报找不到web.xml错误 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

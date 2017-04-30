@@ -48,13 +48,14 @@ input[type=password] {
 	height: 34px;
 }
 body{
-    background:repeat  center top;
-    min-heigth:min-height:100%; height:auto; height:100%;
-    background-size: cover;
+    background-image: url('${pageContext.request.contextPath }/images/login-blurry-bg.png');
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
 }
 </style>
 </head>
-<body style="background-image: url('${pageContext.request.contextPath }/images/login-blurry-bg.png')">
+<body>
 		<div id="loginBlock" class="login"
 			style="margin-top: 80px;margin-left:40px;margin-right:650px; height: 275px;">
 			<div class="loginFunc">

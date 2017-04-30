@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>宅急送BOS主界面</title>
+<title>恩施市文明单位创建动态管理系统</title>
 <!-- 导入jquery核心类库 -->
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
@@ -193,8 +193,8 @@
 <body class="easyui-layout">
 	<div data-options="region:'north',border:false"
 		style="height:60px;padding:10px;background:url('${pageContext.request.contextPath }/images/header_bg.png') no-repeat right;">
-		<div>
-
+		<div style="height: 100%" >
+            <p style="font-size: 30px;height: 100%">恩施市文明单位创建动态管理系统</p>
 		</div>
 		<div id="sessionInfoDiv"
 			style="position: absolute;right: 5px;top:10px;">

@@ -42,7 +42,11 @@
             url: '${url}',
             onSelect: onSelect,
             columns: [[
-                {field: 'projectName', title: '考核项目', width: 470},
+                {
+                    field: 'projectName',
+                    title: '考核项目',
+                    width: 470
+                },
                 {
                     field: 'type',
                     title: '考核类型',

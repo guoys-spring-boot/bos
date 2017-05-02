@@ -150,6 +150,10 @@
                 handler: doDelete
             }];
 
+            if(${disabled}){
+                toolbar = [];
+            }
+
 
             $('#attachmentGrid').datagrid( {
                 iconCls : 'icon-forward',

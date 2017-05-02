@@ -56,6 +56,11 @@ public class LoginController {
 		try {
             UnitBean unitBean = unitService.findByUsername(user.getUsername());
 
+            if(unitBean == null){
+                model.addAttribute("msg", "用户不存在");
+                return "login";
+            }
+
             if(!"1".equals(unitBean.getAuditingStatus()) && !"admin".equals(unitBean.getUsername())){
                 model.addAttribute("msg", "该单位还没有审核通过");
                 return "login";

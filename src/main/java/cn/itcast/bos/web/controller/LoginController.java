@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import cn.itcast.bos.domain.business.UnitBean;
 import cn.itcast.bos.service.business.UnitService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -40,10 +41,13 @@ public class LoginController {
 		if (key == null || !key.equals(checkcode)) {
 			// 验证码无效
 			model.addAttribute("msg", "验证码输入错误");
-			return "login";
+			return "forward:login.jsp";
 		}
 
-
+        if(StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())){
+            model.addAttribute("msg", "用户名或密码为空");
+            return "forward:login.jsp";
+        }
 
 		// 使用shiro 进行权限控制
 		Subject userSubject = SecurityUtils.getSubject();
@@ -58,12 +62,12 @@ public class LoginController {
 
             if(unitBean == null){
                 model.addAttribute("msg", "用户不存在");
-                return "login";
+                return "forward:login.jsp";
             }
 
             if(!"1".equals(unitBean.getAuditingStatus()) && !"admin".equals(unitBean.getUsername())){
                 model.addAttribute("msg", "该单位还没有审核通过");
-                return "login";
+                return "forward:login.jsp";
             }
 
 		    // shiro 提供登陆方法

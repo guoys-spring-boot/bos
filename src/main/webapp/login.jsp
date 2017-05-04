@@ -105,7 +105,7 @@
     <div id="floor">
         <a href="#" onclick="$(window).openWindow('addUserWindow', '${pageContext.request.contextPath}/business/toAddUnit', 750, 570, '用户管理', {})" >单位注册？</a><br/>
         恩施市文明办&nbsp;&nbsp;&nbsp;&nbsp;宣<br/>
-        建设用谷歌浏览器&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        建议使用谷歌浏览器&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 </div>
 </form>
 </body>

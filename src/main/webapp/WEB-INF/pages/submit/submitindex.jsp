@@ -235,10 +235,11 @@
                 </c:if>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <label for="assessmentProject">考核项目：</label>
-                <c:if test="${disabled}">
-                    <select id="assessmentProject" disabled="disabled" required="true" class="easyui-combogrid" name="project.id" style="width:430px;"></select>
+                <c:if test="${disabled or action eq 'edit'}">
+                    <select id="assessmentProject" disabled="disabled" required="true" class="easyui-combogrid" style="width:430px;"></select>
+                    <input type="hidden" name="project.id" value="${submitContent.project.id}" />
                 </c:if>
-                <c:if test="${!disabled}">
+                <c:if test="${!disabled and !(action eq 'edit')}">
                     <select id="assessmentProject" required="true" class="easyui-combogrid" name="project.id" style="width:430px;"></select>
                 </c:if>
             </div>

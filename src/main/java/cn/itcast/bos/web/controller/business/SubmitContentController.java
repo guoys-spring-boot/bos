@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.*;
 
@@ -80,7 +81,11 @@ public class SubmitContentController {
         }
         model.addAttribute("disabled", true);
         model.addAttribute("action", "lookup");
-        model.addAttribute("submitContent", submitContentService.findById(id));
+        SubmitContent submitContent = submitContentService.findById(id);
+        if(submitContent != null && submitContent.getContent() != null){
+            submitContent.setContent(submitContent.getContent().replace("\n", "\\n"));
+        }
+        model.addAttribute("submitContent", submitContent);
         return "submit/submitindex";
     }
 
@@ -157,6 +162,14 @@ public class SubmitContentController {
         submitContentService.update(content, needInsert, needDelete);
 
         return "redirect:/submitContent/toEditSubmitContent?id=" + content.getId();
+    }
+
+    @RequestMapping("/checkAlreadySubmit")
+    @ResponseBody
+    public Object checkAlreadySubmit(@RequestParam(value = "contentId", required = false) String contentId, HttpSession session,
+                                     @RequestParam(value = "projectId", required = false) String projectId){
+        String unitId = ((UnitBean) session.getAttribute("user")).getId();
+        return submitContentService.checkAlreadySubmit(projectId, contentId, unitId);
     }
 
     @RequestMapping("/listScoreDetails")

@@ -19,4 +19,7 @@ public interface SubmitContentDao extends BaseDAO<SubmitContent> {
 
     List<Score> findScoresByContentId(@Param("contentId") String contentId);
 
+    int checkAlreadySubmit(@Param("contentId") String contentId, @Param("projectId") String projectId,
+                           @Param("unitId") String unitId);
+
 }

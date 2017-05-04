@@ -50,4 +50,11 @@
         select score.id as stdId, score.scroe as detailScore, xzb.khpfx as stdItem, xzb.shuoming as stdRemark, xzb.score as stdScore from wmb_score score
         right join wmb_khxzb xzb on score.khbzid = xzb.id where score.sbnrid = #{contentId}
     </select>
+
+    <select id="checkAlreadySubmit" resultType="int">
+        SELECT count(*) from wmb_sbnr where khxmid = #{projectId} and dwid = #{unitId}
+        <if test="projectId != null and projectId != ''" >
+            and id != #{contentId}
+        </if>
+    </select>
 </mapper>

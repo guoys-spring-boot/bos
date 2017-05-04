@@ -39,6 +39,11 @@
             nowrap: true,
             treeField:'projectName',
             textField: 'projectName',
+            rowStyler: function (row) {
+                if(row.alreadySubmit){
+                    return 'background-color:#FF0000;';
+                }
+            },
             url: '${url}',
             onSelect: onSelect,
             columns: [[
@@ -66,10 +71,41 @@
             if(!row._parentId){
                 throw new Error();
             }
+
             $("#contentDetails").datagrid('load', {
                 "contentId" : row.id
             });
             //throw new Error();
+        }
+
+        function checkAlreadySubmit() {
+            var contentId = $("#id").val();
+            var projectId = $("input[name='project.id']").val();
+
+            var result = false;
+            $.ajax("${path}/submitContent/checkAlreadySubmit", {
+                data: {
+                    contentId: contentId,
+                    projectId: projectId
+                },
+                async : false,
+                success: function (data) {
+                    if(data == true || data == "true"){
+                        result = true;
+                    }
+                },
+                error: function (jqXHR) {
+                    alert(JSON.stringify(jqXHR, null, 4));
+                    result = true;
+                }
+
+            });
+            if(result){
+                $(this)._alert("该考核项目已经上报过");
+                return false;
+            }
+
+            return true;
         }
 
         $(function () {
@@ -79,6 +115,10 @@
                 if(!$("input[name='project.id']").val()){
                     $(this)._alert("考核项目不能为空");
                     return;
+                }
+
+                if(!checkAlreadySubmit()){
+                    return false;
                 }
                 var changes = $("#attachmentGrid").datagrid('getChanges', 'inserted');
                 var ids = [];
@@ -95,6 +135,10 @@
                 if(!$("input[name='project.id']").val()){
                     $(this)._alert("考核项目不能为空");
                     return;
+                }
+
+                if(!checkAlreadySubmit()){
+                    return false;
                 }
                 var grid = $("#attachmentGrid");
                 var changes = grid.datagrid('getChanges', 'inserted');
@@ -219,8 +263,7 @@
             <script type="text/javascript">
                 var width = $(window).width() * 0.85;
                 var height = $(window).height() * 0.63;
-                //$("#content").val('${submitContent.content}');
-                //$("#assessmentProject").val('${project.id}');
+
                 try {
                     var ue = UE.getEditor('content', {
                         initialFrameWidth: width,

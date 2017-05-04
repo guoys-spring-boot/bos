@@ -2,15 +2,20 @@ package cn.itcast.bos.web.controller.business;
 
 import cn.itcast.bos.domain.business.AssessmentContent;
 import cn.itcast.bos.domain.business.AssessmentStd;
+import cn.itcast.bos.domain.business.SubmitContent;
+import cn.itcast.bos.domain.business.UnitBean;
 import cn.itcast.bos.service.EnumService;
 import cn.itcast.bos.service.business.AssessmentContentService;
+import cn.itcast.bos.service.business.SubmitContentService;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -23,11 +28,14 @@ public class AssessmentContentController {
 
     private AssessmentContentService contentService;
 
+    private SubmitContentService submitContentService;
+
     private EnumService enumService;
 
-    public AssessmentContentController(AssessmentContentService service, EnumService enumService){
+    public AssessmentContentController(AssessmentContentService service, EnumService enumService, SubmitContentService contentService){
         this.contentService = service;
         this.enumService = enumService;
+        this.submitContentService = contentService;
     }
 
     @RequestMapping("/listContent")
@@ -73,10 +81,20 @@ public class AssessmentContentController {
 
     @RequestMapping("/listContentAsTree2")
     @ResponseBody
-    public Object listContentAsTree2(String type){
+    public Object listContentAsTree2(@RequestParam(value = "type", required = false) String type, HttpSession session){
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
         List<AssessmentContent> list = contentService.list(type);
         Map<String, String> assessmentType = enumService.getEnum("assessmentType");
+        UnitBean user = (UnitBean) session.getAttribute("user");
+        List<SubmitContent> submitContents = submitContentService.listSubmitContent(user.getId());
+        List<String> alreadySubmitAssess = new ArrayList<String>(submitContents.size());
+        for (SubmitContent submitContent : submitContents) {
+            if(submitContent.getProject() != null){
+                alreadySubmitAssess.add(submitContent.getProject().getId());
+            }
+
+        }
+
         Map<String, Object> currentType = null;
         for (AssessmentContent content : list) {
             if(currentType == null || !currentType.get("id").equals(content.getType())){
@@ -93,6 +111,7 @@ public class AssessmentContentController {
             record.put("projectName", content.getProjectName());
             record.put("type", content.getType());
             record.put("_parentId", content.getType());
+            record.put("alreadySubmit", alreadySubmitAssess.contains(content.getId()));
             ((List<Map<String, Object>>) currentType.get("children")).add(record);
 
         }

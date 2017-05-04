@@ -79,7 +79,11 @@ public class UnitServiceImp implements UnitService {
         if(StringUtils.isNotBlank(bean.getUsername()) && _bean != null && !bean.getId().equals(_bean.getId())){
             throw new RuntimeException("username already existed");
         }
-        unitDao.deleteRoleByUnitId(bean.getId());
+
+        if(bean.getRole() != null && StringUtils.isNotBlank(bean.getRole().getId())){
+            unitDao.deleteRoleByUnitId(bean.getId());
+        }
+
         unitDao.update(bean);
         if(bean.getRole() != null && StringUtils.isNotBlank(bean.getRole().getId())){
             unitDao.saveUnitRole(bean.getId(), bean.getRole().getId());

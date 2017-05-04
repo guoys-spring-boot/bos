@@ -32,4 +32,13 @@ public interface SubmitContentService {
      * @return
      */
     List<Score> listScoresByContentId(String contentId);
+
+    /**
+     *  检查一个考核题目是否已经上报过
+     * @param projectId 题目Id
+     * @param contentId 当前内容的id 修改时使用
+     * @param unitId 单位Id
+     * @return
+     */
+    boolean checkAlreadySubmit(String projectId, String contentId, String unitId);
 }

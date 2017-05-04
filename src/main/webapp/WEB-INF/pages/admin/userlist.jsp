@@ -206,6 +206,9 @@
 			striped : true,
 			toolbar : toolbar,
 			url : "/business/listUnit",
+            queryParams : {
+                parentUnitCode : "${sessionScope.user.id}"
+            },
 			idField : 'id', 
 			frozenColumns : frozenColumns,
 			columns : columns,

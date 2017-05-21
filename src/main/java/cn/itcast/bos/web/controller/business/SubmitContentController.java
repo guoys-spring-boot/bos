@@ -8,6 +8,7 @@ import cn.itcast.bos.utils.UUIDUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,13 +39,14 @@ public class SubmitContentController {
     private SubmitContentService submitContentService;
 
     @RequestMapping("/addSubmitContent")
-    public String addSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert, HttpServletRequest request){
+    public String addSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert, HttpServletRequest request,
+                                   Model model){
 
         UnitBean bean =  (UnitBean)request.getSession().getAttribute("user");
         content.setUnitId(bean.getId());
         submitContentService.save(content, needInsert);
-
-        return "redirect:/submitContent/toAddSubmitContent";
+        model.addAttribute("saveSuccess", true);
+        return "forward:/submitContent/toAddSubmitContent";
     }
 
     @RequestMapping("/toAddSubmitContent")
@@ -90,9 +92,13 @@ public class SubmitContentController {
     }
 
     @RequestMapping("/toEditSubmitContent")
-    public String toEditSubmitContent(String id, Model model){
+    public String toEditSubmitContent(@RequestParam("id") String id, @RequestParam(value="saveSuccess",required=false)String saveSuccess  ,Model model){
         if(StringUtils.isBlank(id)){
             return "submit/submitindex";
+        }
+
+        if(saveSuccess != null && saveSuccess.toLowerCase().equals("true")){
+            model.addAttribute("saveSuccess", true);
         }
         model.addAttribute("disabled", false);
         model.addAttribute("action", "edit");
@@ -160,8 +166,8 @@ public class SubmitContentController {
     public String updateSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert,
                                     @RequestParam("needDelete")String needDelete){
         submitContentService.update(content, needInsert, needDelete);
-
-        return "redirect:/submitContent/toEditSubmitContent?id=" + content.getId();
+        //model.addAttribute("saveSuccess", true);
+        return "redirect:/submitContent/toEditSubmitContent?id=" + content.getId() + "&saveSuccess=true";
     }
 
     @RequestMapping("/checkAlreadySubmit")

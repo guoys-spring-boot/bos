@@ -82,6 +82,7 @@ public class ShiroConfiguration {
         filterChainDefinitionManager.put("/business/listAllParentUnit", "anon");
         filterChainDefinitionManager.put("/base/loadEnum", "anon");
         filterChainDefinitionManager.put("/listRoleAsEnum", "anon");
+        filterChainDefinitionManager.put("/submitContent/downloadAttachment", "anon");
 
         filterChainDefinitionManager.put("/validatecode.jsp","anon");
         //filterChainDefinitionManager.put("/user/**", "authc,roles[user]");

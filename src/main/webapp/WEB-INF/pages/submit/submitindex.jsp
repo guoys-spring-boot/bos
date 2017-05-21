@@ -88,6 +88,10 @@
     <script type="text/javascript">
         $(function () {
             $("body").css({visibility: "visible"});
+
+            if("${saveSuccess}" == "true"){
+                $(this)._alert("保存成功");
+            }
         });
 
 
@@ -125,8 +129,60 @@
             ]]
         };
 
-        function _download(id) {
-            location.href = '${path}/submitContent/downloadAttachment?id=' + id;
+        String.prototype.endWith=function(str){
+            var reg=new RegExp(str+"$");
+            return reg.test(this);
+        };
+        var images = ['.png', '.jpg', '.jpeg'];
+        var previews = ['.doc', '.xls', '.docx', '.xlsx'];
+        function _download(id, name) {
+            var url = '${path}/submitContent/downloadAttachment?id=' + id;
+            if(name == null || name == undefined){
+                location.href = url;
+                return;
+            }
+
+            if(isImage(name)){
+                $("#imagePreview").find("img").attr("src", url);
+                $("#imagePreview").window('open');
+                return;
+            }
+            if(isPreview(name)){
+                var previewUrl = 'http://ow365.cn/?i=12491&furl=http://61.136.205.130:8089' + url;
+                $(window)._openTab("tabs", previewUrl, "预览", window.top);
+                return;
+            }
+            location.href = url;
+        }
+
+        function isPreview(name) {
+            if(name == null || name == undefined){
+                return false;
+            }
+            var result = false;
+            $.each(previews, function (index, item) {
+
+                if(name.toLowerCase().endWith(item)){
+                    result = true;
+                }
+            });
+
+            return result;
+        }
+
+        function isImage(name) {
+            if(name == null || name == undefined){
+                return false;
+            }
+            var result = false;
+            $.each(images, function (index, item) {
+
+                if(name.toLowerCase().endWith(item)){
+                    result = true;
+                }
+            });
+
+            return result;
         }
 
         function onSelect(row) {
@@ -250,7 +306,7 @@
                 rowspan : 1,
                 sortable : false,
                 formatter: function (value, row, index) {
-                    return "<a href='#' onclick='_download(\""+row.id+"\")'>"+value+"</a>"
+                    return "<a href='#' onclick='_download(\""+row.id+"\", \""+value+"\")'>"+value+"</a>"
                 }
             }]];
 
@@ -383,6 +439,11 @@
         <div class="rect4"></div>
         <div class="rect5"></div>
     </div>
+</div>
+
+<div id="imagePreview" class="easyui-window" title="图片预览" collapsible="false" minimizable="false" modal="true" closed="true" resizable="false"
+     maximizable="false" icon="icon-save"  style="display: none;width: 900px; height: 500px">
+    <img src="" alt="" />
 </div>
 </body>
 </html>

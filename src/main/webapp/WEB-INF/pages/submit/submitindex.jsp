@@ -319,16 +319,36 @@
                 }
             }
 
+            function download() {
+                var grid = $("#attachmentGrid");
+                var selections = grid.datagrid('getSelections');
+                if(selections.length == 0 || selections.length > 1){
+                    $(this)._alert("请选择一条记录");
+                    return;
+                }
+                var url = '${path}/submitContent/downloadAttachment?id=' + selections[0].id;
+                window.location = url;
 
+            }
             var toolbar = [{
                 id: 'button-add-row',
                 text: '删除',
                 iconCls: 'icon-cancel',
                 handler: doDelete
+            }, {
+                id: 'button-download-row',
+                text: '下载',
+                iconCls: 'icon-edit',
+                handler: download
             }];
 
             if(${disabled}){
-                toolbar = [];
+                toolbar = [{
+                    id: 'button-download-row',
+                    text: '下载',
+                    iconCls: 'icon-edit',
+                    handler: download
+                }];
             }
 
 

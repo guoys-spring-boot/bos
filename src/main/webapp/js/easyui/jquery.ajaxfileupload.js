@@ -10,13 +10,15 @@
  */
 
 ;(function($) {
+    var timer;
     $.fn.AjaxFileUpload = function(options) {
 
         var defaults = {
                 action:     "upload.php",
                 onChange:   function(filename) {},
                 onSubmit:   function(filename) {},
-                onComplete: function(filename, response) {}
+                onComplete: function(filename, response) {},
+                progressBar : "uploadProgress"
             },
             settings = $.extend({}, defaults, options),
             randomId = (function() {
@@ -51,9 +53,26 @@
             form.append($element).bind("submit", {element: $clone, iframe: iframe, filename: filename}, onSubmit).submit();
         }
 
+        function startProgress() {
+            timer = window.setInterval(function () {
+                var url = "/file/getProgressBar";
+                $.ajax(url, {
+                    async : false,
+                    success: function (data) {
+                        console.log(data);
+                        settings.progressBar.progressbar('setValue', Number(data) * 100);
+                    }
+                });
+            }, 20);
+        }
+        function stopProgress() {
+            settings.progressBar.progressbar('setValue', 100);
+            window.clearInterval(timer);
+        }
+
         function onSubmit(e) {
             var data = settings.onSubmit.call(e.data.element, e.data.filename);
-
+            startProgress();
             // If false cancel the submission
             if (data === false) {
                 // Remove the temporary form and iframe
@@ -73,6 +92,7 @@
         }
 
         function onComplete (e) {
+            stopProgress();
             var $iframe  = $(e.target),
                 doc      = ($iframe[0].contentWindow || $iframe[0].contentDocument).document,
                 response = doc.body.innerHTML;

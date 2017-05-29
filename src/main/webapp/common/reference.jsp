@@ -34,5 +34,6 @@
         type="text/javascript"></script>
 
 <script src="${path}/common/checkLogin.js"></script>
-<script src="${path}/js/easyui/jquery.ajaxfileupload.js"></script>
+
 <script src="${path}/js/easyui/ext/datagrid-detailview.js" type="text/javascript"></script>
+<script src="${path}/js/easyui/jquery.ajaxfileupload.js"></script>

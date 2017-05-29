@@ -374,7 +374,7 @@
         <table id="attachmentGrid" ></table>
     </div>
     <input type="file" id="file" name="file">
-
+    <div id="uploadProgress" class="easyui-progressbar" style="width:150px;"></div>
 </div>
 <div region="center" style="overflow:hidden;" border="false">
     <form:form commandName="submitContent" id="submitContentForm" action="${path}/submitContent/addSubmitContent" method="post">
@@ -431,11 +431,13 @@
 
 
                     $("#file").AjaxFileUpload({
-                        action:"${path}/submitContent/upload",
+                        action:"${path}/file/upload",
+                        progressBar:$("#uploadProgress"),
                         onComplete: function(filename, response) {
                             $("#attachmentGrid").datagrid('insertRow', {
                                 row:response
                             });
+                            $("#uploadProgress").progressbar('setValue', 100);
                             $("#file").val('');
                         }
                     })

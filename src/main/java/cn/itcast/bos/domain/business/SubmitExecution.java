@@ -3,6 +3,8 @@ package cn.itcast.bos.domain.business;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.text.DecimalFormat;
+
 /**
  * 上报情况表， 统计使用
  */
@@ -77,7 +79,8 @@ public class SubmitExecution {
     }
 
     public String getCompetePercent() {
-        return competePercent;
+        double percent = Double.parseDouble(this.getCompletedCount()) / Double.parseDouble(this.getTotalCount()) * 100;
+        return new DecimalFormat("###0.##").format(percent) + "%";
     }
 
     public void setCompetePercent(String competePercent) {

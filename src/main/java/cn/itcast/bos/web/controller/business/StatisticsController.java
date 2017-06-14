@@ -3,13 +3,21 @@ package cn.itcast.bos.web.controller.business;
 import cn.itcast.bos.domain.business.SubmitExecution;
 import cn.itcast.bos.domain.business.UnitBean;
 import cn.itcast.bos.service.business.StatisticsServcie;
+import cn.itcast.bos.utils.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,4 +56,65 @@ public class StatisticsController {
 
         return result;
     }
+
+    @RequestMapping("/excelSubmitExecutions")
+    public void excelSubmitExecutions(@RequestParam(value = "unitId", required = false) String unitId, HttpSession session,
+                                      HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String _unitId = null;
+        if(StringUtils.isEmpty(unitId)){
+            _unitId = ((UnitBean) session.getAttribute("user")).getId();
+        }else{
+            _unitId = unitId;
+        }
+        List<String> headerRow = new ArrayList<String>();
+        headerRow.add("单位名称");
+        headerRow.add("单位类型");
+        headerRow.add("总题目数");
+        headerRow.add("已完成题目数");
+        headerRow.add("未完成题目数");
+        headerRow.add("得分情况");
+        headerRow.add("完成率");
+        List<SubmitExecution> submitExecutions = statisticsServcie.listSubmitExecutions(_unitId);
+
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("完成情况表");
+
+        HSSFRow row = sheet.createRow(0);
+        int i = 0;
+        for (String s : headerRow) {
+
+            HSSFCell cell = row.createCell(i);
+            sheet.autoSizeColumn(i);
+            cell.setCellValue(s);
+            i++;
+        }
+
+        int j = 1;
+        for (SubmitExecution submitExecution : submitExecutions) {
+            HSSFRow row1 = sheet.createRow(j++);
+            createStringCell(row1, 0, submitExecution.getUnitName());
+            createStringCell(row1, 1, submitExecution.getUnitType());
+            createStringCell(row1, 2, submitExecution.getTotalCount());
+            createStringCell(row1, 3, submitExecution.getCompletedCount());
+            createStringCell(row1, 4, submitExecution.getUnCompleteCount());
+            createStringCell(row1, 5, submitExecution.getTotalScore() + "");
+            createStringCell(row1, 6, submitExecution.getCompetePercent());
+
+        }
+
+        response.setHeader("conent-type", "application/octet-stream");
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=" +
+                FileUtils.encodeDownloadFilename("执行完成情况表.xls", request.getHeader("user-agent")));
+        workbook.write(response.getOutputStream());
+    }
+
+    private void createStringCell(HSSFRow row, int index, String cellValue){
+        HSSFCell cell = row.createCell(index);
+        cell.setCellValue(cellValue);
+    }
+
+
 }
+
+

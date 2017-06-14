@@ -6,12 +6,17 @@ import cn.itcast.bos.utils.FileUtils;
 import cn.itcast.bos.utils.UUIDUtils;
 import com.baidu.ueditor.ActionEnter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,19 +38,25 @@ public class FileUploadServlet extends HttpServlet {
 
     private MultipartResolver multipartResolver;
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     private AttachmentService attachmentService;
 
-    public FileUploadServlet(AttachmentService attachmentService, MultipartResolver resolver){
-        this.attachmentService = attachmentService;
-        this.multipartResolver = resolver;
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
+        attachmentService = applicationContext.getBean(AttachmentService.class);
+        multipartResolver = applicationContext.getBean(MultipartResolver.class);
     }
+
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
         doPost(request, response);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.debug("开始上传文件");
         response.setContentType("text/json;charset=utf-8");
         if(!multipartResolver.isMultipart(request)){
             response.getWriter().write("无效的访问");

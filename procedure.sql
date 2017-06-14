@@ -15,7 +15,7 @@ CREATE PROCEDURE showChildLst(IN rootId VARCHAR(255))
     CALL createChildLst(rootId, 0);
 
     SELECT
-      SUM(score.`scroe`)             totalScore,
+      SUM(score.`scroe`)          AS totalScore,
       dw.`id`                     AS unitId,
       COUNT(DISTINCT nr.`khxmid`) AS completeNum,
       t.c                         AS totalCount,

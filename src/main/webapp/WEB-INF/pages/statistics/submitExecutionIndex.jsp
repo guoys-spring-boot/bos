@@ -26,6 +26,10 @@
             reloadGrid();
 		});
 
+		$("#excel").click(function () {
+            window.location = '${path}/statistics/excelSubmitExecutions?unitId=' + $("input[name='unitId']").val();
+        });
+
         $.enumComboboxFromUrl('unitId', '${path}/business/listAllParentUnit');
 	});
 </script>	
@@ -53,6 +57,7 @@
 		</form>
 		<div class="datagrid-toolbar">	
 			<a id="ajax" href="#" class="easyui-linkbutton" plain="true" icon="icon-search">查询</a>
+            <a id="excel" href="#" class="easyui-linkbutton" plain="true" icon="icon-search">导出excel</a>
 		</div>
     </div>
     <div region="center" style="overflow:hidden;" border="false">

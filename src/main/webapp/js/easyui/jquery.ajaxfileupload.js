@@ -54,18 +54,24 @@
         }
 
         function startProgress() {
+            if(!settings.progressBar){
+                return;
+            }
             timer = window.setInterval(function () {
                 var url = "/file/getProgressBar";
                 $.ajax(url, {
                     async : false,
                     success: function (data) {
-                        console.log(data);
+
                         settings.progressBar.progressbar('setValue', Number(data) * 100);
                     }
                 });
             }, 20);
         }
         function stopProgress() {
+            if(!settings.progressBar){
+                return;
+            }
             settings.progressBar.progressbar('setValue', 100);
             window.clearInterval(timer);
         }

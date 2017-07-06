@@ -14,9 +14,11 @@
     <div class="datagrid-toolbar">
         <c:if test="${action eq 'add'}">
             <a id="contentSave" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
+            <c:set var="actionUrl" value="${path}/assessmentContent/addContent" />
         </c:if>
         <c:if test="${action eq 'update'}">
             <a id="update" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
+            <c:set var="actionUrl" value="${path}/assessmentContent/updateContent" />
         </c:if>
     </div>
 </div>
@@ -24,14 +26,14 @@
     <div region="north" border="false" style="overflow: auto">
 
     <form:form id="contentForm" method="post" commandName="assessmentContent"
-               action="${path}/assessmentContent/addContent">
+               action="${actionUrl}">
             <table class="table-edit" width="95%" align="center">
                 <tr>
                     <td>考核类型:</td>
                     <td><form:input path="type" disabled="${disabled}" type="text"
                                     required="true"/></td>
                     <td>考核总分:</td>
-                    <td><form:input path="totalScore" disabled="true" type="text" class="easyui-numberbox" precision="2"
+                    <td><form:input path="totalScore" readonly="true" type="text" class="easyui-numberbox" precision="2"
                                     required="true"/></td>
                 </tr>
                 <tr>
@@ -87,6 +89,7 @@
             });
 
             $("#update").click(function () {
+
                 if(!$("#projectName").val()){
                     $(this)._alert("考核项目不能为空");
                     return;
@@ -96,7 +99,7 @@
                 contentForm._addGridChanges("grid", "needUpdates", "updated");
                 contentForm._addGridChanges("grid", "needDeletes", "deleted");
                 if (contentForm.form('validate')) {
-                    contentForm.attr("action", "${path}/assessmentContent/updateContent");
+                    //contentForm.attr("action", "${path}/assessmentContent/updateContent");
                     contentForm.form('submit', {
                         success:function () {
                             $(window).closeWindow('addUserWindow');

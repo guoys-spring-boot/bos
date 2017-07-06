@@ -10,10 +10,14 @@
     <script type="text/javascript">
 	function reloadGrid() {
         var elWin = $("#list").get(0).contentWindow;
-        elWin.$("#grid").datagrid('load', {
+
+        elWin.$("#grid").datagrid('reload', {
             xmlx: $("input[name='assessmentType']").val(),
 			unitLevel : $("input[name='unitLevel']").val(),
-            unitShortName : $("#unitShortName").val()
+            unitShortName : $("#unitShortName").val(),
+			page : 4,
+			rows : 10
+
         });
     }
 	$(function(){

@@ -91,7 +91,7 @@
             pagination: true,
 			fit : true,
 			border : false,
-            singleSelect:false,
+            singleSelect:true,
 			rownumbers : true,
 			striped : true,
 			toolbar : toolbar,

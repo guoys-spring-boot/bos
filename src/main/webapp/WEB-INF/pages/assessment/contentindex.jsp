@@ -10,7 +10,7 @@
     <script type="text/javascript">
 	function reloadGrid() {
         var elWin = $("#list").get(0).contentWindow;
-        elWin.$("#grid").datagrid('load', {
+        elWin.$("#grid").datagrid('reload', {
             type: $("input[name='assessmentType']").val()
         });
     }

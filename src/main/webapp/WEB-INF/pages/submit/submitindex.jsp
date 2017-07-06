@@ -134,7 +134,7 @@
             return reg.test(this);
         };
         var images = ['.png', '.jpg', '.jpeg'];
-        var previews = ['.doc', '.xls', '.docx', '.xlsx'];
+        var previews = ['.doc', '.xls', '.docx', '.xlsx', '.pdf'];
         function _download(id, name) {
             var url = '${path}/submitContent/downloadAttachment?id=' + id;
             if(name == null || name == undefined){
@@ -143,8 +143,9 @@
             }
 
             if(isImage(name)){
-                $("#imagePreview").find("img").attr("src", url);
-                $("#imagePreview").window('open');
+                //$("#imagePreview").find("img").attr("src", url);
+                //$("#imagePreview").window('open');
+                window.open('${path}/page.do?module=submit&resource=image&url='+ url, "image");
                 return;
             }
             if(isPreview(name)){

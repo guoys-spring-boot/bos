@@ -124,7 +124,12 @@
             grid.datagrid('beginEdit', rowIndex);
             var ed = grid.datagrid('getEditor', {index:rowIndex,field:field});
             $(ed.target).focus();
-            $(".numberbox-f").bind('input propertychange', caculateTotalScore);
+
+            var ed1 = grid.datagrid('getEditor', {index: rowIndex, field:'score'});
+            ed1.target.numberbox({
+                onChange : caculateTotalScore
+            });
+            // $("#_easyui_textbox_input3").bind('input propertychange', caculateTotalScore);
             editRowIndex = rowIndex;
         }
 
@@ -139,8 +144,8 @@
 
             totalScore += Number($(this).val());
 
-            $("#totalScore").val(totalScore);
-            $("input[name='totalScore']").val(totalScore);
+            $("#totalScore").textbox('setValue', totalScore);
+
         }
 
         function deleteRow(target) {

@@ -53,7 +53,7 @@
 
     <select id="checkAlreadySubmit" resultType="int">
         SELECT count(*) from wmb_sbnr where khxmid = #{projectId} and dwid = #{unitId}
-        <if test="projectId != null and projectId != ''" >
+        <if test="contentId != null and contentId != ''" >
             and id != #{contentId}
         </if>
     </select>

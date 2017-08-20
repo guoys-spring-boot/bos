@@ -44,6 +44,9 @@ public class SubmitContentController {
 
         UnitBean bean =  (UnitBean)request.getSession().getAttribute("user");
         content.setUnitId(bean.getId());
+        if(submitContentService.checkAlreadySubmit(content.getProject().getId(), null, bean.getId())){
+            throw new RuntimeException("该项目已经上报完成");
+        }
         submitContentService.save(content, needInsert);
         model.addAttribute("saveSuccess", true);
         return "forward:/submitContent/toAddSubmitContent";
@@ -164,7 +167,12 @@ public class SubmitContentController {
 
     @RequestMapping("/updateSubmitContent")
     public String updateSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert,
-                                    @RequestParam("needDelete")String needDelete){
+                                    @RequestParam("needDelete")String needDelete, HttpServletRequest request){
+
+        UnitBean bean =  (UnitBean)request.getSession().getAttribute("user");
+        if(submitContentService.checkAlreadySubmit(content.getProject().getId(), content.getId(), bean.getId())){
+            throw new RuntimeException("该项目已经上报完成");
+        }
         submitContentService.update(content, needInsert, needDelete);
         //model.addAttribute("saveSuccess", true);
         return "redirect:/submitContent/toEditSubmitContent?id=" + content.getId() + "&saveSuccess=true";

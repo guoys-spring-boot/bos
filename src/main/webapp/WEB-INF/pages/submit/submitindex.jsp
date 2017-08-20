@@ -190,16 +190,26 @@
             if(!row._parentId){
                 throw new Error();
             }
-
-            $("#contentDetails").datagrid('load', {
+            $("#contentDetails").datagrid('reload', {
                 "contentId" : row.id
             });
+            var result = isAlreadySubmit(row.id);
+            if(result){
+                $("#save").hide();
+                $("#edit").hide();
+            }else{
+                $("#save").show();
+                $("#edit").show();
+                //$("#save").attr("disable", "false");
+            }
             //throw new Error();
         }
 
-        function checkAlreadySubmit() {
+        function isAlreadySubmit(projectId) {
             var contentId = $("#id").val();
-            var projectId = $("input[name='project.id']").val();
+            if(projectId == null){
+                projectId = $("input[name='project.id']").val();
+            }
 
             var result = false;
             $.ajax("${path}/submitContent/checkAlreadySubmit", {
@@ -219,6 +229,11 @@
                 }
 
             });
+            return result;
+        }
+
+        function checkAlreadySubmit() {
+            var result = isAlreadySubmit();
             if(result){
                 $(this)._alert("该考核项目已经上报过");
                 return false;

@@ -11,7 +11,7 @@
     <script type="text/javascript">
 	function reloadGrid() {
         var elWin = $("#list").get(0).contentWindow;
-        elWin.$("#grid").datagrid('load', {
+        elWin.$("#grid").datagrid('reload', {
             unitLevel: $("input[name='unitLevel']").val(),
             auditingStatus: $("input[name='auditingStatus']").val(),
             parentUnitCode : $("input[name='parentUnitCode']").val(),
@@ -53,7 +53,7 @@
 				<tr><td>
 					<b>上级单位</b><span class="operator"><a name="username-opt" opt="all"></a></span>
                     <c:if test="${sessionScope.user.isAdmin()}">
-					    <input type="text" id="parentUnitCode" value="${sessionScope.user.id}" name="parentUnitCode"/>
+					    <input type="text" id="parentUnitCode" name="parentUnitCode"/>
                     </c:if>
                     <c:if test="${!sessionScope.user.isAdmin()}">
                         <input readonly="readonly" type="text" id="parentUnitCode" value="${sessionScope.user.id}" name="parentUnitCode"/>

@@ -36,7 +36,13 @@ public class LoginController {
 	@RequestMapping("/login.do")
 	// 用户登录
 	public String login(User user, String checkcode, HttpServletRequest request, Model model) {
-		// 判断验证码 是否正确
+
+	    if(request.getParameter("kick") != null){
+            model.addAttribute("msg", "您的账号在别的电脑上登录，您被强制下线");
+            return "forward:login.jsp";
+        }
+
+	    // 判断验证码 是否正确
 		String key = (String) request.getSession().getAttribute("key");// session中验证码
 		if (key == null || !key.equals(checkcode)) {
 			// 验证码无效

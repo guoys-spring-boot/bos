@@ -81,6 +81,28 @@
           <artifactId>commons-lang3</artifactId>
           <version>3.1</version>
       </dependency>
+      <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+      <dependency>
+          <groupId>com.alibaba</groupId>
+          <artifactId>fastjson</artifactId>
+          <version>1.2.0</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+      <dependency>
+          <groupId>net.sf.json-lib</groupId>
+          <artifactId>json-lib</artifactId>
+          <version>2.1</version>
+          <scope>system</scope>
+          <systemPath>${project.basedir}/lib/json-lib-2.1-jdk15.jar</systemPath>
+      </dependency>
+
+      <dependency>
+          <groupId>common.weixin</groupId>
+          <artifactId>showapi</artifactId>
+          <version>1.0</version>
+          <scope>system</scope>
+          <systemPath>${project.basedir}/lib/showapi_sdk20160406.jar</systemPath>
+      </dependency>
       <dependency>
           <groupId>org.apache.lucene</groupId>
           <artifactId>lucene-core</artifactId>

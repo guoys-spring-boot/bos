@@ -87,4 +87,10 @@ public class SubmitContentServiceImp implements SubmitContentService {
     public boolean checkAlreadySubmit(String projectId, String contentId, String unitId) {
         return submitContentDao.checkAlreadySubmit(contentId, projectId, unitId) > 0;
     }
+
+    @Override
+    public int getYwcCount(String unitId) {
+        // TODO Auto-generated method stub
+        return submitContentDao.getYwcCount(unitId);
+    }
 }

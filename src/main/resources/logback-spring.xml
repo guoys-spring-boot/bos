@@ -55,8 +55,8 @@
         <appender-ref ref="orm"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
-    <logger name="std" level="DEBUG">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="std" />
-    </logger>
+    </root>
 </configuration>

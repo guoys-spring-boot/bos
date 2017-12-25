@@ -32,4 +32,16 @@ public class ScoreServiceImp implements ScoreService {
             }
         }
     }
+
+    @Override
+    public Double getScore(String dwid) {
+        // TODO Auto-generated method stub
+        return scoreDao.getScore(dwid);
+    }
+
+    @Override
+    public int getYwcCount(String dwid) {
+        // TODO Auto-generated method stub
+        return scoreDao.getYwcCount(dwid);
+    }
 }

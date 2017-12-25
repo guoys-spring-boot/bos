@@ -10,4 +10,8 @@ import java.util.List;
 public interface ScoreService {
 
     void insert(List<Score> scores);
+
+    public Double getScore(String dwid);
+
+    public int getYwcCount(String dwid);
 }

@@ -57,4 +57,8 @@
             and id != #{contentId}
         </if>
     </select>
+
+    <select id="getYwcCount" resultType="int">
+        select ifnull(count(s.id),0) from wmb_sbnr s where s.dwid = #{unitId}
+    </select>
 </mapper>

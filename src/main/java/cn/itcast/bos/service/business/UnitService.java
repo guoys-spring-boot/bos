@@ -28,4 +28,8 @@ public interface UnitService {
     void updatePassword(String unitId, String password);
 
     List<UnitBean> findAllParentUnit();
+    
+    UnitBean findByOpenid(String openid);
+    
+    UnitBean findBySessionKey(String sessionKey);
 }

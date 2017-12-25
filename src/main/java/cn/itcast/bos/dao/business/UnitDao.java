@@ -20,11 +20,16 @@ public interface UnitDao extends BaseDAO<UnitBean> {
 
     UnitBean findByUserName(@Param("username") String username);
 
-    void updatePassword(@Param("id")String id, @Param("password")String password);
+    void updatePassword(@Param("id") String id, @Param("password") String password);
 
-    void deleteRoleByUnitId(@Param("unitId")String unitId);
+    void deleteRoleByUnitId(@Param("unitId") String unitId);
 
     void saveUnitRole(@Param("unitId") String unitId, @Param("roleId") String roleId);
 
     List<UnitBean> findAllParentUnit();
+    
+    UnitBean findByOpenid(@Param("openid") String sessionKey);
+    
+    UnitBean findBySessionKey(@Param("sessionKey") String sessionKey);
+    
 }

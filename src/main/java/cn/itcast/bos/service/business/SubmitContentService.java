@@ -41,4 +41,6 @@ public interface SubmitContentService {
      * @return
      */
     boolean checkAlreadySubmit(String projectId, String contentId, String unitId);
+
+    int getYwcCount(String unitId);
 }

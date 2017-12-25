@@ -21,5 +21,6 @@ public interface SubmitContentDao extends BaseDAO<SubmitContent> {
 
     int checkAlreadySubmit(@Param("contentId") String contentId, @Param("projectId") String projectId,
                            @Param("unitId") String unitId);
+    int getYwcCount(@Param("unitId") String unitId);
 
 }

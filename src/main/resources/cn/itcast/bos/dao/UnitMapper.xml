@@ -25,8 +25,11 @@
         <result column="password" property="password" jdbcType="VARCHAR"/>
         <result column="auditingStatus" property="auditingStatus" jdbcType="VARCHAR"/>
         <result column="isAdmin" property="isAdmin" jdbcType="VARCHAR"/>
+        <result column="sessionKey" property="sessionKey" jdbcType="VARCHAR"/>
+        <result column="openid" property="openid" jdbcType="VARCHAR"/>
         <result column="unitAddress" property="unitAddress" jdbcType="VARCHAR"/>
         <association property="role" resultMap="RoleResultMap" />
+       
     </resultMap>
     <resultMap id="RoleResultMap" type="cn.itcast.bos.domain.Role">
         <id column="roleId" property="id"/>
@@ -36,7 +39,7 @@
     <sql id="Base_Column_List">
         ID, parentUnitCode, ascriptionArea, organizationCode, unitFullName, unitType, unitProperty, unitLevel,
         unitPersonCount, legalEntity, legalEntityTelNum, leader, leaderTelNum, unitContactPerson, unitContactPersonTelNum,
-        contactQQ, contactEmail, username, password, auditingStatus, isAdmin, unitAddress, unitShortName
+        contactQQ, contactEmail, username, password, auditingStatus, isAdmin, unitAddress, unitShortName, sessionKey
     </sql>
     <insert id="insert" parameterType="cn.itcast.bos.domain.business.UnitBean">
         INSERT INTO BASE_UNIT (
@@ -45,7 +48,7 @@
         #{id}, #{parentUnitCode}, #{ascriptionArea}, #{organizationCode}, #{unitFullName}, #{unitType},
         #{unitProperty}, #{unitLevel}, #{unitPersonCount}, #{legalEntity}, #{legalEntityTelNum}, #{leader},
         #{leaderTelNum}, #{unitContactPerson}, #{unitContactPersonTelNum}, #{contactQQ}, #{contactEmail}, #{username},
-        #{password}, #{auditingStatus}, #{isAdmin}, #{unitAddress}, #{unitShortName}
+        #{password}, #{auditingStatus}, #{isAdmin}, #{unitAddress}, #{unitShortName}, #{sessionKey}
         )
     </insert>
     <select id="findById" resultMap="UnitResultMap">
@@ -54,7 +57,7 @@
         c.unitPersonCount, c.legalEntity, c.legalEntityTelNum, c.leader, c.leaderTelNum, c.unitContactPerson,
         c.unitContactPersonTelNum,
         c.contactQQ, c.contactEmail, c.username, c.password, c.auditingStatus, c.isAdmin, c.unitAddress, c.unitShortName,
-            USER_ROLE.ROLE_ID as roleId, AUTH_ROLE.HOMEPAGE AS HOMEPAGE, AUTH_ROLE.HOMEPAGETITLE AS HOMEPAGETITLE
+            USER_ROLE.ROLE_ID as roleId, AUTH_ROLE.HOMEPAGE AS HOMEPAGE, AUTH_ROLE.HOMEPAGETITLE AS HOMEPAGETITLE , c.sessionKey
         from BASE_UNIT c left join BASE_UNIT p on c.parentUnitCode = p.id left join USER_ROLE ON c.id = USER_ROLE.USER_ID
             LEFT JOIN AUTH_ROLE on USER_ROLE.ROLE_ID = AUTH_ROLE.ID WHERE c.ID = #{id}
     </select>
@@ -159,6 +162,12 @@
         <if test="unitAddress != null and unitAddress != ''">
             unitAddress = #{unitAddress},
         </if>
+        <if test="openid != null and openid != ''">
+            openid = #{openid},
+        </if>
+        <if test="sessionKey != null and sessionKey != ''">
+            sessionKey = #{sessionKey},
+        </if>
         password = password
         where id = #{id}
     </update>
@@ -173,7 +182,7 @@
         <include refid="Base_Column_List"/>
         from BASE_UNIT where username = #{username}
     </select>
-
+    
     <update id="updatePassword">
         UPDATE BASE_UNIT
         SET password = #{password}
@@ -189,4 +198,17 @@
     <select id="findAllParentUnit" resultMap="UnitResultMap">
         select distinct t2.id, t2.unitShortName from BASE_UNIT t1 join  BASE_UNIT t2 on t1.`parentUnitCode` = t2.id
     </select>
+    
+    <select id="findByOpenid" resultMap="UnitResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_UNIT where openid = #{openid}
+    </select>
+    
+    <select id="findBySessionKey" resultMap="UnitResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from BASE_UNIT where sessionKey = #{sessionKey}
+    </select>
+    
 </mapper>

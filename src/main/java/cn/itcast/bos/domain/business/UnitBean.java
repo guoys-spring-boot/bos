@@ -118,6 +118,12 @@ public class UnitBean {
     private String unitAddress;
 
     private Role role;
+    
+    private String code;
+    
+    private String sessionKey;
+    
+    private String openid;
 
     public String getId() {
         return id;
@@ -351,4 +357,29 @@ public class UnitBean {
                 ", unitAddress='" + unitAddress + '\'' +
                 '}';
     }
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getSessionKey() {
+		return sessionKey;
+	}
+
+	public void setSessionKey(String sessionKey) {
+		this.sessionKey = sessionKey;
+	}
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
+    
 }

@@ -25,5 +25,9 @@ public interface AssessmentContentService {
     int count(String type);
 
     List<AssessmentStd> listStds(String contentId);
+    
+    List<AssessmentContent> getWwcList(String unitId);
+    
+    List<AssessmentContent> getYwcList(String unitId);
 
 }

@@ -10,4 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ScoreDao extends BaseDAO<Score> {
+    public Double getScore(String dwid);
+    public int getYwcCount(String dwid);
 }

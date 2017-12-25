@@ -5,6 +5,7 @@ import cn.itcast.bos.domain.business.UnitBean;
 import cn.itcast.bos.service.business.UnitService;
 import cn.itcast.bos.utils.MD5Utils;
 import cn.itcast.bos.utils.UUIDUtils;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,4 +123,20 @@ public class UnitServiceImp implements UnitService {
     public List<UnitBean> findAllParentUnit() {
         return unitDao.findAllParentUnit();
     }
+
+	@Override
+	public UnitBean findByOpenid(String openid) {
+		if(StringUtils.isBlank(openid)){
+            return null;
+        }
+        return unitDao.findByOpenid(openid);
+	}
+
+	@Override
+	public UnitBean findBySessionKey(String sessionKey) {
+		if(StringUtils.isBlank(sessionKey)){
+            return null;
+        }
+        return unitDao.findBySessionKey(sessionKey);
+	}
 }

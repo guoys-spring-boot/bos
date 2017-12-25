@@ -6,6 +6,7 @@ import cn.itcast.bos.domain.business.AssessmentContent;
 import cn.itcast.bos.domain.business.AssessmentStd;
 import cn.itcast.bos.service.business.AssessmentContentService;
 import cn.itcast.bos.utils.UUIDUtils;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,5 +118,19 @@ public class AssessmentContentServiceImp implements AssessmentContentService {
         }
         return dao.findStdByContentId(contentId);
     }
+
+
+	@Override
+	public List<AssessmentContent> getWwcList(String unitId) {
+		// TODO Auto-generated method stub
+		return dao.getWwcList(unitId);
+	}
+
+
+	@Override
+	public List<AssessmentContent> getYwcList(String unitId) {
+		// TODO Auto-generated method stub
+		return dao.getYwcList(unitId);
+	}
 }
 

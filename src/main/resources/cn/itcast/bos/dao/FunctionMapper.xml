@@ -9,6 +9,7 @@
     <result column="GENERATEMENU" property="generatemenu" jdbcType="VARCHAR" />
     <result column="ZINDEX" property="zindex" jdbcType="DECIMAL" />
     <result column="PID" property="pid" jdbcType="VARCHAR" />
+    <result column="ICONCLS" property="iconSkin" />
   </resultMap>
   
   <!-- 查询用户具有菜单 -->
@@ -28,7 +29,7 @@
   </select>
   
   <sql id="Base_Column_List" >
-    AUTH_FUNCTION.ID, AUTH_FUNCTION.NAME, AUTH_FUNCTION.DESCRIPTION, AUTH_FUNCTION.PAGE, AUTH_FUNCTION.GENERATEMENU, AUTH_FUNCTION.ZINDEX, PID
+    AUTH_FUNCTION.ID, AUTH_FUNCTION.NAME, AUTH_FUNCTION.DESCRIPTION, AUTH_FUNCTION.PAGE, AUTH_FUNCTION.GENERATEMENU, AUTH_FUNCTION.ZINDEX, PID, ICONCLS
   </sql>
   <select id="selectByPrimaryKey" resultMap="FunctionResultMap" parameterType="java.lang.String" >
     select 

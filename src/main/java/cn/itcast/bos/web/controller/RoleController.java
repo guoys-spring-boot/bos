@@ -5,6 +5,7 @@ import cn.itcast.bos.service.RoleService;
 import cn.itcast.bos.service.UserService;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -40,6 +41,15 @@ public class RoleController {
     public String saveRole(Role role, String functionIds){
         roleService.saveRole(role, functionIds);
         return "admin/role";
+    }
+
+    @RequestMapping("/role_toEdit")
+    public String toEdit(String id, Model model){
+
+        Role role = roleService.getById(id);
+        model.addAttribute("role", role);
+
+        return "admin/role_add";
     }
 
     @RequestMapping("/listRoleAsEnum")

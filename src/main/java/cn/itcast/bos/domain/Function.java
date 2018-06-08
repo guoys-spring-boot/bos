@@ -23,6 +23,8 @@ public class Function {
 
 	private Long zindex;
 
+	private String iconSkin;
+
 	@JsonProperty(value = "_parentId")
 	private String pid;
 
@@ -84,4 +86,12 @@ public class Function {
 	public void setPid(String pid) {
 		this.pid = pid == null ? null : pid.trim();
 	}
+
+    public String getIconSkin() {
+        return iconSkin;
+    }
+
+    public void setIconSkin(String iconSkin) {
+        this.iconSkin = iconSkin;
+    }
 }

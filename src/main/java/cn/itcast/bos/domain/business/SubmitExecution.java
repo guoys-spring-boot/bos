@@ -1,6 +1,7 @@
 package cn.itcast.bos.domain.business;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.text.DecimalFormat;
@@ -20,7 +21,7 @@ public class SubmitExecution {
 
     private String unCompleteCount; //未完成数
 
-    private double totalScore;
+    private Double totalScore;
 
     private String competePercent; //完成率
 
@@ -70,11 +71,11 @@ public class SubmitExecution {
         this.unCompleteCount = unCompleteCount;
     }
 
-    public double getTotalScore() {
+    public Double getTotalScore() {
         return totalScore;
     }
 
-    public void setTotalScore(double totalScore) {
+    public void setTotalScore(Double totalScore) {
         this.totalScore = totalScore;
     }
 

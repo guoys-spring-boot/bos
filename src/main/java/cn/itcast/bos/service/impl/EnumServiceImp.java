@@ -32,4 +32,11 @@ public class EnumServiceImp implements EnumService {
 
         return result;
     }
+
+
+
+    @Override
+    public List<EnumBean> listEnum(String enumType){
+        return enumDao.findByEnumType(enumType);
+    }
 }

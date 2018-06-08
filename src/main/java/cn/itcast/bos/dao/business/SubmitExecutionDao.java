@@ -2,6 +2,7 @@ package cn.itcast.bos.dao.business;
 
 import cn.itcast.bos.domain.business.SubmitExecution;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ import java.util.List;
 @Mapper
 public interface SubmitExecutionDao {
 
-    List<SubmitExecution> listSubmitExecutions(String unitId);
+    List<SubmitExecution> listSubmitExecutions(@Param("unitId") String unitId, @Param("year") String year);
 }

@@ -100,7 +100,9 @@
             grid.datagrid({
                 iconCls: 'icon-forward',
                 pagination: true,
+                pageSize: 20,
                 fit: true,
+                fitColumns: true,
                 border: false,
                 singleSelect: true,
                 rownumbers: true,

@@ -8,6 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Insert title here</title>
     <jsp:include page="${pageContext.request.contextPath}/common/reference.jsp"/>
+
 </head>
 <body class="easyui-layout">
 <div region="north" style="height:31px;overflow:hidden;" split="false" border="false">
@@ -34,15 +35,15 @@
                         <form:input path="parentUnitCode" disabled="true" type="text" class="easyui-validatebox"/>
                     </c:if>
                     <c:if test="${!(param.from eq 'index')}">
-                        <form:input path="parentUnitCode" disabled="${disabled}" type="text"
+                        <form:input path="parentUnitCode" disabled="${disabled}" type="text" cssStyle="width: 80%"
                                     class="easyui-validatebox"/>
                     </c:if>
                 </td>
                 <td>归属区域:</td>
                 <td>
-                    <input id="ascriptionArea" disabled="true" value="es001" type="text" class="easyui-combobox"
+                    <input id="ascriptionArea" disabled="true" value="恩施市" type="text" class="easyui-validatebox"
                                     required="true"/>
-                    <input name="ascriptionArea" value="es001" type="hidden" class="easyui-combobox"
+                    <input name="ascriptionArea" value="es001" type="hidden"
                            required="true"/>
 
                 </td>
@@ -64,11 +65,11 @@
                     <!-- 是否为主页的请求 -->
                     <c:if test="${param.from eq 'index'}">
                         <form:input path="unitType" disabled="true" type="text" name="unitType" id="unitType"
-                                    class="easyui-combobox" required="true" style="width: 150px;"/>
+                                    class="easyui-combobox" required="true" cssStyle="width: 80%"/>
                     </c:if>
                     <c:if test="${!(param.from eq 'index')}">
                         <form:input path="unitType" disabled="${disabled}" type="text" name="unitType" id="unitType"
-                                    class="easyui-combobox" required="true" style="width: 150px;"/>
+                                    class="easyui-combobox" required="true" cssStyle="width: 80%"/>
                     </c:if>
 
                 </td>
@@ -81,11 +82,11 @@
                 <td>
                     <c:if test="${param.from eq 'index'}">
                         <form:input path="unitProperty" disabled="true" type="text" name="unitProperty"
-                                    id="unitProperty" class="easyui-combobox" required="true" style="width: 150px;"/>
+                                    id="unitProperty" class="easyui-combobox" required="true" cssStyle="width: 80%"/>
                     </c:if>
                     <c:if test="${!(param.from eq 'index')}">
                         <form:input path="unitProperty" disabled="${disabled}" type="text" name="unitProperty"
-                                    id="unitProperty" class="easyui-combobox" required="true" style="width: 150px;"/>
+                                    id="unitProperty" class="easyui-combobox" required="true" cssStyle="width: 80%"/>
                     </c:if>
 
                 </td>
@@ -94,18 +95,18 @@
                     <!-- 是否为主页的请求 -->
                     <c:if test="${param.from eq 'index'}">
                         <form:input path="unitLevel" disabled="true" type="text" name="unitLevel" id="unitLevel"
-                                    class="easyui-combobox" required="true" style="width: 150px;"/>
+                                    class="easyui-combobox" required="true" cssStyle="width: 80%"/>
                     </c:if>
                     <c:if test="${!(param.from eq 'index')}">
                         <form:input path="unitLevel" disabled="${disabled}" type="text" name="unitLevel" id="unitLevel"
-                                    class="easyui-combobox" required="true" style="width: 150px;"/>
+                                    class="easyui-combobox" required="true" cssStyle="width: 80%"/>
                     </c:if>
                 </td>
             </tr>
             <tr>
                 <td>单位人数:</td>
                 <td><form:input disabled="${disabled}" path="unitPersonCount" type="text" name="unitPersonCount"
-                                id="unitPersonCount" class="easyui-numberbox" required="true"/></td>
+                                id="unitPersonCount" class="easyui-validatebox" required="true"/></td>
                 <td>单位法人:</td>
                 <td><form:input disabled="${disabled}" path="legalEntity" type="text" name="legalEntity"
                                 id="legalEntity" class="easyui-validatebox" required="true"/></td>
@@ -113,7 +114,7 @@
             <tr>
                 <td>单位法人电话:</td>
                 <td><form:input disabled="${disabled}" path="legalEntityTelNum" type="text" name="legalEntityTelNum"
-                                id="legalEntityTelNum" class="easyui-numberbox" required="true"/></td>
+                                id="legalEntityTelNum" class="easyui-validatebox" required="true"/></td>
                 <td>分管领导:</td>
                 <td><form:input disabled="${disabled}" path="leader" type="text" name="leader" id="leader"
                                 class="easyui-validatebox" required="true"/></td>
@@ -121,7 +122,7 @@
             <tr>
                 <td>分管领导电话:</td>
                 <td><form:input disabled="${disabled}" path="leaderTelNum" type="text" name="leaderTelNum"
-                                id="leaderTelNum" class="easyui-numberbox" required="true"/></td>
+                                id="leaderTelNum" class="easyui-validatebox" required="true"/></td>
                 <td>单位联系人:</td>
                 <td><form:input disabled="${disabled}" path="unitContactPerson" type="text" name="unitContactPerson"
                                 id="unitContactPerson" class="easyui-validatebox" required="true"/></td>
@@ -136,7 +137,7 @@
                 <td>单位联系人qq:</td>
                 <td>
                     <form:input path="contactQQ" type="text" disabled="${disabled}" name="contactQQ" id="contactQQ"
-                                class="easyui-numberbox" required="true"/>
+                                class="easyui-validatebox" required="true"/>
                 </td>
             </tr>
             <tr>
@@ -163,7 +164,7 @@
                     <td>角色:</td>
                     <td>
                         <form:input path="role.id" id="roleId" disabled="${disabled}" type="text"
-                                    class="easyui-combobox" required="true"/>
+                                    class="easyui-combobox" required="true" cssStyle="width: 80%"/>
                     </td>
                 </c:if>
             </tr>
@@ -172,11 +173,11 @@
                 <td>
                     <c:if test="${param.from eq 'index'}">
                         <form:input path="isAdmin" disabled="true" type="text" name="isAdmin" id="isAdmin"
-                                    class="easyui-combobox" required="true"/>
+                                    class="easyui-combobox" required="true" cssStyle="width: 80%"/>
                     </c:if>
                     <c:if test="${!(param.from eq 'index')}">
                         <form:input path="isAdmin" disabled="${disabled}" type="text" name="isAdmin" id="isAdmin"
-                                    class="easyui-combobox" required="true"/>
+                                    class="easyui-combobox" required="true" cssStyle="width: 80%"/>
                     </c:if>
                 </td>
 
@@ -221,7 +222,7 @@
             $.enumCombobox('unitProperty', 'unitProperty');
             $.enumCombobox('unitType', 'unitType');
             $.enumCombobox('isAdmin', 'yesOrNo');
-            $.enumCombobox('ascriptionArea', 'ascriptionArea');
+            //$.enumCombobox('ascriptionArea', 'ascriptionArea');
             $.enumComboboxFromUrl("roleId", '${path}/listRoleAsEnum');
             $.enumComboboxFromUrl('parentUnitCode', '${path}/business/listAllParentUnit');
         });

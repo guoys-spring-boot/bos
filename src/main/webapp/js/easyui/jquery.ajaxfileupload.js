@@ -107,7 +107,12 @@
                 try{
                     response = $.parseJSON(response);
                 }catch (error){
-                    response = $.parseJSON($(response).text());
+                    try{
+                        response = $.parseJSON($(response).text());
+                    }catch (error){
+                        response = {}
+                    }
+
                 }
 
             } else {

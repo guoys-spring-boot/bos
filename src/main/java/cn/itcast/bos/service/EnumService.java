@@ -1,5 +1,8 @@
 package cn.itcast.bos.service;
 
+import cn.itcast.bos.domain.EnumBean;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,4 +11,6 @@ import java.util.Map;
 public interface EnumService {
 
     Map<String, String> getEnum(String enumType);
+
+    List<EnumBean> listEnum(String enumType);
 }

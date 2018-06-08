@@ -22,7 +22,7 @@ public class StatisticsServcieImp  implements StatisticsServcie{
     }
 
     @Override
-    public List<SubmitExecution> listSubmitExecutions(String unitId) {
-        return submitExecutionDao.listSubmitExecutions(unitId);
+    public List<SubmitExecution> listSubmitExecutions(String unitId, String year) {
+        return submitExecutionDao.listSubmitExecutions(unitId, year);
     }
 }

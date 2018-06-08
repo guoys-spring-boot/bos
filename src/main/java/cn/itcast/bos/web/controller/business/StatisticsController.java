@@ -5,7 +5,10 @@ import cn.itcast.bos.domain.business.UnitBean;
 import cn.itcast.bos.service.business.StatisticsServcie;
 import cn.itcast.bos.utils.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,13 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static cn.itcast.bos.common.SessionHelpler.resolveYear;
 
 
 /**
@@ -46,11 +49,14 @@ public class StatisticsController {
         }else{
             _unitId = unitId;
         }
+        String year = resolveYear(session);
+
         Map<String, Object> result = new HashMap<String, Object>();
-        List<SubmitExecution> submitExecutions = statisticsServcie.listSubmitExecutions(_unitId);
+        List<SubmitExecution> submitExecutions = statisticsServcie.listSubmitExecutions(_unitId, year);
         if(submitExecutions.size() > 0){
             submitExecutions.get(0).set_parentId(null);
         }
+
         result.put("total", submitExecutions.size());
         result.put("rows", submitExecutions);
 
@@ -66,6 +72,8 @@ public class StatisticsController {
         }else{
             _unitId = unitId;
         }
+        String year = resolveYear(session);
+
         List<String> headerRow = new ArrayList<String>();
         headerRow.add("单位名称");
         headerRow.add("单位类型");
@@ -74,7 +82,7 @@ public class StatisticsController {
         headerRow.add("未完成题目数");
         headerRow.add("得分情况");
         headerRow.add("完成率");
-        List<SubmitExecution> submitExecutions = statisticsServcie.listSubmitExecutions(_unitId);
+        List<SubmitExecution> submitExecutions = statisticsServcie.listSubmitExecutions(_unitId, year);
 
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("完成情况表");

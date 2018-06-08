@@ -18,11 +18,13 @@ public interface AssessmentContentService {
 
     void deleteBatch(String ids);
 
-    List<AssessmentContent> list(String type);
+    List<AssessmentContent> list(AssessmentContent content);
 
     AssessmentContent findById(String id);
 
-    int count(String type);
+    int count(AssessmentContent content);
+
+    void copyAsNewYear(String old,String newYear);
 
     List<AssessmentStd> listStds(String contentId);
     

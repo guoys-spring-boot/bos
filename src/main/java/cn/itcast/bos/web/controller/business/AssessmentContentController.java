@@ -1,5 +1,6 @@
 package cn.itcast.bos.web.controller.business;
 
+import cn.itcast.bos.common.SessionHelpler;
 import cn.itcast.bos.domain.business.AssessmentContent;
 import cn.itcast.bos.domain.business.AssessmentStd;
 import cn.itcast.bos.domain.business.SubmitContent;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
+
+import static cn.itcast.bos.common.SessionHelpler.resolveYear;
 
 /**
  * Created by gys on 2017/4/5.
@@ -40,25 +43,38 @@ public class AssessmentContentController {
 
     @RequestMapping("/listContent")
     @ResponseBody
-    public Object listContent(Integer page, Integer rows, String type){
+    public Object listContent(Integer page, Integer rows, String type, HttpSession session){
+
         page = page == null ? 0 : page;
         rows = rows == null ? Integer.MAX_VALUE : rows;
         rows = rows <= 0 ? Integer.MAX_VALUE : rows;
         page = page < 0 ? 0 : page;
         PageHelper.startPage(page, rows);
-        List<AssessmentContent> list = contentService.list(type);
-        int total = contentService.count(type);
+
+        AssessmentContent param = new AssessmentContent();
+        param.setType(type);
+        param.setYear(resolveYear(session));
+
+        List<AssessmentContent> list = contentService.list(param);
+        int total = contentService.count(param);
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("rows", list);
         result.put("total", total);
         return result;
     }
+
+
     @RequestMapping("/listContentAsTree")
     @ResponseBody
-    public Object listContentAsTree(String type){
+    public Object listContentAsTree(String type, HttpSession session){
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
-        List<AssessmentContent> list = contentService.list(type);
+
+        AssessmentContent param = new AssessmentContent();
+        param.setType(type);
+        param.setYear(resolveYear(session));
+        List<AssessmentContent> list = contentService.list(param);
         Map<String, String> assessmentType = enumService.getEnum("assessmentType");
+
         Map<String, Object> currentType = null;
         for (AssessmentContent content : list) {
             if(currentType == null || !currentType.get("id").equals(content.getType())){
@@ -83,10 +99,17 @@ public class AssessmentContentController {
     @ResponseBody
     public Object listContentAsTree2(@RequestParam(value = "type", required = false) String type, HttpSession session){
         List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
-        List<AssessmentContent> list = contentService.list(type);
+
+        AssessmentContent param = new AssessmentContent();
+        param.setType(type);
+        param.setYear(resolveYear(session));
+        List<AssessmentContent> list = contentService.list(param);
         Map<String, String> assessmentType = enumService.getEnum("assessmentType");
+
         UnitBean user = (UnitBean) session.getAttribute("user");
-        List<SubmitContent> submitContents = submitContentService.listSubmitContent(user.getId());
+        String year = resolveYear(session);
+
+        List<SubmitContent> submitContents = submitContentService.listSubmitContent(user.getId(), year);
         List<String> alreadySubmitAssess = new ArrayList<String>(submitContents.size());
         for (SubmitContent submitContent : submitContents) {
             if(submitContent.getProject() != null){
@@ -146,8 +169,15 @@ public class AssessmentContentController {
     }
 
     @RequestMapping("/addContent")
-    public void addContent(AssessmentContent content){
+    public void addContent(AssessmentContent content, HttpSession session){
+        content.setYear(resolveYear(session));
         contentService.save(content);
+    }
+
+    @RequestMapping("/copyContent")
+    @ResponseBody
+    public void copyContent(String newYear, String oldYear){
+        contentService.copyAsNewYear(oldYear, newYear);
     }
 
     @RequestMapping("/toLookupContent")

@@ -8,6 +8,8 @@ import cn.itcast.bos.service.business.AssessmentContentService;
 import cn.itcast.bos.utils.UUIDUtils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ import java.util.List;
 @Transactional
 public class AssessmentContentServiceImp implements AssessmentContentService {
 
+    private Logger logger = LoggerFactory.getLogger(getClass());
     private AssessmentContentDao dao;
     private AssessmentStdDao stdDao;
     public AssessmentContentServiceImp(AssessmentContentDao dao, AssessmentStdDao stdDao){
@@ -89,9 +92,40 @@ public class AssessmentContentServiceImp implements AssessmentContentService {
     }
 
     @Override
-    public List<AssessmentContent> list(String type) {
-        AssessmentContent content = new AssessmentContent();
-        content.setType(type);
+    public void copyAsNewYear(String old, String newYear) {
+        AssessmentContent param = new AssessmentContent();
+        param.setYear(newYear);
+
+        int count = this.count(param);
+        if(count > 0){
+            logger.warn("新的年度中已经有了项目， 返回");
+            return;
+        }
+
+        param.setYear(old);
+        List<AssessmentContent> list = this.list(param);
+        for (AssessmentContent content : list) {
+            content.setYear(newYear);
+            content.setId(UUIDUtils.generatePrimaryKey());
+
+            List<AssessmentStd> stds = content.getAssessmentStdList();
+            for (AssessmentStd std : stds) {
+                std.setYear(newYear);
+                std.setId(UUIDUtils.generatePrimaryKey());
+                std.setContentId(content.getId());
+
+                stdDao.insert(std);
+            }
+
+            dao.insert(content);
+        }
+
+        logger.info("复制完成， 共复制 {} 条", list.size());
+    }
+
+    @Override
+    public List<AssessmentContent> list(AssessmentContent content) {
+
         return dao.findAll(content);
 
     }
@@ -105,9 +139,7 @@ public class AssessmentContentServiceImp implements AssessmentContentService {
     }
 
     @Override
-    public int count(String type) {
-        AssessmentContent content = new AssessmentContent();
-        content.setType(type);
+    public int count(AssessmentContent content) {
         return dao.count(content);
     }
 

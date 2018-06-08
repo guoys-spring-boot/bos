@@ -12,64 +12,126 @@
         <result column="unitLevel" property="unitLevel" jdbcType="VARCHAR"/>
         <result column="xmlxmc" property="xmlxmc" jdbcType="VARCHAR"/>
         <result column="levelmc" property="levelmc" jdbcType="VARCHAR"/>
-        <result column="score" property="score" />
+        <result column="score" property="score"/>
     </resultMap>
 
     <select id="findById" resultMap="ReportResultMap">
-        SELECT K.*,b1.EnumText AS xmlxmc,b2.EnumText AS levelmc FROM
-        (
-        SELECT RS.id,RS.khxmid,RS.dwid,KM.khxm,KM.xmlx,KM.totalscore,BS.unitShortName,BS.unitLevel FROM
-        wmb_sbnr RS
-        LEFT JOIN wmb_khxm KM ON RS.khxmid=KM.id
-        LEFT JOIN base_unit BS ON RS.dwid=BS.id
-        )K,base_enum b1,base_enum b2
-        where K.xmlx=b1.EnumCode and b1.EnumType='assessmentType'
-        AND K.unitLevel=b2.EnumCode and b2.EnumType='unitLevel' AND K.ID = #{id}
+        SELECT
+            K.*,
+            b1.EnumText AS xmlxmc,
+            b2.EnumText AS levelmc
+        FROM
+            (
+                SELECT
+                    RS.id,
+                    RS.khxmid,
+                    RS.dwid,
+                    KM.khxm,
+                    KM.xmlx,
+                    KM.totalscore,
+                    BS.unitShortName,
+                    BS.unitLevel
+                FROM
+                    wmb_sbnr RS
+                    LEFT JOIN wmb_khxm KM ON RS.khxmid = KM.id
+                    LEFT JOIN base_unit BS ON RS.dwid = BS.id
+            ) K, base_enum b1, base_enum b2
+        WHERE K.xmlx = b1.EnumCode AND b1.EnumType = 'assessmentType'
+              AND K.unitLevel = b2.EnumCode AND b2.EnumType = 'unitLevel' AND K.ID = #{id}
     </select>
     <select id="findAll" resultMap="ReportResultMap">
-        SELECT K.*,b1.EnumText AS xmlxmc,b2.EnumText AS levelmc FROM
-        (
-        SELECT RS.id,RS.khxmid,RS.dwid,KM.khxm,KM.xmlx,KM.totalscore,BS.unitShortName,BS.unitLevel, sum(sc.scroe) as score FROM
-        wmb_sbnr RS
-        LEFT JOIN wmb_khxm KM ON RS.khxmid=KM.id
-        LEFT JOIN BASE_UNIT BS ON RS.dwid=BS.id
-        LEFT JOIN wmb_score sc ON sc.sbnrid = RS.id
-        where RS.dwid in (select id from BASE_UNIT where parentUnitCode = #{dwid})
-        <if test="xmlx != null and xmlx != ''">
-            and KM.xmlx = #{xmlx}
-        </if>
-        <if test="unitLevel != null and unitLevel != ''">
-            and BS.unitLevel = #{unitLevel}
-        </if>
-        <if test="unitShortName != null and unitShortName != ''">
-            <bind name="pattern" value="'%' + unitShortName + '%'" />
-            and BS.unitShortName like #{pattern}
-        </if>
-        group by RS.id
-        )K,BASE_ENUM b1,BASE_ENUM b2
-        where K.xmlx=b1.EnumCode and b1.EnumType='assessmentType'
-        AND K.unitLevel=b2.EnumCode and b2.EnumType='unitLevel'
+        SELECT
+            K.*,
+            b1.EnumText AS xmlxmc,
+            b2.EnumText AS levelmc
+        FROM
+            (
+                SELECT
+                    RS.id,
+                    RS.khxmid,
+                    RS.dwid,
+                    KM.khxm,
+                    KM.xmlx,
+                    KM.totalscore,
+                    BS.unitShortName,
+                    BS.unitLevel,
+                    sum(sc.scroe) AS
+                        score
+                FROM
+                    (select * from wmb_sbnr where year = #{year}) RS
+                    LEFT JOIN wmb_khxm KM ON RS.khxmid = KM.id
+                    LEFT JOIN BASE_UNIT BS ON RS.dwid = BS.id
+                    LEFT JOIN wmb_score sc ON sc.sbnrid = RS.id
+                WHERE
+                <if test="admin">
+                    1=1
+                </if>
+                <if test="!admin">
+                    RS.dwid in (select id from BASE_UNIT where parentUnitCode = #{dwid})
+                </if>
+                <if test="xmlx != null and xmlx != ''">
+                    and KM.xmlx = #{xmlx}
+                </if>
+                <if test="unitLevel != null and unitLevel != ''">
+                    and BS.unitLevel = #{unitLevel}
+                </if>
+                <if test="unitShortName != null and unitShortName != ''">
+                    <bind name="pattern" value="'%' + unitShortName + '%'"/>
+                    and BS.unitShortName like #{pattern}
+                </if>
+                GROUP BY RS.id
+            ) K, BASE_ENUM b1, BASE_ENUM b2
+        WHERE K.xmlx = b1.EnumCode AND b1.EnumType = 'assessmentType'
+              AND K.unitLevel = b2.EnumCode AND b2.EnumType = 'unitLevel'
     </select>
     <select id="findTotalCount" resultType="int">
-        select count(*) from (SELECT K.*,b1.EnumText AS xmlxmc,b2.EnumText AS levelmc FROM
-        (
-        SELECT RS.id,RS.khxmid,RS.dwid,KM.khxm,KM.xmlx,KM.totalscore,BS.unitShortName,BS.unitLevel FROM
-        wmb_sbnr RS
-        LEFT JOIN wmb_khxm KM ON RS.khxmid=KM.id
-        LEFT JOIN base_unit BS ON RS.dwid=BS.id
-        )K,base_enum b1,base_enum b2
-        where K.xmlx=b1.EnumCode and b1.EnumType='assessmentType'
-        AND K.unitLevel=b2.EnumCode and b2.EnumType='unitLevel')M
+        SELECT count(*)
+        FROM (SELECT
+                  K.*,
+                  b1.EnumText AS xmlxmc,
+                  b2.EnumText AS levelmc
+              FROM
+                  (
+                      SELECT
+                          RS.id,
+                          RS.khxmid,
+                          RS.dwid,
+                          KM.khxm,
+                          KM.xmlx,
+                          KM.totalscore,
+                          BS.unitShortName,
+                          BS.unitLevel
+                      FROM
+                          (select * from wmb_sbnr where year = #{year}) RS
+                          LEFT JOIN wmb_khxm KM ON RS.khxmid = KM.id
+                          LEFT JOIN base_unit BS ON RS.dwid = BS.id
+                  ) K, base_enum b1, base_enum b2
+              WHERE K.xmlx = b1.EnumCode AND b1.EnumType = 'assessmentType'
+                    AND K.unitLevel = b2.EnumCode AND b2.EnumType = 'unitLevel') M
     </select>
     <select id="totalCountByCondition" parameterType="cn.itcast.bos.domain.business.ReportUpBean" resultType="int">
-        select count(*) from (SELECT K.*,b1.EnumText AS xmlxmc,b2.EnumText AS levelmc FROM
-        (
-        SELECT RS.id,RS.khxmid,RS.dwid,KM.khxm,KM.xmlx,KM.totalscore,BS.unitShortName,BS.unitLevel FROM
-        wmb_sbnr RS
-        LEFT JOIN wmb_khxm KM ON RS.khxmid=KM.id
-        LEFT JOIN base_unit BS ON RS.dwid=BS.id
-        )K,base_enum b1,base_enum b2
-        where K.xmlx=b1.EnumCode and b1.EnumType='assessmentType'
-        AND K.unitLevel=b2.EnumCode and b2.EnumType='unitLevel')M
+        SELECT count(*)
+        FROM (SELECT
+                  K.*,
+                  b1.EnumText AS xmlxmc,
+                  b2.EnumText AS levelmc
+              FROM
+                  (
+                      SELECT
+                          RS.id,
+                          RS.khxmid,
+                          RS.dwid,
+                          KM.khxm,
+                          KM.xmlx,
+                          KM.totalscore,
+                          BS.unitShortName,
+                          BS.unitLevel
+                      FROM
+                          (select * from wmb_sbnr where year = #{year}) RS
+                          LEFT JOIN wmb_khxm KM ON RS.khxmid = KM.id
+                          LEFT JOIN base_unit BS ON RS.dwid = BS.id
+                  ) K, base_enum b1, base_enum b2
+              WHERE K.xmlx = b1.EnumCode AND b1.EnumType = 'assessmentType'
+                    AND K.unitLevel = b2.EnumCode AND b2.EnumType = 'unitLevel') M
     </select>
 </mapper>

@@ -20,11 +20,11 @@
         </c:if>
     </div>
 </div>
-<div region="center" style="height:600px;overflow:auto;padding:5px;" border="false">
+<div region="center" style="overflow:auto;padding:5px;" border="false">
     <div region="north" border="false" style="overflow: auto">
 
-    <form:form id="contentForm" method="post" commandName="assessmentContent"
-               action="${path}/busines/addScore">
+        <form:form id="contentForm" method="post" commandName="assessmentContent"
+                   action="${path}/busines/addScore">
             <table class="table-edit" width="95%" align="center">
                 <tr>
                     <td>考核类型:</td>
@@ -48,12 +48,12 @@
                 <form:hidden path="id"/>
                 <input type="hidden" id="scores" name="scores"/>
             </table>
-    </form:form>
+        </form:form>
 
-        <div style="width: 700px; height: 250px">
-                <table id="grid" ></table>
-            </div>
+        <div style="width: 650px; height: 250px">
+            <table id="grid"></table>
         </div>
+    </div>
     <script type="text/javascript">
         var grid = $("#grid");
 
@@ -65,21 +65,21 @@
                 var scores = [];
                 var grid = $("#grid");
                 var rows = grid.datagrid('getRows');
-                for (var i = 0; i < rows.length; i++){
+                for (var i = 0; i < rows.length; i++) {
                     var rowIndex = grid.datagrid('getRowIndex', rows[i]);
                     grid.datagrid('endEdit', rowIndex);
                 }
 
-                for(var j = 0; j< rows.length; j++){
+                for (var j = 0; j < rows.length; j++) {
                     var update = rows[j];
                     var score = {};
                     score.stdId = update.id;
-                    if(update.scored == null || isNaN(update.scored) || update.scored == '' || update.scored == undefined){
+                    if (update.scored == null || isNaN(update.scored) || update.scored == '' || update.scored == undefined) {
                         $(this)._alert("分数为必填项");
                         return false;
                     }
 
-                    if(update.scored > update.score){
+                    if (update.scored > update.score) {
                         $(this)._alert("分数不能大于总分");
                         return false;
                     }
@@ -90,14 +90,14 @@
                 }
                 $.ajax(url, {
                     type: 'post',
-                    dataType:"json",
-                    contentType:"application/json",
-                    data:JSON.stringify(scores),
-                    success:function () {
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify(scores),
+                    success: function () {
                         $(window).closeWindow('doExam');
                     },
-                    async:false,
-                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                    async: false,
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
                         alert(JSON.stringify(XMLHttpRequest, null, 4));
                     }
                 });
@@ -110,13 +110,13 @@
 
         function onClickCell(rowIndex, field) {
             grid.datagrid('beginEdit', rowIndex);
-            var ed = grid.datagrid('getEditor', {index:rowIndex,field:field});
+            var ed = grid.datagrid('getEditor', {index: rowIndex, field: field});
             $(ed.target).focus();
         }
 
         function deleteRow(target) {
             var tr = $(target).closest('tr.datagrid-row');
-            var rowIndex =  parseInt(tr.attr('datagrid-row-index'));
+            var rowIndex = parseInt(tr.attr('datagrid-row-index'));
             grid.datagrid('deleteRow', rowIndex);
         }
 
@@ -140,24 +140,23 @@
         };
 
 
-
         var columns = [[itemCol, remarkCol, scoreCol, {
-            field: 'beizhu',
-            title: '备注',
-            width: 150,
-            editor: {
-                type: "textarea"
-            }
-        } ,{
             field: 'scored',
             title: '考核得分',
             width: 60,
             editor: {
                 type: "numberbox",
-                options:{
+                options: {
                     required: true,
                     precision: 2
                 }
+            }
+        }, {
+            field: 'beizhu',
+            title: '备注',
+            width: 150,
+            editor: {
+                type: "textarea"
             }
         }]];
         var toolbar = [];
@@ -165,16 +164,17 @@
         grid.datagrid({
             iconCls: 'icon-forward',
             border: false,
-            rownumbers:true,
+            rownumbers: true,
             height: 'auto',
             singleSelect: true,
             striped: true,
             toolbar: toolbar,
             nowrap: false,
-            fit:true,
-            onDblClickCell : onClickCell,
+            fit: true,
+            fitColumns: true,
+            onDblClickCell: onClickCell,
 
-            url : "${path}/assessmentContent/listContentStd?contentId=${assessmentContent.id}",
+            url: "${path}/assessmentContent/listContentStd?contentId=${assessmentContent.id}",
             idField: 'id',
             columns: columns
         });

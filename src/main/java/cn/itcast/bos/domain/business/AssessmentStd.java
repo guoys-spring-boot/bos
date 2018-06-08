@@ -10,9 +10,19 @@ public class AssessmentStd {
 
     private String remark;
 
-    private double score;
+    private Double score;
 
     private String contentId;
+
+    private String year;
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
 
     public String getId() {
         return id;
@@ -38,11 +48,11 @@ public class AssessmentStd {
         this.remark = remark;
     }
 
-    public double getScore() {
+    public Double getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(Double score) {
         this.score = score;
     }
 

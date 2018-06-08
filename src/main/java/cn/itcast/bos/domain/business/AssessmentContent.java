@@ -19,7 +19,18 @@ public class AssessmentContent {
 
     private List<AssessmentStd> assessmentStdList = new ArrayList<AssessmentStd>();
 
-    private double totalScore;
+    private Double totalScore;
+
+
+    private String year;
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
 
     public List<AssessmentStd> getAssessmentStdList() {
         return assessmentStdList;
@@ -57,11 +68,11 @@ public class AssessmentContent {
         this.assessmentStdList = assessmentStdList;
     }
 
-    public double getTotalScore() {
+    public Double getTotalScore() {
         return totalScore;
     }
 
-    public void setTotalScore(double totalScore) {
+    public void setTotalScore(Double totalScore) {
         this.totalScore = totalScore;
     }
 

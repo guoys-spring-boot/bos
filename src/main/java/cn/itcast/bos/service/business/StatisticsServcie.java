@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface StatisticsServcie {
 
-    List<SubmitExecution> listSubmitExecutions(String unitId);
+    List<SubmitExecution> listSubmitExecutions(String unitId, String year);
 }

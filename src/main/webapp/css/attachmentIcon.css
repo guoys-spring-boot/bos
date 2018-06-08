@@ -1,0 +1,11 @@
+.wordIcon {
+    background:url(./img/wordIcon.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle
+}
+
+.pdfIcon {
+    background:url(./img/pdfIcon.png) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle
+}
+
+.imgIcon {
+    background:url(./img/imgIcon.jpg) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle
+}

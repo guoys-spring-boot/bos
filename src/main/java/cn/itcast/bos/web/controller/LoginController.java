@@ -2,6 +2,7 @@ package cn.itcast.bos.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import cn.itcast.bos.common.SessionHelpler;
 import cn.itcast.bos.domain.business.UnitBean;
 import cn.itcast.bos.service.business.UnitService;
 import org.apache.commons.lang3.StringUtils;
@@ -56,6 +57,11 @@ public class LoginController {
             return "forward:login.jsp";
         }
 
+		if(StringUtils.isEmpty(user.getYear())){
+			model.addAttribute("msg", "年度为空");
+			return "forward:login.jsp";
+		}
+
 		// 使用shiro 进行权限控制
 		Subject userSubject = SecurityUtils.getSubject();
 		// 将用户名和密码 封装成 令牌
@@ -81,6 +87,8 @@ public class LoginController {
 			userSubject.login(token);
 
 			request.getSession().setAttribute("user", unitService.findById(unitBean.getId()));
+			SessionHelpler.saveYear(request.getSession(), user.getYear());
+
 			// 重定向主页
 			return "redirect:index.jsp";
 		} catch (UnknownAccountException e) {

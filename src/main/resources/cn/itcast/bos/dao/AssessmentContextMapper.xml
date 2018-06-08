@@ -6,25 +6,30 @@
         <result column="khxm" property="projectName" jdbcType="VARCHAR"/>
         <result column="xmlx" property="type" jdbcType="VARCHAR"/>
         <result column="totalscore" property="totalScore"/>
-        <collection property="assessmentStdList" ofType="cn.itcast.bos.domain.business.AssessmentStd" >
-            <id column="id" property="id" />
+        <result column="year" property="year" />
+        <collection property="assessmentStdList" ofType="cn.itcast.bos.domain.business.AssessmentStd">
+            <id column="stdid" property="id"/>
             <result column="khpfx" property="item"/>
             <result column="score" property="score"/>
             <result column="shuoming" property="remark"/>
         </collection>
-     </resultMap>
+    </resultMap>
+
     <resultMap id="StdResultMap" type="cn.itcast.bos.domain.business.AssessmentStd">
-        <id column="id" property="id" />
+        <id column="id" property="id"/>
         <result column="khpfx" property="item"/>
         <result column="score" property="score"/>
         <result column="shuoming" property="remark"/>
+        <result column="year" property="year" />
     </resultMap>
+
     <sql id="Base_Column_List">
-        id, khxm, xmlx, totalscore
+        id, khxm, xmlx, totalscore, year
     </sql>
+
     <insert id="insert" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
-        insert into wmb_khxm (<include refid="Base_Column_List"/>) values (#{id}, #{projectName}, #{type},
-        #{totalScore})
+        insert into wmb_khxm (<include refid="Base_Column_List"/>)
+        values (#{id}, #{projectName}, #{type}, #{totalScore}, #{year} )
     </insert>
 
     <update id="update" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
@@ -32,19 +37,23 @@
         SET khxm = #{projectName}, xmlx = #{type}, totalscore = #{totalScore}
         WHERE id = #{id}
     </update>
+
     <delete id="delete" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
         DELETE FROM wmb_khxm
         WHERE id = #{id}
     </delete>
+
     <select id="findById" resultMap="ContentResultMap">
         select
         <include refid="Base_Column_List"/>
         from wmb_khxm xm where id = #{id}
     </select>
+
     <select id="findAll" resultMap="ContentResultMap" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
         select
-        <include refid="Base_Column_List"/>
-        from wmb_khxm where 1=1
+        wmb_khxm.id as id, khxm, xmlx, totalscore, wmb_khxm.year as year, xzb.id as stdid, xzb.score, xzb.khpfx, xzb.shuoming
+        from wmb_khxm join wmb_khxzb xzb on xzb.khxmid = wmb_khxm.id
+        where wmb_khxm.year = #{year}
         <if test="projectName != null and projectName != ''">
             and khxm = #{projectName}
         </if>
@@ -53,10 +62,11 @@
         </if>
         order by xmlx
     </select>
+
     <select id="count" resultType="int" parameterType="cn.itcast.bos.domain.business.AssessmentContent">
         select
         count(*)
-        from wmb_khxm where 1=1
+        from wmb_khxm where year = #{year}
         <if test="projectName != null and projectName != ''">
             and khxm = #{projectName}
         </if>
@@ -65,7 +75,9 @@
         </if>
     </select>
 
-    <select id="findStdByContentId" resultMap="StdResultMap" >
-        select * from wmb_khxzb where khxmid = #{contentId}
+    <select id="findStdByContentId" resultMap="StdResultMap">
+        SELECT *
+        FROM wmb_khxzb
+        WHERE khxmid = #{contentId}
     </select>
 </mapper>

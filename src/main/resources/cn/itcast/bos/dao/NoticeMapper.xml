@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itcast.bos.dao.business.NoticeDao">
+
+    <resultMap id="NoticeMap" type="cn.itcast.bos.domain.business.Notice">
+        <id column="NoticeId" property="id" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="date" />
+        <association property="attachment" resultMap="cn.itcast.bos.dao.business.AttachmentDao.AttachmentResultMap" />
+    </resultMap>
+
+    <select id="findAll" resultMap="NoticeMap">
+        SELECT n.id as NoticeId, n.name, n.create_time, f.fujianmc, fujianurl, f.id FROM wmb_notice n join wmb_fujian f on n.id = f.sbnrid ORDER BY n.create_time desc
+    </select>
+
+    <insert id="insert" >
+        INSERT INTO wmb_notice (id, name, create_time) VALUES (#{id}, #{name}, #{date})
+    </insert>
+    <delete id="delete" >
+        DELETE FROM wmb_notice WHERE id = #{id}
+    </delete>
+</mapper>

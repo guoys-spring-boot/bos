@@ -23,7 +23,7 @@ public class SubmitExecutionTest {
 
     @Test
     public void test(){
-        List<SubmitExecution> executions = dao.listSubmitExecutions("1");
+        List<SubmitExecution> executions = dao.listSubmitExecutions("1", "2018");
         System.out.println(executions);
     }
 }

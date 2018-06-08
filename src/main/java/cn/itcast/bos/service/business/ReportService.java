@@ -2,6 +2,7 @@ package cn.itcast.bos.service.business;
 
 import java.util.List;
 
+import cn.itcast.bos.domain.business.AgencyReportProcess;
 import cn.itcast.bos.domain.business.ReportUpBean;
 
 public interface ReportService {
@@ -14,5 +15,5 @@ public interface ReportService {
 
     ReportUpBean findById(String id);
 
-    
+    List<AgencyReportProcess> findAgency(AgencyReportProcess p);
 }

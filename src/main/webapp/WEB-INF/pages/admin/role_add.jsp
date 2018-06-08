@@ -49,12 +49,12 @@
 					</tr>
 					<tr>
 						<td>名称</td>
-						<td><input type="text" name="name" class="easyui-validatebox" data-options="required:true" /></td>
+						<td><input type="text" name="name" value="${role.name}" class="easyui-validatebox" data-options="required:true" /></td>
 					</tr>
 					<tr>
 						<td>描述</td>
 						<td>
-							<textarea name="description" rows="4" cols="60"></textarea>
+							<textarea name="description" value="${role.description}" rows="4" cols="60"></textarea>
 						</td>
 					</tr>
 					<tr>
@@ -65,6 +65,8 @@
 						</td>
 					</tr>
 					</table>
+
+				<input type="hidden" value="${role.id}" name="id" id="id" />
 			</form>
 			<script type="text/javascript">
                 $(function(){

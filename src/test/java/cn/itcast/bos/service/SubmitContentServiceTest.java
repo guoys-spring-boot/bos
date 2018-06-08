@@ -23,7 +23,7 @@ public class SubmitContentServiceTest {
 
     @Test
     public void testFindByUnitId(){
-        List<SubmitContent> submitContents = submitContentDao.findByUnitId("0243143576fd4392ae95c893e53d7bb5");
+        List<SubmitContent> submitContents = submitContentDao.findByUnitId("0243143576fd4392ae95c893e53d7bb5", "2018");
 
         System.out.printf("");
     }

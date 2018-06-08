@@ -11,7 +11,7 @@
 
     var dialogOptions = {
         onDestroy: function () {
-            window.parent.reloadGrid();
+            reload();
             $("#doExam").window('destroy');
 
         }
@@ -83,7 +83,7 @@
             sortable : false,
 			formatter: function (value, row, index) {
 				if(row.unitLevel == '1' || row.unitLevel == '2'){
-				    if(row.score > 0){
+				    if(row.score != null){
 				        return "已审核";
                     }
 				    return "<a href='#' onclick='doExam(\"" + row.id + "\", \"" + row.khxmid + "\")'>审核</a>"
@@ -92,6 +92,13 @@
         }
 	]];
 
+    function reload() {
+        $("#grid").datagrid('reload', {
+            xmlx: $("input[name='assessmentType']").val(),
+            unitLevel : $("input[name='unitLevel']").val(),
+            unitShortName : $("#unitShortName").val()
+        });
+    }
 
 	// 定义标题栏
 	var frozenColumns = [[]];
@@ -103,12 +110,14 @@
 		$('#grid').datagrid( {
 			iconCls : 'icon-forward',
             pagination: true,
+			pageSize: 20,
 			fit : true,
+            fitColumns: true,
 			border : false,
             singleSelect:true,
 			rownumbers : true,
 			striped : true,
-			toolbar : toolbar,
+			toolbar : '#toolbar',
             height:'auto',
             nowrap:true,
 			url : "/business/listReport",
@@ -131,13 +140,37 @@
 
         $("#doExam").window('close');
 
-		
+        $.enumCombobox('assessmentType', 'assessmentType', '', '请选择');
+        $.enumCombobox('unitLevel', 'unitLevel', '', '请选择');
+
+        $("#queryBtn").click(reload);
+
+
 	});
 
 </script>		
 </head>
 <body class="easyui-layout" style="visibility:hidden;">
 
+
+	<div id="toolbar">
+		<table class="table-edit" width="100%" >
+			<tr>
+				<td>
+					<b>考核类型</b><span class="operator"><a name="birthday-opt" opt="date"></a></span>
+					<input id="assessmentType" name="assessmentType" value="">
+
+					<b>单位等级</b><span class="operator"><a name="gender-opt" opt="all"></a></span>
+					<input id="unitLevel" name="unitLevel" value="">
+
+					<b>单位名称</b><span class="operator"><a name="gender-opt" opt="all"></a></span>
+					<input id="unitShortName" class="easyui-textbox" name="unitShortName" value="">
+
+					<a id="queryBtn" href="#" class="easyui-linkbutton" plain="true" icon="icon-search">查询</a>
+				</td>
+			</tr>
+		</table>
+	</div>
     <div region="center" border="false">
     	<table id="grid"></table>
 	</div>

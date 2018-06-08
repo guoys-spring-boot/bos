@@ -6,9 +6,10 @@
         <result column="fujianmc" property="name" jdbcType="VARCHAR"/>
         <result column="fujianurl" property="uri" jdbcType="VARCHAR"/>
         <result column="sbnrid" property="foreignKey" jdbcType="VARCHAR"/>
+        <result column="uploadTime" property="uploadTime" />
     </resultMap>
     <sql id="Base_Column_List">
-    id, fujianmc, fujianurl, sbnrid
+    id, fujianmc, fujianurl, sbnrid, uploadTime
   </sql>
 
     <select id="findByForeignKey" resultMap="AttachmentResultMap" >
@@ -16,7 +17,7 @@
     </select>
     <insert id="insert" >
         INSERT INTO wmb_fujian ( <include refid="Base_Column_List"/> )
-        VALUE (#{id}, #{name}, #{uri}, #{foreignKey})
+        VALUE (#{id}, #{name}, #{uri}, #{foreignKey} , #{uploadTime})
     </insert>
     <update id="updateForeignKey" >
         update wmb_fujian SET sbnrid = #{key} where id = #{id}

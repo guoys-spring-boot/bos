@@ -12,6 +12,8 @@ public class Attachment {
 
     private String uri;
 
+    private String uploadTime;
+
     public String getId() {
         return id;
     }
@@ -42,5 +44,13 @@ public class Attachment {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public String getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(String uploadTime) {
+        this.uploadTime = uploadTime;
     }
 }

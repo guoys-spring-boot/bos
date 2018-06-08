@@ -88,6 +88,8 @@ public class ShiroConfiguration {
         filterChainDefinitionManager.put("/login.jsp", "anon");
         filterChainDefinitionManager.put("/js/**", "anon");
         filterChainDefinitionManager.put("/css/**", "anon");
+        filterChainDefinitionManager.put("/font/**", "anon");
+        filterChainDefinitionManager.put("/fontAwesome/**", "anon");
         filterChainDefinitionManager.put("/images/**", "anon");
         filterChainDefinitionManager.put("/json/**", "anon");
         filterChainDefinitionManager.put("/business/toAddUnit", "anon");

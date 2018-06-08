@@ -28,6 +28,8 @@ public interface BaseDAO<T> {
 	// 查询所有
 	public List<T> findAll();
 
+	List<T> findByCondition(T t);
+
 	// 根据id 查询
 	// String int 类型都实现 Serializable
 	public T findById(Serializable id);

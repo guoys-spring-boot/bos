@@ -3,62 +3,164 @@
 <mapper namespace="cn.itcast.bos.dao.business.SubmitContentDao">
     <resultMap id="ContentResultMap" type="cn.itcast.bos.domain.business.SubmitContent">
         <id column="id" property="id" jdbcType="VARCHAR"/>
-        <result property="content" column="content" />
-        <result property="unitId" column="dwid" />
-        <result property="score" column="score" />
+        <result property="content" column="content"/>
+        <result property="unitId" column="dwid"/>
+        <result property="score" column="score"/>
+        <result property="status" column="status"/>
+        <result property="year" column="year"/>
+        <result property="amCnt" column="amCnt" />
         <association property="project" resultMap="ProjectMap"/>
         <collection property="scoreDetails" resultMap="ScoreResultMap"/>
     </resultMap>
     <resultMap id="ProjectMap" type="cn.itcast.bos.domain.business.AssessmentContent">
         <id column="projectId" property="id"/>
         <result column="khxm" property="projectName"/>
-        <result column="xmlx" property="type" />
+        <result column="xmlx" property="type"/>
         <result column="totalscore" property="totalScore"/>
+        <result column="year" property="year"/>
     </resultMap>
-    <resultMap id="ScoreResultMap" type="cn.itcast.bos.domain.business.Score" >
-        <id column="ScoreId" property="id" jdbcType="VARCHAR" />
-        <result column="dwid" property="unitId" jdbcType="VARCHAR" />
-        <result column="sbnrid" property="contentId" jdbcType="VARCHAR" />
-        <result column="detailScore" property="score" />
-        <result column="beizhu" property="remark" jdbcType="VARCHAR" />
+    <resultMap id="ScoreResultMap" type="cn.itcast.bos.domain.business.Score">
+        <id column="ScoreId" property="id" jdbcType="VARCHAR"/>
+        <result column="dwid" property="unitId" jdbcType="VARCHAR"/>
+        <result column="sbnrid" property="contentId" jdbcType="VARCHAR"/>
+        <result column="detailScore" property="score"/>
+        <result column="beizhu" property="remark" jdbcType="VARCHAR"/>
+        <result column="year" property="year"/>
         <association property="assessmentStd" resultMap="StdResultMap"/>
     </resultMap>
     <resultMap id="StdResultMap" type="cn.itcast.bos.domain.business.AssessmentStd">
         <id column="StdId" property="id"/>
-        <result column="stdItem" property="item" />
-        <result column="stdRemark" property="remark" />
+        <result column="stdItem" property="item"/>
+        <result column="stdRemark" property="remark"/>
         <result column="stdScore" property="score"/>
+        <result column="year" property="year"/>
     </resultMap>
     <select id="findByUnitId" resultMap="ContentResultMap">
 
-        select sb.id, sb.dwid,sb.content , sb.khxmid as projectId, xm.khxm, xm.xmlx, xm.totalscore, sum(sc.scroe) as score
-        from wmb_sbnr sb join wmb_khxm xm on xm.id = sb.khxmid left join wmb_score sc on sb.id = sc.sbnrid where sb.dwid=#{unitId} group by sb.id order by xm.xmlx
+        SELECT
+            sb.id,
+            sb.dwid,
+            sb.content,
+            sb.khxmid     AS projectId,
+            xm.khxm,
+            xm.xmlx,
+            xm.totalscore,
+            sum(sc.scroe) AS score
+        FROM wmb_sbnr sb
+            JOIN wmb_khxm xm ON xm.id = sb.khxmid
+            LEFT JOIN wmb_score sc ON sb.id = sc.sbnrid
+        WHERE sb.dwid = #{unitId} AND sb.year = #{year}
+        GROUP BY sb.id
+        ORDER BY xm.xmlx
 
     </select>
     <insert id="insert" parameterType="cn.itcast.bos.domain.business.SubmitContent">
-        insert into wmb_sbnr (id, khxmid, dwid, content) VALUE (#{id}, #{project.id}, #{unitId}, #{content})
+        INSERT INTO wmb_sbnr (id, khxmid, dwid, content, year)
+            VALUE (#{id}, #{project.id}, #{unitId}, #{content}, #{year})
     </insert>
 
+    <select id="findContentWithProjectByUnitId" resultMap="ContentResultMap">
+
+        SELECT *
+        FROM (
+                 SELECT
+                     xm.id          AS projectId,
+                     xm.khxm        AS khxm,
+                     xm.totalscore  AS totalscore,
+                     xm.xmlx        AS xmlx,
+                     nr.id          AS id,
+                     sc.sc          AS score,
+                     CASE WHEN nr.id IS NOT NULL AND fj.fjcnt IS NULL
+                          THEN 0
+                     ELSE
+                          fj.fjcnt END AS amCnt,
+                     CASE WHEN sc.sc IS NOT NULL
+                         THEN '已评分'
+                     WHEN nr.id IS NOT NULL
+                         THEN '已上报'
+                     ELSE '未上报' END AS status
+                 FROM (SELECT *
+                       FROM wmb_khxm
+                       WHERE year = #{year}) xm LEFT JOIN (SELECT *
+                                                           FROM wmb_sbnr
+                                                           WHERE
+                                                               wmb_sbnr.dwid = #{unitId} AND wmb_sbnr.year = #{year}) nr
+                         ON xm.id = nr.khxmid
+
+                     LEFT JOIN (SELECT
+                                    sbnrid,
+                                    sum(scroe) sc
+                                FROM wmb_score
+                                GROUP BY sbnrid) sc ON sc.sbnrid = nr.id
+                     LEFT JOIN (SELECT
+                                    count(*) AS fjcnt,
+                                    sbnrid
+                                FROM wmb_fujian
+                                GROUP BY sbnrid) fj ON fj.sbnrid = nr.id
+                 WHERE xm.xmlx = #{projectType}) t
+
+                <if test="status != null and status != ''">
+                    where status = #{status}
+                </if>
+    </select>
+
     <select id="findById" resultMap="ContentResultMap">
-        select id, dwid, content, khxmid as projectId from wmb_sbnr where id = #{id}
+        SELECT
+            id,
+            dwid,
+            content,
+            khxmid AS projectId
+        FROM wmb_sbnr
+        WHERE id = #{id}
     </select>
     <update id="update" parameterType="cn.itcast.bos.domain.business.SubmitContent">
-        UPDATE wmb_sbnr SET khxmid = #{project.id}, content = #{content} where id = #{id}
+        UPDATE wmb_sbnr
+        SET khxmid = #{project.id}, content = #{content}
+        WHERE id = #{id}
     </update>
 
     <select id="findScoresByContentId" resultMap="ScoreResultMap">
-        select score.id as stdId, score.scroe as detailScore, xzb.khpfx as stdItem, xzb.shuoming as stdRemark, xzb.score as stdScore from wmb_score score
-        right join wmb_khxzb xzb on score.khbzid = xzb.id where score.sbnrid = #{contentId}
+        SELECT
+            score.id     AS stdId,
+            score.scroe  AS detailScore,
+            xzb.khpfx    AS stdItem,
+            xzb.shuoming AS stdRemark,
+            xzb.score    AS stdScore
+        FROM wmb_score score
+            RIGHT JOIN wmb_khxzb xzb ON score.khbzid = xzb.id
+        WHERE score.sbnrid = #{contentId}
     </select>
 
     <select id="checkAlreadySubmit" resultType="int">
-        SELECT count(*) from wmb_sbnr where khxmid = #{projectId} and dwid = #{unitId}
-        <if test="contentId != null and contentId != ''" >
+        SELECT count(*)
+        FROM wmb_sbnr
+        WHERE khxmid = #{projectId} AND dwid = #{unitId} AND year = #{year}
+        <if test="contentId != null and contentId != ''">
             and id != #{contentId}
         </if>
     </select>
 
-    <select id="getYwcCount" resultType="int">
-        select ifnull(count(s.id),0) from wmb_sbnr s where s.dwid = #{unitId}
+    <select id="checkAlreadyScored" resultType="int">
+        SELECT count(*)
+        FROM wmb_score AS sc
+        JOIN wmb_sbnr AS nr ON nr.id = sc.sbnrid
+        WHERE nr.khxmid = #{projectId} AND
+        nr.dwid = #{unitId} AND
+        nr.year = #{year}
+        <if test="contentId != null and contentId != ''">
+            and nr.id != #{contentId}
+        </if>
+
     </select>
+
+    <select id="getYwcCount" resultType="int">
+        SELECT ifnull(count(s.id), 0)
+        FROM wmb_sbnr s
+        WHERE s.dwid = #{unitId}
+    </select>
+
+    <select id="findAssessmentTypeByUnitId" resultType="cn.itcast.bos.domain.EnumBean">
+        SELECT * FROM view_unit_assessmenttype WHERE unitId = #{unitId}
+    </select>
+
 </mapper>

@@ -97,9 +97,10 @@
 
         var assessmentType = $.loadEnum('assessmentType');
         var options = {
-            panelWidth: 650,
+            panelWidth: '75%',
             idField: 'id',
             striped: true,
+            fitColumns: true,
             labelPosition:'left',
             value:'${submitContent.project.id}',
             nowrap: true,
@@ -405,11 +406,11 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <label for="assessmentProject">考核项目：</label>
                 <c:if test="${disabled or action eq 'edit'}">
-                    <select id="assessmentProject" disabled="disabled" required="true" class="easyui-combogrid" style="width:430px;"></select>
+                    <select id="assessmentProject" disabled="disabled" required="true" class="easyui-combogrid" style="width:80%;"></select>
                     <input type="hidden" name="project.id" value="${submitContent.project.id}" />
                 </c:if>
                 <c:if test="${!disabled and !(action eq 'edit')}">
-                    <select id="assessmentProject" required="true" class="easyui-combogrid" name="project.id" style="width:430px;"></select>
+                    <select id="assessmentProject" required="true" class="easyui-combogrid" name="project.id" style="width:80%;"></select>
                 </c:if>
             </div>
         </div>

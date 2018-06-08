@@ -29,4 +29,13 @@ public class EnumController {
         }
         return enumService.getEnum(id);
     }
+
+    @RequestMapping("/loadEnumAsJson")
+    @ResponseBody
+    public Object loadEnumAsJson(String id){
+        if(id == null){
+            return new HashMap<String, String>();
+        }
+        return enumService.listEnum(id);
+    }
 }

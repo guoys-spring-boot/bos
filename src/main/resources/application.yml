@@ -1,8 +1,11 @@
 spring:
   datasource:
-    url: jdbc:mysql://10.211.55.4:3306/bos?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: root
+#    url: jdbc:mysql://10.211.55.9:3306/bos?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: root
+    url: jdbc:mysql://61.136.205.130:3306/bos?useUnicode=true&characterEncoding=utf-8
+    username: swxcb
+    password: swxcb
     driver-class-name: com.mysql.jdbc.Driver
   mvc:
     view:
@@ -10,7 +13,10 @@ spring:
       suffix: .jsp
   http:
     multipart:
-      maxFileSize: 50MB
+      maxFileSize: 100MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
 
 
 logging:
@@ -23,3 +29,4 @@ mybatis:
   # 配置mapper的扫描，找到所有的mapper.xml映射文件
   # 加载全局的配置文件
   configLocation: classpath:SqlMapConfig.xml
+

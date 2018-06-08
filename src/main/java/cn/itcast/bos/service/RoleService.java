@@ -12,4 +12,6 @@ public interface RoleService {
     List<Role> listRole();
 
     void saveRole(Role role, String functionIds);
+
+    Role getById(String id);
 }

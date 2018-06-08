@@ -20,6 +20,21 @@
 		  <artifactId>spring-boot-starter-web</artifactId>
 	  </dependency>
 
+      <!-- https://mvnrepository.com/artifact/org.apache.velocity/velocity -->
+      <dependency>
+          <groupId>org.apache.velocity</groupId>
+          <artifactId>velocity</artifactId>
+          <version>1.6.2</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+      </dependency>
+
+
+
+
       <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
       <dependency>
           <groupId>org.apache.hbase</groupId>

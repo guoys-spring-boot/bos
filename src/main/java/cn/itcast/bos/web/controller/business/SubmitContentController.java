@@ -1,6 +1,8 @@
 package cn.itcast.bos.web.controller.business;
 
+import cn.itcast.bos.common.SessionHelpler;
 import cn.itcast.bos.domain.business.*;
+import cn.itcast.bos.domain.business.vo.MyReportVO;
 import cn.itcast.bos.service.business.AttachmentService;
 import cn.itcast.bos.service.business.SubmitContentService;
 import cn.itcast.bos.utils.FileUtils;
@@ -23,6 +25,8 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.*;
 
+import static cn.itcast.bos.common.SessionHelpler.resolveYear;
+
 /**
  * Created by gys on 2017/4/9.
  */
@@ -38,15 +42,32 @@ public class SubmitContentController {
     private AttachmentService attachmentService;
     private SubmitContentService submitContentService;
 
+
+    @ResponseBody
+    @RequestMapping("/listAssessmentType")
+    public Object listAssessmentType(String unitId, HttpServletRequest request){
+        if(unitId == null || "".equals(unitId)){
+            UnitBean unit = SessionHelpler.resolveUnit(request.getSession());
+            unitId = unit.getId();
+        }
+        return submitContentService.listAssessmentTypeByUnitId(unitId);
+    }
+
+
     @RequestMapping("/addSubmitContent")
     public String addSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert, HttpServletRequest request,
                                    Model model){
 
         UnitBean bean =  (UnitBean)request.getSession().getAttribute("user");
         content.setUnitId(bean.getId());
-        if(submitContentService.checkAlreadySubmit(content.getProject().getId(), null, bean.getId())){
+        String year = resolveYear(request.getSession());
+
+        if(submitContentService.checkAlreadySubmit(content.getProject().getId(), null, bean.getId(), year)){
             throw new RuntimeException("该项目已经上报完成");
         }
+
+
+        content.setYear(resolveYear(request.getSession()));
         submitContentService.save(content, needInsert);
         model.addAttribute("saveSuccess", true);
         return "forward:/submitContent/toAddSubmitContent";
@@ -68,22 +89,55 @@ public class SubmitContentController {
         Page<Object> page1 = PageHelper.startPage(page, rows);
         Map<String, Object> result = new HashMap<String, Object>();
 
-        result.put("rows", submitContentService.listSubmitContent(bean.getId()));
+        String year = resolveYear(request.getSession());
+
+        result.put("rows", submitContentService.listSubmitContent(bean.getId(), year));
         result.put("total", page1.getTotal());
         List<Map<String, Object>> footer = new ArrayList<Map<String, Object>>();
         Map<String, Object> content = new HashMap<String, Object>();
-        content.put("score", submitContentService.getAlreadyScore(bean.getId()));
+        content.put("score", submitContentService.getAlreadyScore(bean.getId(), year));
         content.put("projectName", "总分:");
         footer.add(content);
         result.put("footer", footer);
         return result;
     }
 
+    @ResponseBody
+    @RequestMapping("/listSubmitContentWithProject")
+    public Object listSubmitContentWithProject(Integer page, Integer rows, HttpServletRequest request, MyReportVO vo){
+        UnitBean bean = (UnitBean)request.getSession().getAttribute("user");
+        page = page == null ? 0 : page;
+        rows = rows == null ? Integer.MAX_VALUE : rows;
+        Page<Object> page1 = PageHelper.startPage(page, rows);
+
+        String year = resolveYear(request.getSession());
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        if(vo.getUnitId() == null || vo.getUnitId().equals("")){
+            vo.setUnitId(bean.getId());
+        }
+
+        vo.setYear(year);
+        result.put("rows", submitContentService.listSubmitContentWithProject(vo));
+        result.put("total", page1.getTotal());
+
+
+        Map<String, Object> content = new HashMap<String, Object>();
+        content.put("score", submitContentService.getAlreadyScore(bean.getId(), year));
+        content.put("projectName", "总分:");
+
+
+        //result.put("footer", footer);
+        return result;
+    }
+
     @RequestMapping("/toLookupSubmitContent")
     public String toLookupSubmitContent(String id, Model model){
+
         if(StringUtils.isBlank(id)){
             return "submit/submitindex";
         }
+
         model.addAttribute("disabled", true);
         model.addAttribute("action", "lookup");
         SubmitContent submitContent = submitContentService.findById(id);
@@ -91,6 +145,7 @@ public class SubmitContentController {
             submitContent.setContent(submitContent.getContent().replace("\n", "\\n"));
         }
         model.addAttribute("submitContent", submitContent);
+
         return "submit/submitindex";
     }
 
@@ -166,12 +221,15 @@ public class SubmitContentController {
     }
 
     @RequestMapping("/updateSubmitContent")
+    @ResponseBody
     public String updateSubmitContent(SubmitContent content, @RequestParam("needInsert") String needInsert,
                                     @RequestParam("needDelete")String needDelete, HttpServletRequest request){
 
+        String year = resolveYear(request.getSession());
+
         UnitBean bean =  (UnitBean)request.getSession().getAttribute("user");
-        if(submitContentService.checkAlreadySubmit(content.getProject().getId(), content.getId(), bean.getId())){
-            throw new RuntimeException("该项目已经上报完成");
+        if(submitContentService.checkAlreadyScored( content.getProject().getId(), content.getId(), bean.getId(), year)){
+            throw new RuntimeException("该项目已经打分完成");
         }
         submitContentService.update(content, needInsert, needDelete);
         //model.addAttribute("saveSuccess", true);
@@ -183,12 +241,14 @@ public class SubmitContentController {
     public Object checkAlreadySubmit(@RequestParam(value = "contentId", required = false) String contentId, HttpSession session,
                                      @RequestParam(value = "projectId", required = false) String projectId){
         String unitId = ((UnitBean) session.getAttribute("user")).getId();
-        return submitContentService.checkAlreadySubmit(projectId, contentId, unitId);
+        String year = resolveYear(session);
+
+        return submitContentService.checkAlreadySubmit(projectId, contentId, unitId, year);
     }
 
     @RequestMapping("/listScoreDetails")
     @ResponseBody
-    public Object listScoreDetails(String contentId){
-        return submitContentService.listScoresByContentId(contentId);
+    public Object listScoreDetails(String contentId, HttpSession session){
+        return submitContentService.listScoresByContentId(contentId, resolveYear(session));
     }
 }

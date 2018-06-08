@@ -4,11 +4,13 @@ import cn.itcast.bos.dao.business.AttachmentDao;
 import cn.itcast.bos.domain.business.Attachment;
 import cn.itcast.bos.service.business.AttachmentService;
 import cn.itcast.bos.utils.UUIDUtils;
+import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +32,7 @@ public class AttachServiceImp implements AttachmentService {
         if(StringUtils.isBlank(attachment.getId())){
             attachment.setId(UUIDUtils.generatePrimaryKey());
         }
+        attachment.setUploadTime(DateUtil.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
         attachmentDao.insert(attachment);
     }
 

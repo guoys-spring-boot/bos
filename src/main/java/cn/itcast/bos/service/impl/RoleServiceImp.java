@@ -30,6 +30,12 @@ public class RoleServiceImp implements RoleService {
         return roleDao.findAll();
     }
 
+
+    @Override
+    public Role getById(String id) {
+        return roleDao.findById(id);
+    }
+
     @Override
     public void saveRole(Role role, String functionIds) {
         String roleId = UUIDUtils.generatePrimaryKey();

@@ -44,4 +44,9 @@ public class FunctionController {
 
 		return result;
 	}
+
+	@RequestMapping("/")
+	public Object getFunctionByRoleId(String roleId){
+		return null;
+	}
 }

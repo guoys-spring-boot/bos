@@ -2,6 +2,8 @@ package cn.itcast.bos.service.business.impl;
 
 import java.util.List;
 
+import cn.itcast.bos.dao.business.AgencyReportProcessDao;
+import cn.itcast.bos.domain.business.AgencyReportProcess;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +15,11 @@ import cn.itcast.bos.service.business.ReportService;
 @Transactional
 public class ReportServiceImp implements ReportService{
     private ReportDao reportdao;
-	
+	private AgencyReportProcessDao agencyReportProcessDao;
     
-    public ReportServiceImp(ReportDao reportdao){
+    public ReportServiceImp(ReportDao reportdao, AgencyReportProcessDao p){
     	this.reportdao = reportdao;
+    	this.agencyReportProcessDao = p;
     }
 	@Override
 	public List<ReportUpBean> listUnit(ReportUpBean reportUpBaen) {
@@ -43,5 +46,9 @@ public class ReportServiceImp implements ReportService{
 	        }
 	        return reportUpBaen;
 	}
-    
+
+	@Override
+	public List<AgencyReportProcess> findAgency(AgencyReportProcess p) {
+		return agencyReportProcessDao.findByCondition(p);
+	}
 }
